@@ -1,0 +1,11 @@
+{
+  "entity.grenade.bounce": {
+    "subtitle": "subtitle.lrtactical.entity.grenade.bounce",
+    "sounds": [
+      "lrtactical:entity/grenade_bounce_1",
+      "lrtactical:entity/grenade_bounce_2",
+      "lrtactical:entity/grenade_bounce_3",
+      "lrtactical:entity/grenade_bounce_4"
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+package me.xjqsh.lrtactical.resource;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.gson.JsonObject;
+import me.xjqsh.lrtactical.item.index.ThrowableIndex;
+import me.xjqsh.lrtactical.network.DataType;
+import me.xjqsh.lrtactical.resource.manager.ThrowableIndexManager;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.Collection;
+import java.util.Map;
+
+public enum CommonNetworkCache implements ICommonResourceProvider {
+    INSTANCE;
+
+    public Map<ResourceLocation, ThrowableIndex<?, ?>> throwableIndex = Maps.newHashMap();
+
+    public ThrowableIndex<?, ?> getThrowableIndex(ResourceLocation id) {
+        return throwableIndex.get(id);
+    }
+
+    public Collection<ThrowableIndex<?,?>> getThrowableIndexes() {
+        return throwableIndex.values();
+    }
+
+    public void parseThrowableIndex(Map<ResourceLocation, String> cache) {
+        ImmutableMap.Builder<ResourceLocation, ThrowableIndex<?, ?>> builder = ImmutableMap.builder();
+        for (Map.Entry<ResourceLocation, String> throwableEntry : cache.entrySet()) {
+            JsonObject jsonObject = CommonAssetsManager.GSON.fromJson(throwableEntry.getValue(), JsonObject.class);
+            var index = ThrowableIndexManager.parse(jsonObject, throwableEntry.getKey());
+            if (index != null) {
+                builder.put(throwableEntry.getKey(), index);
+            }
+        }
+        this.throwableIndex = builder.build();
+    }
+
+    public void fromNetwork(Map<DataType, Map<ResourceLocation, String>> cache) {
+        for (Map.Entry<DataType, Map<ResourceLocation, String>> entry : cache.entrySet()) {
+            switch (entry.getKey()) {
+                case THROWABLE_INDEX -> parseThrowableIndex(entry.getValue());
+                default -> {
+                    // ignore
+                }
+            }
+        }
+    }
+}

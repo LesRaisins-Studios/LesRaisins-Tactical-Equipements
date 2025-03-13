@@ -1,0 +1,7 @@
+{
+  "item_name": "lrtactical.item.smoke_grenade",
+  "model": "lrtactical:throwable/smoke_grenade_geo",
+  "animation": "lrtactical:smoke_grenade",
+  "state_machine": "lrtactical:default_grenade_state_machine",
+  "texture": "lrtactical:throwable/smoke_grenade_uv"
+}

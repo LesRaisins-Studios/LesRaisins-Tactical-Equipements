@@ -1,0 +1,18 @@
+{
+  "type": "lrtactical:explode",
+  "name": "item.lrtactical.m67",
+  "data": {
+    "prepare_time": 10,
+    "initial_speed": 1.5,
+    "cooldown": 40,
+    "cooldown_category": "lrtactical:grenade",
+    "put_away_time": 380,
+    "stack_size": 1,
+    "entity" : {
+      "life_time": 75,
+      "gravity": 0.07,
+      "should_bounce": true,
+      "bounceFactor": 0.75
+    }
+  }
+}
