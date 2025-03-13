@@ -27,7 +27,12 @@ import java.util.function.Consumer;
 
 public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
     public ThrowableItem() {
-        super(new Properties().stacksTo(6));
+        super(new Properties().stacksTo(1));
+    }
+
+    @Override
+    public int getMaxStackSize(ItemStack stack) {
+        return getThrowableIndex(stack).map(index -> index.getData().getStackSize()).orElse(1);
     }
 
     @ParametersAreNonnullByDefault

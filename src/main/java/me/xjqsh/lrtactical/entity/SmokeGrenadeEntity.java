@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.entity;
 
 import me.xjqsh.lrtactical.init.ModParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
@@ -47,7 +48,7 @@ public class SmokeGrenadeEntity extends ThrowableItemEntity {
                     this.level().addParticle(ModParticleTypes.SMOKE_CLOUD.get(), true, x + offsetX, y + offsetY, z + offsetZ, 0.0D, 0.0D, 0.0D);
                 }
             }
+            this.level().addParticle(ParticleTypes.CLOUD, true, this.getX(), this.getY() + 0.1, this.getZ(), 0.0D, 0.01D, 0.0D);
         }
     }
-
 }
