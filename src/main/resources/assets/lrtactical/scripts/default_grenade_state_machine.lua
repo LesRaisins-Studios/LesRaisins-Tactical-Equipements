@@ -65,7 +65,7 @@ function main_track_states.start.transition(this, context, input)
 end
 
 function main_track_states.idle.entry(this, context)
-    print("idle entry")
+    --print("idle entry")
 end
 
 function main_track_states.idle.update(this, context)
@@ -75,7 +75,7 @@ function main_track_states.idle.update(this, context)
 end
 
 function main_track_states.idle.transition(this, context, input)
-    print("idle entry - " .. input)
+    --print("idle entry - " .. input)
     if (input == INPUT_PUT_AWAY) then
         runPutAwayAnimation(context)
         -- 丢枪后转到最终态
@@ -90,13 +90,13 @@ function main_track_states.idle.transition(this, context, input)
 end
 
 function main_track_states.using.entry(this, context)
-    print("using entry")
+    --print("using entry")
 end
 
 function main_track_states.using.update(this, context)
     if not context:isUsing() then
         context:trigger("idle")
-    elseif context:getUsingTick() >= 22 then
+    elseif context:getUsingTick() >= context:getPrepareTime() then
         context:trigger("using_hold")
     end
 end

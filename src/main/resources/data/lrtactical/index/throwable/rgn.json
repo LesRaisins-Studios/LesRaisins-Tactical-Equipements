@@ -1,7 +1,7 @@
 {
   "type": "lrtactical:explode",
   "data": {
-    "prepare_time": 10,
+    "prepare_time": 22,
     "initial_speed": 1.5,
     "cooldown": 40,
     "cooldown_category": "lrtactical:grenade",

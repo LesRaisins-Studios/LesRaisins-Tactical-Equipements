@@ -20,6 +20,7 @@ public class EquipmentMod {
         ModItems.ITEMS.register(modEventBus);
         ModEntities.ENTITY_TYPES.register(modEventBus);
         ModParticleTypes.PARTICLE_TYPES.register(modEventBus);
+        ModEffects.EFFECTS.register(modEventBus);
         ModThrowableTypes.THROWABLE_TYPES.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
 

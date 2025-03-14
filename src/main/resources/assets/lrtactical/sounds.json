@@ -7,5 +7,14 @@
       "lrtactical:entity/grenade_bounce_3",
       "lrtactical:entity/grenade_bounce_4"
     ]
+  },
+  "player.ring": {
+    "sounds": [
+      {
+        "name": "lrtactical:player/ring",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitle.lrtactical.player.ring"
   }
 }
