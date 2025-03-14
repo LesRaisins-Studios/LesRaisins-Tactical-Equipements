@@ -109,6 +109,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { url "https://maven.shedaniel.me/" } // cloth config api
     maven {
         url 'https://jitpack.io'
     }
@@ -122,6 +123,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation(fg.deobf("libs:tacz:1.20.1-0310-055841-all"))
+    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
     // LuaJ 库，将 lua 脚本语言引入用于控制枪械的逻辑和动画状态机
     compileOnly('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
     compileOnly('com.github.FiguraMC.luaj:luaj-jse:3.0.8-figura')

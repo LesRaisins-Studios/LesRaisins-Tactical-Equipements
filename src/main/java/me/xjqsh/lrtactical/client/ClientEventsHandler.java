@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.xjqsh.lrtactical.config.ClientConfig;
 import me.xjqsh.lrtactical.init.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,7 +23,7 @@ public class ClientEventsHandler {
         int tickRemain = effect.getDuration();
 
         int alpha = tickRemain > 100 ? 255 : (int) (tickRemain / 100f * 255f);
-        int color = 0xFFFFFF + (alpha << 24);
+        int color = (ClientConfig.BLACK_FLASH.get() ? 0x000000 : 0xFFFFFF) + (alpha << 24);
 
         GuiGraphics graphics = new GuiGraphics(mc, mc.renderBuffers().bufferSource());
         int width = mc.getWindow().getScreenWidth();
