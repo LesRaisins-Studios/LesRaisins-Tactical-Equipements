@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** from MrCrayfish's Gun Mod
+/** from MrCrayfish's Gun Mod, modified for LRTactical
  * @author MrCrayfish
  */
 
