@@ -8,6 +8,7 @@ import me.xjqsh.lrtactical.client.renderer.CoolDownDecorations;
 import me.xjqsh.lrtactical.client.renderer.entity.ThrowableEntityRenderer;
 import me.xjqsh.lrtactical.entity.GrenadeEntity;
 import me.xjqsh.lrtactical.entity.SmokeGrenadeEntity;
+import me.xjqsh.lrtactical.entity.StunGrenadeEntity;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModParticleTypes;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,6 +27,7 @@ public class ClientSetupHandler {
     public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(GrenadeEntity.TYPE, ThrowableEntityRenderer::new);
         event.registerEntityRenderer(SmokeGrenadeEntity.TYPE, ThrowableEntityRenderer::new);
+        event.registerEntityRenderer(StunGrenadeEntity.TYPE, ThrowableEntityRenderer::new);
     }
 
     @SubscribeEvent

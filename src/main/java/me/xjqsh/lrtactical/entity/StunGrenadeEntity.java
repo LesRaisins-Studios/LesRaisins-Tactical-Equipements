@@ -99,11 +99,15 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
             if(SightTraceUtil.rayTraceOpaqueBlocks(starter, target.level(), eyes, p, false, false, false) == null) {
                 // Duration attenuated by distance
                 int durationBlinded = data.calcBlindDuration(distance, a1);
-                target.addEffect(new MobEffectInstance(ModEffects.BLIND.get(), durationBlinded));
+                if (durationBlinded > 0){
+                    target.addEffect(new MobEffectInstance(ModEffects.BLIND.get(), durationBlinded));
+                }
             }
         }
 
         int durationDeafened = data.calcDeafenedDuration(distance);
-        target.addEffect(new MobEffectInstance(ModEffects.DEAFENED.get(), durationDeafened));
+        if (durationDeafened > 0){
+            target.addEffect(new MobEffectInstance(ModEffects.DEAFENED.get(), durationDeafened));
+        }
     }
 }

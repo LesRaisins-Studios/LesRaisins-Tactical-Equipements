@@ -1,0 +1,30 @@
+{
+  "type": "lrtactical:stun",
+  "data": {
+    "prepare_time": 22,
+    "initial_speed": 1.5,
+    "cooldown": 40,
+    "cooldown_category": "lrtactical:stun",
+    "put_away_time": 380,
+    "stack_size": 3,
+    "entity": {
+      "life_time": 60,
+      "gravity": 0.07,
+      "should_bounce": true,
+      "bounceFactor": 0.75
+    },
+    "stun": {
+      "radius": 32,
+      "blind": {
+        "max_duration": 300,
+        "min_duration": 80,
+        "max_angle": 85.0,
+        "view_angle_factor": 0.35
+      },
+      "deafened": {
+        "max_duration": 300,
+        "min_duration": 80
+      }
+    }
+  }
+}
