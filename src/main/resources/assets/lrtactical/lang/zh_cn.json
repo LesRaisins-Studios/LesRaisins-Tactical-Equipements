@@ -1,13 +1,12 @@
 {
   "item_group.lrtactical.throwable": "LesRaisins - 投掷物",
   "item.lrtactical.m67": "M67 手雷",
-  "lrtactical.item.m67": "M67 手雷",
-  "lrtactical.item.rgn": "RGN 手雷",
-  "lrtactical.item.smoke_grenade": "M18 烟雾弹",
-  "lrtactical.item.flash_grenade": "闪光弹",
+  "item.lrtactical.rgn": "RGN 手雷",
+  "item.lrtactical.smoke_grenade": "M18 烟雾弹",
+  "item.lrtactical.flash_grenade": "闪光弹",
   "config.lrtactical.effect": "效果",
   "effect.lrtactical.blinded": "致盲",
-  "effect.lrtactical.deafended": "耳鸣",
+  "effect.lrtactical.deafened": "失聪",
   "config.lrtactical.effect.blackflash": "黑色致盲",
-  "config.lrtactical.effect.blackflash.desc": "使用黑色遮罩代替闪光弹的致盲效果"
+  "config.lrtactical.effect.blackflash.desc": "使用黑色遮罩代替闪光弹的白色致盲效果"
 }

@@ -1,5 +1,6 @@
 {
   "type": "lrtactical:explode",
+  "name": "item.lrtactical.rgn",
   "data": {
     "prepare_time": 16,
     "initial_speed": 1.5,

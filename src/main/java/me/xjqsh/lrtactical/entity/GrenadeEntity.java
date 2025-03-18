@@ -4,8 +4,6 @@ import me.xjqsh.lrtactical.util.CustomExplosion;
 import me.xjqsh.lrtactical.util.ParticleUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
@@ -61,7 +59,6 @@ public class GrenadeEntity extends ThrowableItemEntity {
                 double z = this.getZ();
                 ParticleUtil.sendParticle(level, ParticleTypes.FLASH, x, y + 0.5, z, 50, 0.2, 0.2, 0.2, 20, true);
                 ParticleUtil.sendParticle(level, ParticleTypes.EXPLOSION_EMITTER, x, y + 1, z, 5, 0.7, 0.7, 0.7, 1, true);
-                level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 6.0f, 1.0f);
             }
         }
         super.onDeath();

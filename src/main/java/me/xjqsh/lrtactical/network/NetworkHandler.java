@@ -3,6 +3,7 @@ package me.xjqsh.lrtactical.network;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.network.message.SCustomCoolDownMessage;
 import me.xjqsh.lrtactical.network.message.SPackSyncMessage;
+import me.xjqsh.lrtactical.network.message.SThrowableSound;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,6 +35,12 @@ public class NetworkHandler {
                 SCustomCoolDownMessage::encode,
                 SCustomCoolDownMessage::decode,
                 SCustomCoolDownMessage::handle
+        );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SThrowableSound.class,
+                SThrowableSound::encode,
+                SThrowableSound::decode,
+                SThrowableSound::handle
         );
     }
 

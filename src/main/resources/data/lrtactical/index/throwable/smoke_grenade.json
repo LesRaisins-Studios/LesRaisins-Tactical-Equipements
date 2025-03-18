@@ -1,5 +1,6 @@
 {
   "type": "lrtactical:smoke",
+  "name": "item.lrtactical.smoke_grenade",
   "data": {
     "prepare_time": 16,
     "initial_speed": 1.5,

@@ -1,13 +1,17 @@
 package me.xjqsh.lrtactical.entity;
 
 
+import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModSounds;
+import me.xjqsh.lrtactical.network.NetworkHandler;
+import me.xjqsh.lrtactical.network.message.SThrowableSound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -15,6 +19,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -22,6 +27,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+
+import net.minecraftforge.network.PacketDistributor;
 
 public abstract class ThrowableItemEntity extends ThrowableItemProjectile implements IEntityAdditionalSpawnData {
     private int life = 100;
@@ -117,7 +124,7 @@ public abstract class ThrowableItemEntity extends ThrowableItemProjectile implem
     public void tick() {
         super.tick();
         if (this.tickCount >= life) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.onDeath();
             }
         }
@@ -125,6 +132,21 @@ public abstract class ThrowableItemEntity extends ThrowableItemProjectile implem
 
     public void onDeath() {
         this.discard();
+        if (!this.level().isClientSide()) {
+            playThrowableSound("death", 16.0F, 1.0F);
+        }
+    }
+
+    public void playThrowableSound(String key, float volume, float pitch) {
+        ItemStack stack = this.getItem();
+        if (stack.getItem() instanceof IThrowable iThrowable) {
+            ResourceLocation id = iThrowable.getId(stack);
+            var packet = new SThrowableSound(id, key, this.position(), volume, pitch);
+            NetworkHandler.CHANNEL.send(
+                    PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(this.getX(), this.getY(), this.getZ(), 64, this.level().dimension())),
+                    packet
+            );
+        }
     }
 
     @Override

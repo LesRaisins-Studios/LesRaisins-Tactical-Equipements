@@ -104,6 +104,9 @@ public class SoundHandler
                     if (loc.equals(new ResourceLocation("minecraft", "entity.generic.explode"))) {
                         return;
                     }
+                    if (loc.equals(new ResourceLocation(EquipmentMod.MOD_ID, "entity.grenade.flash.explode"))) {
+                        return;
+                    }
 
                     float volume = sound instanceof SoundMuted ? ((SoundMuted) sound).getVolumeInitial() : sound.getVolume();
                     this.soundVolumes.put(sound, volume);

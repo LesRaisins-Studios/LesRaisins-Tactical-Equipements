@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.client.resource.display;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.google.gson.annotations.SerializedName;
 import com.tacz.guns.api.client.animation.AnimationController;
 import com.tacz.guns.api.client.animation.Animations;
@@ -18,6 +19,9 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.Objects;
+
 import static com.tacz.guns.client.model.GunModelConstant.LEFTHAND_POS_NODE;
 import static com.tacz.guns.client.model.GunModelConstant.RIGHTHAND_POS_NODE;
 
@@ -27,6 +31,7 @@ public class ThrowableDisplayInstance {
     private LuaAnimationStateMachine<ThrowableAnimationStateContext> stateMachine;
     private ResourceLocation texture;
     private ItemTransforms transforms;
+    private Map<String, ResourceLocation> sounds;
 
     private ThrowableDisplayInstance(){}
 
@@ -48,6 +53,10 @@ public class ThrowableDisplayInstance {
 
     public ItemTransforms getTransforms() {
         return transforms;
+    }
+
+    public Map<String, ResourceLocation> getSounds() {
+        return sounds;
     }
 
     @NotNull
@@ -85,7 +94,8 @@ public class ThrowableDisplayInstance {
                 .build();
         display.texture = new ResourceLocation(pojo.textureLocation.getNamespace(), "textures/" + pojo.textureLocation.getPath() + ".png");
 
-        display.transforms = pojo.transforms == null ? ItemTransforms.NO_TRANSFORMS : pojo.transforms;
+        display.transforms = Objects.requireNonNullElse(pojo.transforms, ItemTransforms.NO_TRANSFORMS);
+        display.sounds = Objects.requireNonNullElseGet(pojo.sounds, Maps::newHashMap);
 
         return display;
     }
@@ -100,6 +110,8 @@ public class ThrowableDisplayInstance {
             @SerializedName("texture")
             ResourceLocation textureLocation,
             @SerializedName("transforms")
-            ItemTransforms transforms
+            ItemTransforms transforms,
+            @SerializedName("sounds")
+            Map<String, ResourceLocation> sounds
     ) {}
 }

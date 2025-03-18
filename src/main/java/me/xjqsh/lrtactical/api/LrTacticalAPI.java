@@ -5,6 +5,7 @@ import me.xjqsh.lrtactical.client.resource.LrClientAssetsManager;
 import me.xjqsh.lrtactical.client.resource.display.ThrowableDisplayInstance;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,6 +20,11 @@ public class LrTacticalAPI {
             return Optional.empty();
         }
         return Optional.ofNullable(LrClientAssetsManager.INSTANCE.getThrowableDisplay(item.getId(stack)));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static Optional<ThrowableDisplayInstance> getThrowableDisplay(ResourceLocation id) {
+        return Optional.ofNullable(LrClientAssetsManager.INSTANCE.getThrowableDisplay(id));
     }
 
     public static Optional<ThrowableIndex<?, ?>> getThrowableIndex(ItemStack stack) {

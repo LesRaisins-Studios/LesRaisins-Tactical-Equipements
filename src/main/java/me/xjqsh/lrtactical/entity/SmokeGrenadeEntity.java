@@ -49,6 +49,10 @@ public class SmokeGrenadeEntity extends ThrowableItemEntity {
                 }
             }
             this.level().addParticle(ParticleTypes.CLOUD, true, this.getX(), this.getY() + 0.1, this.getZ(), 0.0D, 0.01D, 0.0D);
+        } else {
+            if (tickCount == 40) {
+                playThrowableSound("release", 16.0f, 1.0f);
+            }
         }
     }
 }

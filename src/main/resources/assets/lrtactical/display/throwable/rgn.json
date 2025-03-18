@@ -1,9 +1,11 @@
 {
-  "item_name": "lrtactical.item.rgn",
   "model": "lrtactical:throwable/rgn_grenade_geo",
   "animation": "lrtactical:rgn_grenade",
   "state_machine": "lrtactical:default_grenade_state_machine",
   "texture": "lrtactical:throwable/rgn_uv",
+  "sounds": {
+    "death": "lrtactical:entity.grenade.rgn.explode"
+  },
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 5, 0]
