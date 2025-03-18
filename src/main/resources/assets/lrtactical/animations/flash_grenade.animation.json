@@ -101,7 +101,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "lrtactical:grenade_draw_2"
+					"effect": "grenade_draw_2"
 				}
 			}
 		},
@@ -159,7 +159,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "lrtactical:grenade_draw_1"
+					"effect": "grenade_draw_1"
 				}
 			}
 		},
@@ -325,6 +325,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "grenade_inspect"
+				}
 			}
 		},
 		"unlock_safe": {
@@ -469,7 +474,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "lrtactical:grenade_unlock_safe"
+					"effect": "grenade_unlock_safe"
 				}
 			}
 		},
@@ -565,7 +570,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "lrtactical:grenade_throw_2"
+					"effect": "grenade_throw_2"
 				}
 			}
 		},
@@ -735,10 +740,10 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "lrtactical:grenade_draw_2"
+					"effect": "grenade_draw_2"
 				},
 				"1.1": {
-					"effect": "lrtactical:grenade_draw_3"
+					"effect": "grenade_draw_3"
 				}
 			}
 		}
