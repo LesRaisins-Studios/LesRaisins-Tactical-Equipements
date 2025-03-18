@@ -52,7 +52,7 @@
 			}
 		},
 		"draw": {
-			"loop": true,
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.7292,
 			"bones": {
 				"root": {
@@ -98,10 +98,15 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "lrtactical:grenade_draw_2"
+				}
 			}
 		},
 		"put_away": {
-			"loop": true,
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.375,
 			"bones": {
 				"root": {
@@ -150,6 +155,11 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "lrtactical:grenade_draw_1"
 				}
 			}
 		},
@@ -459,9 +469,15 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "lrtactical:grenade_unlock_safe"
+				}
 			}
 		},
 		"throw": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.5,
 			"bones": {
 				"ring": {
@@ -551,6 +567,11 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "lrtactical:grenade_throw_2"
 				}
 			}
 		},
@@ -716,6 +737,14 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "lrtactical:grenade_draw_2"
+				},
+				"1.1": {
+					"effect": "lrtactical:grenade_draw_3"
 				}
 			}
 		}

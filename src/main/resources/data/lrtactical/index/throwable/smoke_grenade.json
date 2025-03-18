@@ -1,7 +1,7 @@
 {
   "type": "lrtactical:smoke",
   "data": {
-    "prepare_time": 22,
+    "prepare_time": 16,
     "initial_speed": 1.5,
     "cooldown": 0,
     "put_away_time": 380,
