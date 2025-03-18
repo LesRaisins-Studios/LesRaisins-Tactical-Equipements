@@ -26,8 +26,8 @@ public class ClientEventsHandler {
         int color = (ClientConfig.BLACK_FLASH.get() ? 0x000000 : 0xFFFFFF) + (alpha << 24);
 
         GuiGraphics graphics = new GuiGraphics(mc, mc.renderBuffers().bufferSource());
-        int width = mc.getWindow().getScreenWidth();
-        int height = mc.getWindow().getScreenHeight();
+        int width = mc.getWindow().getGuiScaledWidth();
+        int height = mc.getWindow().getGuiScaledHeight();
 
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
