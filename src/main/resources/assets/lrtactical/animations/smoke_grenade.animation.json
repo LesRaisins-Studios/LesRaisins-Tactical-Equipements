@@ -159,7 +159,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "lrtactical:grenade/grenade_draw_1"
+					"effect": "lrtactical:grenade/grenade_draw_4"
 				}
 			}
 		},
@@ -739,9 +739,6 @@
 				}
 			},
 			"sound_effects": {
-				"0.0": {
-					"effect": "lrtactical:grenade/grenade_draw_2"
-				},
 				"1.1": {
 					"effect": "lrtactical:grenade/grenade_draw_3"
 				}

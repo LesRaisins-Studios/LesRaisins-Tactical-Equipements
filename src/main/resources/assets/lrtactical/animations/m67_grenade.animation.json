@@ -159,7 +159,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "lrtactical:grenade/grenade_draw_1"
+					"effect": "lrtactical:grenade/grenade_draw_4"
 				}
 			}
 		},
@@ -398,7 +398,10 @@
 						"0.625": [6, -6, 0]
 					},
 					"scale": {
-						"0.625": {"pre": [1, 1, 1], "post": [0, 0, 0]}
+						"0.625": {
+							"pre": [1, 1, 1],
+							"post": [0, 0, 0]
+						}
 					}
 				},
 				"bone2": {
@@ -529,7 +532,10 @@
 					},
 					"scale": {
 						"0.0333": [1, 1, 1],
-						"0.1333": {"pre": [0.5, 0.5, 0.5], "post": [0, 0, 0]}
+						"0.1333": {
+							"pre": [0.5, 0.5, 0.5],
+							"post": [0, 0, 0]
+						}
 					}
 				},
 				"lefthand": {
@@ -739,9 +745,6 @@
 				}
 			},
 			"sound_effects": {
-				"0.0": {
-					"effect": "lrtactical:grenade/grenade_draw_2"
-				},
 				"1.1": {
 					"effect": "lrtactical:grenade/grenade_draw_3"
 				}
