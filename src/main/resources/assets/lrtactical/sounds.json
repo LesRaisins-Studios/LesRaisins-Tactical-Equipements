@@ -41,7 +41,7 @@
   "entity.grenade.smoke.end": {
     "subtitle": "subtitle.lrtactical.entity.grenade.smoke.end",
     "sounds": [
-      "lrtactical:entity/grenade_exp_smoke_edn"
+      "lrtactical:entity/grenade_exp_smoke_end"
     ]
   },
   "player.ring": {
