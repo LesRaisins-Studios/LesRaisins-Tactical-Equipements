@@ -3,10 +3,14 @@ package me.xjqsh.lrtactical.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.tacz.guns.api.item.IAnimationItem;
+import me.xjqsh.lrtactical.api.collision.ConeFilter;
+import me.xjqsh.lrtactical.api.collision.ITargetFilter;
+import me.xjqsh.lrtactical.api.collision.RayFilter;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
 import me.xjqsh.lrtactical.util.VectorUtil;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -25,11 +29,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -69,6 +75,16 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
+    public boolean isEnchantable(@NotNull ItemStack pStack) {
+        return true;
+    }
+
+    @Override
+    public int getEnchantmentValue(ItemStack stack) {
+        return 5;
+    }
+
+    @Override
     public int getAttackCoolDown(ItemStack stack, MeleeAction action) {
         return switch (action) {
             case LEFT -> 10;
@@ -81,14 +97,38 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
         return 15;
     }
 
-    public void attack(Player attacker, ItemStack stack) {
+    @Override
+    public int getAttackDelay(Player attacker, ItemStack stack, MeleeAction action) {
+        return switch (action) {
+            case LEFT -> 0;
+            case RIGHT -> 5;
+        };
+    }
+
+    @Override
+    public void attack(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {
         float base = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        ITargetFilter filter = switch (action) {
+            case LEFT -> new ConeFilter(3d, 90d);
+            case RIGHT -> new RayFilter(3.5d, 1);
+        };
 
-        for(Entity livingentity : attacker.level().getEntitiesOfClass(Entity.class, attacker.getBoundingBox().inflate(5D, 0.25D, 5D))) {
+        if (origin.distanceToSqr(attacker.getEyePosition()) > attacker.getDeltaMovement().lengthSqr() * 4) {
+            origin = attacker.getEyePosition();
+            direction = attacker.getLookAngle();
+        }
+
+        SoundEvent soundEvent = switch (action) {
+            case LEFT -> SoundEvents.PLAYER_ATTACK_WEAK;
+            case RIGHT -> SoundEvents.PLAYER_ATTACK_STRONG;
+        };
+        attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
+                soundEvent, attacker.getSoundSource(), 1.0F, 1.0F);
+
+        for (Entity livingentity : filter.filterTargets(attacker, origin, direction)) {
             boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
-            boolean inAngle = VectorUtil.isInAngle(attacker, livingentity, 45, 2.5D);
 
-            if (livingentity != attacker && !attacker.isAlliedTo(livingentity) && flag && inAngle) {
+            if (livingentity != attacker && !attacker.isAlliedTo(livingentity) && flag) {
                 this.performAttack(attacker, livingentity, stack, base);
             }
         }

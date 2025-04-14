@@ -11,5 +11,5 @@
   "config.lrtactical.effect.blackflash.desc": "Use black overlay instead of white when blinded by flashbang",
   "key.category.lrtactical": "LesRaisins Tactical",
   "key.lrtactical.normal_attack.desc": "Normal Attack",
-  "key.lrtactical.sp_attack.desc": "Speical Attack/Action"
+  "key.lrtactical.sp_attack.desc": "Special Attack/Action"
 }

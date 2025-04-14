@@ -24,7 +24,6 @@ import static com.tacz.guns.client.model.GunModelConstant.RIGHTHAND_POS_NODE;
 
 public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, ItemAnimationStateContext> {
     public MeleeItemRenderer() {
-        super();
         init();
     }
 

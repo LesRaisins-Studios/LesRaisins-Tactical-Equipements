@@ -65,7 +65,7 @@ public interface ICustomItem {
     }
 
     default int getAttackCoolDown(ItemStack stack, MeleeAction action) {
-        return 0;
+        return 20;
     }
 
     /**

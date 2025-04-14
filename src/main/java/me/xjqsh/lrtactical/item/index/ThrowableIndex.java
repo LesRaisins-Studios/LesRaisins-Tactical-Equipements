@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.item.index;
 
 import com.google.gson.*;
+import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.entity.ThrowableItemEntity;
 import me.xjqsh.lrtactical.init.ModItems;
@@ -14,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEntity> {
+public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEntity> implements ICustomItemIndex {
     private final ThrowableType<T, E> type;
     private final Item baseItem;
     private final T data;
@@ -41,10 +42,6 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
         return new ThrowableIndex<>(type, throwableData, name, id, baseItem);
     }
 
-    public ResourceLocation getId() {
-        return id;
-    }
-
     public T getData() {
         return data;
     }
@@ -61,6 +58,15 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
         return type.getFactory().create(stack, thrower, data);
     }
 
+    public ResourceLocation getId() {
+        return id;
+    }
+
+    public Item getBaseItem() {
+        return baseItem;
+    }
+
+    @Override
     public ItemStack createItemStack() {
         ItemStack stack = new ItemStack(baseItem);
         if (stack.getItem() instanceof IThrowable iThrowable) {

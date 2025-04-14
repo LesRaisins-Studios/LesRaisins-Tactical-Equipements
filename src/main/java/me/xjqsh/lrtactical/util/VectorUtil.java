@@ -37,14 +37,10 @@ public class VectorUtil {
      * 计算两个向量之间的夹角
      */
     public static double angleBetween(Vec3 v1, Vec3 v2) {
-        return Math.toDegrees(Math.acos(v1.dot(v2.normalize())));
+        return Math.toDegrees(Math.acos(v1.normalize().dot(v2.normalize())));
     }
 
-    public static boolean isInAngle(Entity attacker, Entity target, double maxAngle, double maxDistance) {
-        // 起点
-        Vec3 origin = attacker.getEyePosition();
-        // 中心方向向量
-        Vec3 view = attacker.getViewVector(1.0f);
+    public static boolean isInAngle(Vec3 origin, Vec3 view, Entity target, double maxAngle, double maxDistance) {
         Vec3 positionVector = target.position().add(0, target.getBbHeight() / 2F, 0).subtract(origin);
 
         Vec3 distanceVector = distanceVector(origin, target.getBoundingBox());

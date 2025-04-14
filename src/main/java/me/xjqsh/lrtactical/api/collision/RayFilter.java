@@ -42,9 +42,9 @@ public class RayFilter implements ITargetFilter {
     }
 
     @Override
-    public @NotNull List<Entity> filterTargets(LivingEntity attacker) {
+    public @NotNull List<Entity> filterTargets(LivingEntity attacker, Vec3 origin, Vec3 direction) {
         var from = attacker.getEyePosition();
-        var to = attacker.getEyePosition().add(attacker.getViewVector(1.0f).scale(maxRange));
+        var to = attacker.getEyePosition().add(direction.normalize().scale(maxRange));
         List<RayEntityHitResult> targets = findEntitiesOnPath(attacker, from, to);
 
         return targets.stream().limit(penetration + 1).map(RayEntityHitResult::getEntity).toList();
@@ -57,13 +57,16 @@ public class RayFilter implements ITargetFilter {
 
         List<Entity> entities = attacker.level().getEntities(attacker, area, EntitySelector.NO_SPECTATORS);
         for (Entity entity : entities) {
-            if (entity.equals(attacker) || entity.equals(attacker.getVehicle()) || entity.isAlive()) {
+            if (entity.equals(attacker) || entity.equals(attacker.getVehicle()) || !entity.isAlive()) {
                 continue;
             }
 
             Optional<Vec3> optional = entity.getBoundingBox().clip(startVec, endVec);
             if (optional.isPresent()) {
                 var result = new RayEntityHitResult(entity, optional.get(), startVec);
+                hitEntities.add(result);
+            } else if(entity.getBoundingBox().contains(startVec)) {
+                var result = new RayEntityHitResult(entity, startVec, startVec);
                 hitEntities.add(result);
             }
         }

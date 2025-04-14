@@ -1,10 +1,7 @@
 package me.xjqsh.lrtactical.network;
 
 import me.xjqsh.lrtactical.EquipmentMod;
-import me.xjqsh.lrtactical.network.message.CMeleeAttack;
-import me.xjqsh.lrtactical.network.message.SCustomCoolDownMessage;
-import me.xjqsh.lrtactical.network.message.SPackSyncMessage;
-import me.xjqsh.lrtactical.network.message.SThrowableSound;
+import me.xjqsh.lrtactical.network.message.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,10 +42,17 @@ public class NetworkHandler {
         );
 
         CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                CMeleeAttack.class,
-                CMeleeAttack::encode,
-                CMeleeAttack::decode,
-                CMeleeAttack::handle
+                CPrepareMeleeAttack.class,
+                CPrepareMeleeAttack::encode,
+                CPrepareMeleeAttack::decode,
+                CPrepareMeleeAttack::handle
+        );
+
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                CPerformMeleeAttack.class,
+                CPerformMeleeAttack::encode,
+                CPerformMeleeAttack::decode,
+                CPerformMeleeAttack::handle
         );
     }
 

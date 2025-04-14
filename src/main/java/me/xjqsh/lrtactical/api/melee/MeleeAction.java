@@ -4,13 +4,13 @@ public enum MeleeAction {
     LEFT("attack_left"),
     RIGHT("attack_right"),
     ;
-    public final String animationSignal;
+    public final String id;
 
     MeleeAction(String signal) {
-        this.animationSignal = signal;
+        this.id = signal;
     }
 
-    public String getAnimation() {
-        return animationSignal;
+    public String getId() {
+        return id;
     }
 }

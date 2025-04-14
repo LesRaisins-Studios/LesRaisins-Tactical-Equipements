@@ -8,5 +8,8 @@
   "effect.lrtactical.blinded": "致盲",
   "effect.lrtactical.deafened": "失聪",
   "config.lrtactical.effect.blackflash": "黑色致盲",
-  "config.lrtactical.effect.blackflash.desc": "使用黑色遮罩代替闪光弹的白色致盲效果"
+  "config.lrtactical.effect.blackflash.desc": "使用黑色遮罩代替闪光弹的白色致盲效果",
+  "key.category.lrtactical": "LesRaisins 战术装备",
+  "key.lrtactical.normal_attack.desc": "普通攻击",
+  "key.lrtactical.sp_attack.desc": "重击/特殊动作"
 }

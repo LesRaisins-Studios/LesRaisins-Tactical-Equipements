@@ -5,7 +5,7 @@ import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
 import me.xjqsh.lrtactical.network.NetworkHandler;
-import me.xjqsh.lrtactical.network.message.CMeleeAttack;
+import me.xjqsh.lrtactical.network.message.CPrepareMeleeAttack;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -17,6 +17,7 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
@@ -39,6 +40,32 @@ public class AttackKeys {
             "key.category.lrtactical");
 
     @SubscribeEvent
+    public static void tick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) return;
+
+        var mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null || player.isSpectator() || mc.gameMode == null) {
+            return;
+        }
+        ItemStack stack = player.getMainHandItem();
+
+        if (NORMAL_ATTACK.isDown()) {
+            player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(combatProperties -> {
+                if (combatProperties.getCoolDownTick() > 0) return;
+
+                if (combatProperties.preAttack(MeleeAction.LEFT, player.getEyePosition(), player.getLookAngle())) {
+                    mc.gameMode.ensureHasSentCarriedItem();
+                    if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof MeleeItemRenderer renderer) {
+                        renderer.triggerAnimation(stack, "attack_left");
+                        player.swing(InteractionHand.MAIN_HAND);
+                    }
+                }
+            });
+        }
+    }
+
+    @SubscribeEvent
     public static void onNormalAttack(InputEvent.MouseButton.Post event) {
         var mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
@@ -49,11 +76,10 @@ public class AttackKeys {
 
         while (NORMAL_ATTACK.consumeClick()) {
             player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(combatProperties -> {
-                if (combatProperties.attack(MeleeAction.LEFT)) {
+                if (combatProperties.preAttack(MeleeAction.LEFT, player.getEyePosition(), player.getLookAngle())) {
+                    mc.gameMode.ensureHasSentCarriedItem();
                     if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof MeleeItemRenderer renderer) {
-                        mc.gameMode.ensureHasSentCarriedItem();
                         renderer.triggerAnimation(stack, "attack_left");
-                        NetworkHandler.CHANNEL.sendToServer(new CMeleeAttack(MeleeAction.LEFT));
                         player.swing(InteractionHand.MAIN_HAND);
                     }
                 }
@@ -72,11 +98,10 @@ public class AttackKeys {
 
         while (SPECIAL_ATTACK.consumeClick()) {
             player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(combatProperties -> {
-                if (combatProperties.attack(MeleeAction.RIGHT)) {
+                if (combatProperties.preAttack(MeleeAction.RIGHT, player.getEyePosition(), player.getLookAngle())) {
+                    mc.gameMode.ensureHasSentCarriedItem();
                     if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof MeleeItemRenderer renderer) {
-                        mc.gameMode.ensureHasSentCarriedItem();
                         renderer.triggerAnimation(stack, "attack_right");
-                        NetworkHandler.CHANNEL.sendToServer(new CMeleeAttack(MeleeAction.RIGHT));
                         player.swing(InteractionHand.MAIN_HAND);
                     }
                 }
