@@ -1,7 +1,7 @@
 package me.xjqsh.lrtactical.client.renderer;
 
 import me.xjqsh.lrtactical.api.item.ICustomItem;
-import me.xjqsh.lrtactical.capability.CoolDownCapabilityProvider;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,7 +21,7 @@ public class CoolDownDecorations implements IItemDecorator {
         }
         if (stack.getItem() instanceof ICustomItem item) {
             float f = item.getCoolDownId(stack)
-                    .map(id -> player.getCapability(CoolDownCapabilityProvider.CAPABILITY)
+                    .map(id -> player.getCapability(CustomItemCoolDownsProvider.CAPABILITY)
                             .map(cap -> cap.getCooldownPercent(id, partialTicks))
                             .orElse(0f)
                     ).orElse(0f);

@@ -1,8 +1,6 @@
 package me.xjqsh.lrtactical.network.message;
 
-import me.xjqsh.lrtactical.capability.CoolDownCapabilityProvider;
-import me.xjqsh.lrtactical.capability.CustomItemCoolDowns;
-import me.xjqsh.lrtactical.resource.CommonNetworkCache;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +36,7 @@ public record SCustomCoolDownMessage(ResourceLocation id, int duration) {
         if (player == null) {
             return;
         }
-        player.getCapability(CoolDownCapabilityProvider.CAPABILITY).ifPresent(
+        player.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(
             coolDownCapability -> {
                 if (message.duration() == 0) {
                     coolDownCapability.removeCooldown(message.id());

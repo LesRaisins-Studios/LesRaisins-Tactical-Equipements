@@ -2,6 +2,7 @@ package me.xjqsh.lrtactical.client;
 
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.client.audio.SoundHandler;
+import me.xjqsh.lrtactical.client.input.AttackKeys;
 import me.xjqsh.lrtactical.client.overlay.UsingProgressOverlay;
 import me.xjqsh.lrtactical.client.particle.SmokeCloudParticle;
 import me.xjqsh.lrtactical.client.renderer.CoolDownDecorations;
@@ -12,10 +13,7 @@ import me.xjqsh.lrtactical.entity.StunGrenadeEntity;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModParticleTypes;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +46,12 @@ public class ClientSetupHandler {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(SoundHandler.get());
+    }
+
+    @SubscribeEvent
+    public static void onClientSetup(RegisterKeyMappingsEvent event) {
+        event.register(AttackKeys.NORMAL_ATTACK);
+        event.register(AttackKeys.SPECIAL_ATTACK);
     }
 }
 

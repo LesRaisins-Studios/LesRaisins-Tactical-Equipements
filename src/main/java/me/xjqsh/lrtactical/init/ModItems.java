@@ -4,6 +4,7 @@ package me.xjqsh.lrtactical.init;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.item.IThrowable;
+import me.xjqsh.lrtactical.item.MeleeItem;
 import me.xjqsh.lrtactical.item.ThrowableItem;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import net.minecraft.core.registries.Registries;
@@ -30,6 +31,7 @@ public class ModItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, EquipmentMod.MOD_ID);
     public static RegistryObject<ThrowableItem> THROWABLE = ITEMS.register("throwable", ThrowableItem::new);
+    public static RegistryObject<MeleeItem> MELEE = ITEMS.register("melee", MeleeItem::new);
 
     public static ItemStack getThrowableIcon() {
         ItemStack stack = new ItemStack(THROWABLE.get());

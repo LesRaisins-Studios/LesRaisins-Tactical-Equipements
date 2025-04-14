@@ -1,6 +1,6 @@
 {
   "model": "lrtactical:throwable/m67_grenade_geo",
-  "animation": "lrtactical:m67_grenade",
+  "animation": "lrtactical:throwable/m67_grenade",
   "state_machine": "lrtactical:default_grenade_state_machine",
   "texture": "lrtactical:throwable/m67_uv",
   "sounds": {

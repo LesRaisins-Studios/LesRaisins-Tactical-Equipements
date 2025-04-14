@@ -138,7 +138,7 @@ public class CustomExplosion extends Explosion {
                     if (distance != 0.0D) {
                         double seenPercent = Mth.clamp(getSeenPercent(position, entity), 0.01, Double.POSITIVE_INFINITY);
                         double damagePercent = (1.0D - distanceRate) * seenPercent;
-                        double damageFinal = (damagePercent * damagePercent + damagePercent) * damage;
+                        double damageFinal = (damagePercent * damagePercent + damagePercent) * damage / 2.0;
 
                         if (entity instanceof Monster monster) {
                             monster.hurt(this.damageSource, (float) damageFinal * (1 + 0.2f * this.damageMultiplier));

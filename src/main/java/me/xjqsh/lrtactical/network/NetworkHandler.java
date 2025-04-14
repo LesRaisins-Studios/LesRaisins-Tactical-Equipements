@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.network;
 
 import me.xjqsh.lrtactical.EquipmentMod;
+import me.xjqsh.lrtactical.network.message.CMeleeAttack;
 import me.xjqsh.lrtactical.network.message.SCustomCoolDownMessage;
 import me.xjqsh.lrtactical.network.message.SPackSyncMessage;
 import me.xjqsh.lrtactical.network.message.SThrowableSound;
@@ -41,6 +42,13 @@ public class NetworkHandler {
                 SThrowableSound::encode,
                 SThrowableSound::decode,
                 SThrowableSound::handle
+        );
+
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                CMeleeAttack.class,
+                CMeleeAttack::encode,
+                CMeleeAttack::decode,
+                CMeleeAttack::handle
         );
     }
 

@@ -1,6 +1,8 @@
 package me.xjqsh.lrtactical.client.overlay;
 
 import me.xjqsh.lrtactical.api.item.ICustomItem;
+import me.xjqsh.lrtactical.capability.CombatProperties;
+import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
@@ -29,5 +31,19 @@ public class UsingProgressOverlay implements IGuiOverlay {
             }
             guiGraphics.fill(x, y, (int) (x + progress * 32), y + 4, 0xFFFFFF | (alpha << 24));
         }
+
+        player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
+            if (cap.getCoolDownTick() > 0) {
+                float maxTick = cap.getLastMaxTick();
+                float progress = 1 - Math.min(1f, cap.getCoolDownTick() / maxTick);
+                int x = screenWidth / 2 - 16;
+                int y = screenHeight / 2 + 16;
+                int alpha = 0x80;
+                if (progress == 1f) {
+                    alpha = (int) (80 + 80 * Math.sin(cap.getCoolDownTick() / 2f));
+                }
+                guiGraphics.fill(x, y, (int) (x + progress * 32), y + 4, 0xFFFFFF | (alpha << 24));
+            }
+        });
     }
 }

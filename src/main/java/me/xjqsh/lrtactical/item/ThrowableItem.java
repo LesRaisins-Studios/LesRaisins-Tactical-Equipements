@@ -1,10 +1,9 @@
 package me.xjqsh.lrtactical.item;
 
 import com.tacz.guns.api.item.IAnimationItem;
-import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
 import me.xjqsh.lrtactical.api.item.IThrowable;
-import me.xjqsh.lrtactical.capability.CoolDownCapabilityProvider;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import me.xjqsh.lrtactical.client.renderer.item.ThrowableItemRendererWrapper;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import net.minecraft.resources.ResourceLocation;
@@ -84,7 +83,7 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
         ItemStack stack = player.getItemInHand(pUsedHand);
         boolean flag = getThrowableIndex(stack)
                 .map(index -> index.getData().getCooldownCategory())
-                .map(id -> player.getCapability(CoolDownCapabilityProvider.CAPABILITY)
+                .map(id -> player.getCapability(CustomItemCoolDownsProvider.CAPABILITY)
                         .map(cap -> cap.isOnCooldown(id))
                         .orElse(false)
                 ).orElse(false);
@@ -112,7 +111,7 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
                     world.addFreshEntity(throwable);
                     ResourceLocation id = index.getData().getCooldownCategory();
                     if (id != null) {
-                        entity.getCapability(CoolDownCapabilityProvider.CAPABILITY).ifPresent(cap -> {
+                        entity.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(cap -> {
                             cap.addCooldown(id, index.getData().getCooldown());
                         });
                     }
@@ -137,20 +136,12 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
     }
 
     @Override
-    public boolean isSame(ItemStack i, ItemStack j) {
-        IThrowable iThrowable1 = IThrowable.of(i);
-        IThrowable iThrowable2 = IThrowable.of(j);
-        if (iThrowable1 != null && iThrowable2 != null) {
-            return iThrowable1.getId(i).equals(iThrowable2.getId(j));
-        }
-        if (i.isEmpty() || j.isEmpty()) {
-            return i.isEmpty() && j.isEmpty();
-        }
-        return false;
+    public String getDescriptionId(ItemStack stack) {
+        return getThrowableIndex(stack).map(ThrowableIndex::getName).orElse(super.getDescriptionId(stack));
     }
 
     @Override
-    public String getDescriptionId(ItemStack stack) {
-        return getThrowableIndex(stack).map(ThrowableIndex::getName).orElse(super.getDescriptionId(stack));
+    public boolean isSame(ItemStack stack1, ItemStack stack2) {
+        return IThrowable.super.isSame(stack1, stack2);
     }
 }

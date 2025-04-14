@@ -1,7 +1,10 @@
 package me.xjqsh.lrtactical.init;
 
 import me.xjqsh.lrtactical.EquipmentMod;
-import me.xjqsh.lrtactical.capability.CoolDownCapabilityProvider;
+import me.xjqsh.lrtactical.capability.CombatProperties;
+import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDowns;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +17,8 @@ public class CommonSetupHandler {
     @SubscribeEvent
     public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player player) {
-            event.addCapability(new ResourceLocation(EquipmentMod.MOD_ID, "custom_cooldown"), new CoolDownCapabilityProvider(player));
+            event.addCapability(CustomItemCoolDowns.ID, new CustomItemCoolDownsProvider(player));
+            event.addCapability(CombatProperties.ID, new CombatPropertiesProvider(player));
         }
     }
 }

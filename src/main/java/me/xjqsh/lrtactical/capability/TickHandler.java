@@ -6,12 +6,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
-public class CoolDownHandler {
+public class TickHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             Player player = event.player;
-            player.getCapability(CoolDownCapabilityProvider.CAPABILITY).ifPresent(CustomItemCoolDowns::tick);
+            player.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(CustomItemCoolDowns::tick);
+            player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(CombatProperties::tick);
         }
     }
 }

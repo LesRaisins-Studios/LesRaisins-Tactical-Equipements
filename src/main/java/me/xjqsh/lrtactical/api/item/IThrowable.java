@@ -39,6 +39,19 @@ public interface IThrowable extends ICustomItem {
     }
 
     @Override
+    default boolean isSame(ItemStack i, ItemStack j) {
+        IThrowable iThrowable1 = IThrowable.of(i);
+        IThrowable iThrowable2 = IThrowable.of(j);
+        if (iThrowable1 != null && iThrowable2 != null) {
+            return iThrowable1.getId(i).equals(iThrowable2.getId(j));
+        }
+        if (i.isEmpty() || j.isEmpty()) {
+            return i.isEmpty() && j.isEmpty();
+        }
+        return false;
+    }
+
+    @Override
     default Optional<ResourceLocation> getCoolDownId(ItemStack stack) {
         return getThrowableIndex(stack)
                 .map(index -> index.getData().getCooldownCategory());
