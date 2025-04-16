@@ -5,6 +5,8 @@ import com.google.common.collect.Multimap;
 import com.google.gson.JsonElement;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
+import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
+import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponData;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponType;
 import me.xjqsh.lrtactical.util.DefaultAttrUUIDUtil;
@@ -78,7 +80,11 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
 
     @Override
     public ItemStack createItemStack() {
-        return ItemStack.EMPTY;
+        ItemStack stack = new ItemStack(baseItem);
+        if (stack.getItem() instanceof IMeleeWeapon iMeleeWeapon) {
+            iMeleeWeapon.setId(stack, this.getId());
+        }
+        return stack;
     }
 
     @Override

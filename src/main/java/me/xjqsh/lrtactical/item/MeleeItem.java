@@ -8,6 +8,7 @@ import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
+import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.item.melee.CombatData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -78,6 +79,12 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 5;
+    }
+
+    @NotNull
+    @Override
+    public String getDescriptionId(@NotNull ItemStack stack) {
+        return getMeleeIndex(stack).map(MeleeWeaponIndex::getDescriptionId).orElse(super.getDescriptionId(stack));
     }
 
     @Override

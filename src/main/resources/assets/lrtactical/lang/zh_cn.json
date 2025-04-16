@@ -4,6 +4,7 @@
   "item.lrtactical.rgn": "RGN 手雷",
   "item.lrtactical.smoke_grenade": "M18 烟雾弹",
   "item.lrtactical.flash_grenade": "闪光弹",
+  "item_group.lrtactical.melee": "LesRaisins - 近战武器",
   "config.lrtactical.effect": "效果",
   "effect.lrtactical.blinded": "致盲",
   "effect.lrtactical.deafened": "失聪",

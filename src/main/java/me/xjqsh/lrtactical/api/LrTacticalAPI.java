@@ -61,7 +61,7 @@ public class LrTacticalAPI {
         return Optional.ofNullable(CommonAssetsManager.get().getMeleeIndex(item.getId(stack)));
     }
 
-    public static Collection<MeleeWeaponIndex<?>> getMeleeIndexIndexes() {
+    public static Collection<MeleeWeaponIndex<?>> getMeleeIndexes() {
         return CommonAssetsManager.get().getMeleeIndexes();
     }
 }

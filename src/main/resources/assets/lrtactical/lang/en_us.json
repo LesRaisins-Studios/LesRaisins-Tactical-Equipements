@@ -4,6 +4,7 @@
   "item.lrtactical.rgn": "RGN Grenade",
   "item.lrtactical.smoke_grenade": "Smoke Grenade",
   "item.lrtactical.flash_grenade": "Flash Grenade",
+  "item_group.lrtactical.melee": "LesRaisins - Melee Weapon",
   "config.lrtactical.effect": "Effects",
   "effect.lrtactical.blinded": "Blinded",
   "effect.lrtactical.deafened": "Defended",
