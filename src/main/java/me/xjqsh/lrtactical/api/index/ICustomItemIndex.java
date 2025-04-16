@@ -10,4 +10,6 @@ public interface ICustomItemIndex {
     ResourceLocation getId();
 
     Item getBaseItem();
+
+    String getDescriptionId();
 }

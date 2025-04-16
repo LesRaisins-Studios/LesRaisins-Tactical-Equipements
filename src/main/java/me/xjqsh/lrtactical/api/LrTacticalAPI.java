@@ -1,8 +1,11 @@
 package me.xjqsh.lrtactical.api;
 
+import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.client.resource.LrClientAssetsManager;
+import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
 import me.xjqsh.lrtactical.client.resource.display.ThrowableDisplayInstance;
+import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
 import net.minecraft.resources.ResourceLocation;
@@ -27,6 +30,19 @@ public class LrTacticalAPI {
         return Optional.ofNullable(LrClientAssetsManager.INSTANCE.getThrowableDisplay(id));
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static Optional<MeleeDisplayInstance> getMeleeDisplay(ItemStack stack) {
+        if (!(stack.getItem() instanceof IMeleeWeapon item)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(LrClientAssetsManager.INSTANCE.getMeleeDisplay(item.getId(stack)));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static Optional<MeleeDisplayInstance> getMeleeDisplay(ResourceLocation index) {
+        return Optional.ofNullable(LrClientAssetsManager.INSTANCE.getMeleeDisplay(index));
+    }
+
     public static Optional<ThrowableIndex<?, ?>> getThrowableIndex(ItemStack stack) {
         if (!(stack.getItem() instanceof IThrowable item)) {
             return Optional.empty();
@@ -36,5 +52,16 @@ public class LrTacticalAPI {
 
     public static Collection<ThrowableIndex<?, ?>> getThrowableIndexes() {
         return CommonAssetsManager.get().getThrowableIndexes();
+    }
+
+    public static Optional<MeleeWeaponIndex<?>> getMeleeIndex(ItemStack stack) {
+        if (!(stack.getItem() instanceof IMeleeWeapon item)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(CommonAssetsManager.get().getMeleeIndex(item.getId(stack)));
+    }
+
+    public static Collection<MeleeWeaponIndex<?>> getMeleeIndexIndexes() {
+        return CommonAssetsManager.get().getMeleeIndexes();
     }
 }

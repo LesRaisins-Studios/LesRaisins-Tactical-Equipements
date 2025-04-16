@@ -1,45 +1,54 @@
 {
-  "attributes": {
-    "minecraft:generic.attack_damage": 8,
-    "minecraft:generic.movement_speed": 0.1
-  },
-  // tick
-  "draw_time": 15,
-  // tick
-  "put_away_time": 5,
-  "attack": {
-    "left_attack": {
-      // 伤害倍率
-      "factor": 0.875,
-      // 击退
-      "knockback": 0.2,
-      // 攻击冷却(tick)
-      "cooldown": 10,
-      // 延迟出伤(tick)
-      "delay": 1,
-      // 判定类型
-      "hitbox": {
-        // 圆锥区域
-        "type": "cone",
-        // 最大距离
-        "max_range": 2.5,
-        // 角度
-        "angle": 90,
-        // 排除自己
-        "exclude_self": true
+  "name": "item.lrtactical.karambit",
+  "type": "lrtactical:normal",
+  "base_item": "lrtactical:melee",
+  "data": {
+    "attributes": {
+      "generic.attack_damage": 7,
+      "minecraft:generic.movement_speed": {
+        "amount": 0.02,
+        "operation": "percent"
       }
     },
-    "right_attack": {
-      "factor": 1.5,
-      "knockback": 0.3,
-      "cooldown": 18,
-      "hitbox": {
-        // 射线
-        "type": "ray",
-        // 最大距离
-        "max_range": 2.5,
-        // 穿刺
-        "penetration": 0
+    // tick
+    "draw_time": 15,
+    // tick
+    "put_away_time": 5,
+    "attack": {
+      "attack_left": {
+        // 伤害倍率
+        "factor": 0.875,
+        // 击退
+        "knockback": 0.2,
+        // 攻击冷却(tick)
+        "cooldown": 10,
+        // 延迟出伤(tick)
+        "delay": 0,
+        // 判定类型
+        "hitbox": {
+          // 圆锥区域
+          "type": "cone",
+          // 最大距离
+          "max_range": 2.5,
+          // 角度
+          "max_angle": 90,
+          // 排除自己
+          "exclude_self": true
+        }
+      },
+      "attack_right": {
+        "factor": 1.5,
+        "knockback": 0.3,
+        "cooldown": 18,
+        "delay": 5,
+        "hitbox": {
+          // 射线
+          "type": "ray",
+          // 最大距离
+          "max_range": 2.5,
+          // 穿刺
+          "penetration": 0
+        }
       }
     }
   }

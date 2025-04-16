@@ -7,6 +7,7 @@
   "config.lrtactical.effect": "效果",
   "effect.lrtactical.blinded": "致盲",
   "effect.lrtactical.deafened": "失聪",
+  "enchantment.lrtactical.backstab": "背刺",
   "config.lrtactical.effect.blackflash": "黑色致盲",
   "config.lrtactical.effect.blackflash.desc": "使用黑色遮罩代替闪光弹的白色致盲效果",
   "key.category.lrtactical": "LesRaisins 战术装备",

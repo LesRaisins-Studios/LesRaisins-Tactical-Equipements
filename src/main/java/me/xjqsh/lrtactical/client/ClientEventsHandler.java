@@ -1,24 +1,17 @@
 package me.xjqsh.lrtactical.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.tacz.guns.GunMod;
-import com.tacz.guns.api.item.IGun;
-import com.tacz.guns.client.input.InteractKey;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.config.ClientConfig;
 import me.xjqsh.lrtactical.init.ModEffects;
-import me.xjqsh.lrtactical.item.MeleeItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

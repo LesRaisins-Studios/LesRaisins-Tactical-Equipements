@@ -8,7 +8,7 @@ import com.google.gson.JsonParseException;
 import com.tacz.guns.GunMod;
 import com.tacz.guns.resource.manager.JsonDataManager;
 import me.xjqsh.lrtactical.init.ModRegistries;
-import me.xjqsh.lrtactical.item.index.ThrowableIndex;
+import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
@@ -18,9 +18,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ThrowableIndexManager extends JsonDataManager<ThrowableIndex<?, ?>> {
-    public ThrowableIndexManager(Gson pGson) {
-        super(null, pGson, "index/throwable", "ThrowableIndex");
+public class MeleeIndexManager extends JsonDataManager<MeleeWeaponIndex<?>> {
+    public MeleeIndexManager(Gson pGson) {
+        super(null, pGson, "index/melee", "MeleeWeaponIndex");
     }
 
     private Map<ResourceLocation, String> networkCache = new HashMap<>();
@@ -39,7 +39,7 @@ public class ThrowableIndexManager extends JsonDataManager<ThrowableIndex<?, ?>>
             JsonObject pJson = element.getAsJsonObject();
 
             try {
-                ThrowableIndex<?, ?> index = ThrowableIndexManager.parse(pJson, id);
+                MeleeWeaponIndex<?> index = MeleeIndexManager.parse(pJson, id);
                 dataMap.put(id, index);
                 builder.put(id, pJson.toString());
             } catch (JsonParseException | IllegalArgumentException e) {
@@ -54,16 +54,16 @@ public class ThrowableIndexManager extends JsonDataManager<ThrowableIndex<?, ?>>
         return networkCache;
     }
 
-    public static ThrowableIndex<?, ?> parse(JsonObject pJson, ResourceLocation id) throws JsonParseException {
+    public static MeleeWeaponIndex<?> parse(JsonObject pJson, ResourceLocation id) throws JsonParseException {
         String name = GsonHelper.getAsString(pJson, "name", "unknown.lrtactical.name");
 
-        String type_name = GsonHelper.getAsString(pJson, "type");
-        var type = ModRegistries.THROWABLE_TYPE_SUPPLIER.get().getValue(new ResourceLocation(type_name));
+        String type_name = GsonHelper.getAsString(pJson, "type", "lrtactical:normal");
+        var type = ModRegistries.MELEE_WEAPON_TYPE_SUPPLIER.get().getValue(new ResourceLocation(type_name));
         if (type == null) {
             throw new JsonParseException("Unknown type name \"" + type_name + "\"");
         }
 
-        String baseItem = GsonHelper.getAsString(pJson, "base_item", "lrtactical:throwable");
+        String baseItem = GsonHelper.getAsString(pJson, "base_item", "lrtactical:melee");
         var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(baseItem));
         if (item == null) {
             throw new JsonParseException("Unknown item id \"" + type_name + "\"");
@@ -71,6 +71,6 @@ public class ThrowableIndexManager extends JsonDataManager<ThrowableIndex<?, ?>>
 
         JsonObject data = GsonHelper.getAsJsonObject(pJson, "data");
 
-        return ThrowableIndex.deserialize(type, data, name, id, item);
+        return MeleeWeaponIndex.deserialize(type, data, name, id, item);
     }
 }

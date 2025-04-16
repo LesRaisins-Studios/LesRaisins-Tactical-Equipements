@@ -3,17 +3,15 @@ package me.xjqsh.lrtactical.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.tacz.guns.api.item.IAnimationItem;
-import me.xjqsh.lrtactical.api.collision.ConeFilter;
 import me.xjqsh.lrtactical.api.collision.ITargetFilter;
-import me.xjqsh.lrtactical.api.collision.RayFilter;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
-import me.xjqsh.lrtactical.util.VectorUtil;
+import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
+import me.xjqsh.lrtactical.item.melee.CombatData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -47,9 +45,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         if (slot == EquipmentSlot.MAINHAND) {
-            ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-            builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 12, AttributeModifier.Operation.ADDITION));
-            return builder.build();
+            return getMeleeIndex(stack).map(MeleeWeaponIndex::getDefaultModifiers).orElse(ImmutableMultimap.of());
         }
         return ImmutableMultimap.of();
     }
@@ -86,52 +82,61 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
 
     @Override
     public int getAttackCoolDown(ItemStack stack, MeleeAction action) {
-        return switch (action) {
-            case LEFT -> 10;
-            case RIGHT -> 18;
-        };
+        return getMeleeIndex(stack)
+                .map(index -> index.getData().getAttackInfo())
+                .map(attackInfos -> attackInfos.getAttackInfo(action))
+                .map(CombatData.MeleeAttackInfo::cooldown)
+                .orElse(0);
     }
 
     @Override
     public int getDrawTime(ItemStack stack) {
-        return 15;
+        return getMeleeIndex(stack).map(index -> index.getData().getDrawTime()).orElse(0);
     }
 
     @Override
     public int getAttackDelay(Player attacker, ItemStack stack, MeleeAction action) {
-        return switch (action) {
-            case LEFT -> 0;
-            case RIGHT -> 5;
-        };
+        return getMeleeIndex(stack)
+                .map(index -> index.getData().getAttackInfo())
+                .map(attackInfos -> attackInfos.getAttackInfo(action))
+                .map(CombatData.MeleeAttackInfo::delay)
+                .orElse(0);
     }
 
     @Override
-    public void attack(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {
+    public void attack(Player attacker, ItemStack stack, MeleeAction action, final Vec3 origin, final Vec3 direction) {
         float base = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        ITargetFilter filter = switch (action) {
-            case LEFT -> new ConeFilter(3d, 90d);
-            case RIGHT -> new RayFilter(3.5d, 1);
-        };
+        getMeleeIndex(stack)
+                .map(index -> index.getData().getAttackInfo())
+                .map(attackInfos -> attackInfos.getAttackInfo(action))
+                .ifPresent(attackInfo -> {
+                    float damage = base * attackInfo.factor();
+                    ITargetFilter filter = attackInfo.hitbox();
+                    Vec3 origin1 = new Vec3(origin.x, origin.y, origin.z);
+                    Vec3 direction1 = new Vec3(direction.x, direction.y, direction.z);
 
-        if (origin.distanceToSqr(attacker.getEyePosition()) > attacker.getDeltaMovement().lengthSqr() * 4) {
-            origin = attacker.getEyePosition();
-            direction = attacker.getLookAngle();
-        }
+                    if (origin1.distanceToSqr(attacker.getEyePosition()) > attacker.getDeltaMovement().lengthSqr() * 4) {
+                        origin1 = attacker.getEyePosition();
+                        direction1 = attacker.getLookAngle();
+                    }
 
-        SoundEvent soundEvent = switch (action) {
-            case LEFT -> SoundEvents.PLAYER_ATTACK_WEAK;
-            case RIGHT -> SoundEvents.PLAYER_ATTACK_STRONG;
-        };
-        attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
-                soundEvent, attacker.getSoundSource(), 1.0F, 1.0F);
+                    SoundEvent soundEvent = switch (action) {
+                        case LEFT -> SoundEvents.PLAYER_ATTACK_WEAK;
+                        case RIGHT -> SoundEvents.PLAYER_ATTACK_STRONG;
+                    };
 
-        for (Entity livingentity : filter.filterTargets(attacker, origin, direction)) {
-            boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
+                    attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
+                            soundEvent, attacker.getSoundSource(), 1.0F, 1.0F);
 
-            if (livingentity != attacker && !attacker.isAlliedTo(livingentity) && flag) {
-                this.performAttack(attacker, livingentity, stack, base);
-            }
-        }
+                    if (damage <= 0) return;
+                    for (Entity livingentity : filter.filterTargets(attacker, origin1, direction1)) {
+                        boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
+
+                        if (livingentity != attacker && !attacker.isAlliedTo(livingentity) && flag) {
+                            this.performAttack(attacker, livingentity, stack, damage);
+                        }
+                    }
+                });
     }
 
     public void performAttack(Player attacker, Entity target, ItemStack stack, float base) {
@@ -157,6 +162,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
         CriticalHitEvent hitResult = ForgeHooks.getCriticalHit(attacker, target, flag2, flag2 ? 1.5F : 1.0F);
         if (hitResult != null) {
             base *= hitResult.getDamageModifier();
+            flag2 = true;
         }
 
         int j = EnchantmentHelper.getFireAspect(attacker);

@@ -1,31 +1,29 @@
 package me.xjqsh.lrtactical.client.renderer.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.tacz.guns.api.client.animation.AnimationController;
-import com.tacz.guns.api.client.animation.Animations;
-import com.tacz.guns.api.client.animation.statemachine.LuaStateMachineFactory;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import com.tacz.guns.api.client.animation.statemachine.LuaAnimationStateMachine;
 import com.tacz.guns.client.animation.statemachine.ItemAnimationStateContext;
 import com.tacz.guns.client.model.BedrockAnimatedModel;
-import com.tacz.guns.client.model.functional.LeftHandRender;
-import com.tacz.guns.client.model.functional.RightHandRender;
+import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
-import com.tacz.guns.client.resource.ClientAssetsManager;
-import com.tacz.guns.client.resource.pojo.model.BedrockVersion;
-import me.xjqsh.lrtactical.EquipmentMod;
-import net.minecraft.client.player.LocalPlayer;
+import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
+import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.ItemTransform;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-
-import static com.tacz.guns.client.model.GunModelConstant.LEFTHAND_POS_NODE;
-import static com.tacz.guns.client.model.GunModelConstant.RIGHTHAND_POS_NODE;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, ItemAnimationStateContext> {
-    public MeleeItemRenderer() {
-        init();
-    }
+    private static final SlotModel SLOT_MODEL = new SlotModel();
 
     @Override
     public ItemAnimationStateContext initContext(ItemStack stack, Player player, float partialTick) {
@@ -40,39 +38,58 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
     }
 
     @Override
-    public long getPutAwayTime(ItemStack stack) {
-        return 400;
+    public ResourceLocation getTextureLocation(ItemStack stack) {
+        return LrTacticalAPI.getMeleeDisplay(stack).map(MeleeDisplayInstance::getTexture).orElse(null);
+    }
+
+    @Override
+    @Nullable
+    public LuaAnimationStateMachine<ItemAnimationStateContext> getStateMachine(ItemStack stack) {
+        return LrTacticalAPI.getMeleeDisplay(stack).map(MeleeDisplayInstance::getStateMachine).orElse(null);
     }
 
     @Override
     public BedrockAnimatedModel getModel(ItemStack stack) {
-        return super.getModel(stack);
+        return LrTacticalAPI.getMeleeDisplay(stack).map(MeleeDisplayInstance::getModel).orElse(null);
     }
 
     @Override
-    public void renderFirstPerson(LocalPlayer player, ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource, int light, float partialTick) {
-        super.renderFirstPerson(player, stack, ctx, poseStack, bufferSource, light, partialTick);
+    public long getPutAwayTime(ItemStack stack) {
+        return LrTacticalAPI.getMeleeIndex(stack)
+                .map(MeleeWeaponIndex::getData)
+                .map(throwableData -> throwableData.getPutAwayTime() * 50L)
+                .orElse(0L);
     }
 
-    public void init() {
-        var pojo = ClientAssetsManager.INSTANCE.getBedrockModelPOJO(new ResourceLocation(EquipmentMod.MOD_ID, "melee/karambit_geo"));
-        BedrockAnimatedModel model = new BedrockAnimatedModel(pojo, BedrockVersion.NEW);
-        // 左手手臂
-        model.setFunctionalRenderer(LEFTHAND_POS_NODE, bedrockPart -> new LeftHandRender(model));
-        // 右手手臂
-        model.setFunctionalRenderer(RIGHTHAND_POS_NODE, bedrockPart -> new RightHandRender(model));
-        this.setModel(model);
+    @Override
+    public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+        if (ctx.firstPerson()) return;
+        LrTacticalAPI.getMeleeDisplay(stack).ifPresent(display -> {
+            BedrockAnimatedModel model = display.getModel();
+            poseStack.pushPose();
+            {
+                ItemTransforms transforms = display.getTransforms();
+                if (transforms != null) {
+                    poseStack.translate(0.5F, 0.5F, 0.5F);
+                    ItemTransform transform = transforms.getTransform(ctx);
+                    transform.apply(false, poseStack);
+                    poseStack.translate(-0.5F, -0.5F, -0.5F);
+                }
 
-        this.textureLocation = new ResourceLocation(EquipmentMod.MOD_ID, "textures/melee/karambit_uv.png");
-
-        var animation = ClientAssetsManager.INSTANCE.getBedrockAnimations(new ResourceLocation(EquipmentMod.MOD_ID, "melee/karambit"));
-        AnimationController controller = Animations.createControllerFromBedrock(animation, model);
-
-        var script = ClientAssetsManager.INSTANCE.getScript(new ResourceLocation(EquipmentMod.MOD_ID, "default_melee_state_machine"));
-
-        stateMachine = new LuaStateMachineFactory<ItemAnimationStateContext>()
-                .setController(controller)
-                .setLuaScripts(script)
-                .build();
+                // 从渲染原点 (0, 24, 0) 移动到模型原点 (0, 0, 0)
+                poseStack.translate(0.5, 1.5f, 0.5);
+                // 基岩版模型是上下颠倒的，需要翻转过来。
+                poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
+                if (model != null) {
+                    model.render(poseStack, ctx, RenderType.entityCutout(
+                            getTextureLocation(stack)
+                    ), light, overlay);
+                } else {
+                    VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
+                    SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+                }
+            }
+            poseStack.popPose();
+        });
     }
 }

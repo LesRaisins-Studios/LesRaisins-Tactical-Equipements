@@ -2,6 +2,7 @@ package me.xjqsh.lrtactical.api.item;
 
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
 import net.minecraft.nbt.CompoundTag;

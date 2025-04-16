@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 @AutoRegisterCapability
@@ -23,6 +25,7 @@ public class CombatProperties {
     private int lastMaxTick = 0;
     private int lastSelected = 0;
 
+    @OnlyIn(Dist.CLIENT)
     private DelayAttack delayedAction = null;
 
     private boolean preparingAttack = false;
@@ -90,6 +93,8 @@ public class CombatProperties {
             if (!entity.level().isClientSide()) {
                 // 服务端，准备进行攻击
                 this.preparingAttack = true;
+                // 服务器宽限1tick以平衡延迟
+                this.coolDownTick = Math.max(0, coolDownTick - 1);
                 if (delay == 0){
                     this.postAttack(action, entity.position(), entity.getLookAngle());
                 }

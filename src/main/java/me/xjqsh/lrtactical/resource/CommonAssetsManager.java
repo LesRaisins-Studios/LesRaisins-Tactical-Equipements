@@ -1,11 +1,17 @@
 package me.xjqsh.lrtactical.resource;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.xjqsh.lrtactical.api.collision.ITargetFilter;
+import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
+import me.xjqsh.lrtactical.item.melee.AttributeData;
+import me.xjqsh.lrtactical.item.melee.CombatData;
 import me.xjqsh.lrtactical.network.DataType;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SPackSyncMessage;
+import me.xjqsh.lrtactical.resource.manager.MeleeIndexManager;
 import me.xjqsh.lrtactical.resource.manager.ThrowableIndexManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
@@ -23,6 +29,9 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     public static CommonAssetsManager INSTANCE;
     public static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .registerTypeAdapter(CombatData.class, new CombatData.Deserializer())
+            .registerTypeAdapter(ITargetFilter.class, new ITargetFilter.Deserializer())
+            .registerTypeAdapter(AttributeData.class, new AttributeData.Deserializer())
             .create();
 
     private CommonAssetsManager() {
@@ -33,14 +42,20 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     }
 
     public ThrowableIndexManager throwableIndexManager;
+    public MeleeIndexManager meleeIndexManager;
 
     private void reloadAndRegister(Consumer<PreparableReloadListener> register) {
         throwableIndexManager = new ThrowableIndexManager(GSON);
+        meleeIndexManager = new MeleeIndexManager(GSON);
         register.accept(throwableIndexManager);
+        register.accept(meleeIndexManager);
     }
 
     public Map<DataType, Map<ResourceLocation, String>> toNetwork() {
-        return Map.of(DataType.THROWABLE_INDEX, throwableIndexManager.getCache());
+        ImmutableMap.Builder<DataType, Map<ResourceLocation, String>> builder = ImmutableMap.builder();
+        builder.put(DataType.THROWABLE_INDEX, throwableIndexManager.getCache());
+        builder.put(DataType.MELEE_INDEX, meleeIndexManager.getCache());
+        return builder.build();
     }
 
     @Override
@@ -51,6 +66,16 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     @Override
     public Collection<ThrowableIndex<?, ?>> getThrowableIndexes() {
         return throwableIndexManager.getAllData().values();
+    }
+
+    @Override
+    public MeleeWeaponIndex<?> getMeleeIndex(ResourceLocation id) {
+        return meleeIndexManager.getData(id);
+    }
+
+    @Override
+    public Collection<MeleeWeaponIndex<?>> getMeleeIndexes() {
+        return meleeIndexManager.getAllData().values();
     }
 
     @SubscribeEvent

@@ -7,6 +7,7 @@
   "config.lrtactical.effect": "Effects",
   "effect.lrtactical.blinded": "Blinded",
   "effect.lrtactical.deafened": "Defended",
+  "enchantment.lrtactical.backstab": "Backstab",
   "config.lrtactical.effect.blackflash": "Black Flash",
   "config.lrtactical.effect.blackflash.desc": "Use black overlay instead of white when blinded by flashbang",
   "key.category.lrtactical": "LesRaisins Tactical",

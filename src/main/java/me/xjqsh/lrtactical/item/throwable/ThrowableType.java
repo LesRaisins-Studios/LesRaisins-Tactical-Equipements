@@ -3,27 +3,12 @@ package me.xjqsh.lrtactical.item.throwable;
 import com.google.gson.JsonElement;
 import me.xjqsh.lrtactical.entity.ThrowableItemEntity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-public class ThrowableType<T extends ThrowableData, E extends ThrowableItemEntity> {
-    private final ThrowableFactory<T, E> factory;
-    private final ThrowableDataSerializer<T> serializer;
-    private Item item;
-
-    public ThrowableType(ThrowableFactory<T, E> factory, ThrowableDataSerializer<T> serializer) {
-        this.factory = factory;
-        this.serializer = serializer;
-    }
-
-    public ThrowableFactory<T, E> getFactory() {
-        return factory;
-    }
-
-    public ThrowableDataSerializer<T> getSerializer() {
-        return serializer;
-    }
-
+public record ThrowableType<T extends ThrowableData, E extends ThrowableItemEntity>(
+        ThrowableType.ThrowableFactory<T, E> factory,
+        ThrowableType.ThrowableDataSerializer<T> serializer
+) {
 
     @FunctionalInterface
     public interface ThrowableFactory<T extends ThrowableData, E extends ThrowableItemEntity> {

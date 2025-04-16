@@ -3,7 +3,9 @@ package me.xjqsh.lrtactical.client.resource;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.xjqsh.lrtactical.EquipmentMod;
+import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
 import me.xjqsh.lrtactical.client.resource.display.ThrowableDisplayInstance;
+import me.xjqsh.lrtactical.client.resource.manager.MeleeDisplayManager;
 import me.xjqsh.lrtactical.client.resource.manager.ThrowableDisplayManager;
 import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -29,14 +31,22 @@ public enum LrClientAssetsManager {
             .create();
 
     private ThrowableDisplayManager throwableDisplay;
+    private MeleeDisplayManager meleeDisplay;
 
     public void reloadAndRegister(Consumer<PreparableReloadListener> register) {
         throwableDisplay = new ThrowableDisplayManager(GSON);
+        meleeDisplay = new MeleeDisplayManager(GSON);
+
         register.accept(throwableDisplay);
+        register.accept(meleeDisplay);
     }
 
     public ThrowableDisplayInstance getThrowableDisplay(ResourceLocation id) {
         return throwableDisplay.getData(id);
+    }
+
+    public MeleeDisplayInstance getMeleeDisplay(ResourceLocation id) {
+        return meleeDisplay.getData(id);
     }
 
     // 要排在tacz后，因为我们要用到tacz的资源

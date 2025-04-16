@@ -45,9 +45,9 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
         return true;
     }
 
-    @ParametersAreNonnullByDefault
+    @NotNull
     @Override
-    public UseAnim getUseAnimation(ItemStack pStack) {
+    public UseAnim getUseAnimation(@NotNull ItemStack pStack) {
         return UseAnim.BOW;
     }
 
@@ -121,23 +121,15 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
         });
     }
 
-    @ParametersAreNonnullByDefault
     @Override
-    public boolean useOnRelease(ItemStack pStack) {
+    public boolean useOnRelease(@NotNull ItemStack pStack) {
         return true;
     }
 
+    @NotNull
     @Override
-    public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
-    }
-
-    @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-    }
-
-    @Override
-    public String getDescriptionId(ItemStack stack) {
-        return getThrowableIndex(stack).map(ThrowableIndex::getName).orElse(super.getDescriptionId(stack));
+    public String getDescriptionId(@NotNull ItemStack stack) {
+        return getThrowableIndex(stack).map(ThrowableIndex::getDescriptionId).orElse(super.getDescriptionId(stack));
     }
 
     @Override

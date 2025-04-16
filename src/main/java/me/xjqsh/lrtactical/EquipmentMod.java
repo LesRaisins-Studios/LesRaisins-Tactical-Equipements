@@ -24,9 +24,11 @@ public class EquipmentMod {
         ModItems.TABS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModEntities.ENTITY_TYPES.register(modEventBus);
+        ModEnchantment.ENCHANTMENTS.register(modEventBus);
         ModParticleTypes.PARTICLE_TYPES.register(modEventBus);
         ModEffects.EFFECTS.register(modEventBus);
-        ModThrowableTypes.THROWABLE_TYPES.register(modEventBus);
+        ModCustomTypes.THROWABLE_TYPES.register(modEventBus);
+        ModCustomTypes.MELEE_WEAPON_TYPES.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
 
         NetworkHandler.init();

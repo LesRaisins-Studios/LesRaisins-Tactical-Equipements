@@ -4,14 +4,12 @@ import com.google.gson.*;
 import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.entity.ThrowableItemEntity;
-import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +33,7 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
     public static <T extends ThrowableData, E extends ThrowableItemEntity> ThrowableIndex<T, E> deserialize(
             @NotNull ThrowableType<T, E> type, JsonElement data, String name, ResourceLocation id, Item baseItem
     ) {
-        T throwableData = type.getSerializer().parse(data);
+        T throwableData = type.serializer().parse(data);
         if (throwableData == null) {
             return null;
         }
@@ -50,12 +48,12 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
         return type;
     }
 
-    public String getName() {
+    public String getDescriptionId() {
         return name;
     }
 
     public E createEntity(ItemStack stack, LivingEntity thrower) {
-        return type.getFactory().create(stack, thrower, data);
+        return type.factory().create(stack, thrower, data);
     }
 
     public ResourceLocation getId() {
