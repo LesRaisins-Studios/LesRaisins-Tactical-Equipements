@@ -1,7 +1,10 @@
 package me.xjqsh.lrtactical.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.tacz.guns.api.TimelessAPI;
+import com.tacz.guns.client.animation.statemachine.GunAnimationConstant;
 import me.xjqsh.lrtactical.EquipmentMod;
+import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.config.ClientConfig;
 import me.xjqsh.lrtactical.init.ModEffects;
@@ -14,11 +17,38 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EquipmentMod.MOD_ID)
 public class ClientEventsHandler {
+    @SubscribeEvent
+    public static void tickAnimation(TickEvent.ClientTickEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+        ItemStack mainHandItem = player.getMainHandItem();
+        LrTacticalAPI.getMeleeDisplay(mainHandItem).ifPresent(index -> {
+            var animationStateMachine = index.getStateMachine();
+            // 群组服切世界导致的特殊 BUG 处理，正常情况不会遇到此问题
+            if (player.input == null) {
+                animationStateMachine.trigger(GunAnimationConstant.INPUT_IDLE);
+                return;
+            }
+            if (!player.isMovingSlowly() && player.isSprinting()) {
+                // 如果玩家正在移动，播放移动动画，否则播放 idle 动画
+                animationStateMachine.trigger(GunAnimationConstant.INPUT_RUN);
+            } else if (!player.isMovingSlowly() && player.input.getMoveVector().length() > 0.01) {
+                animationStateMachine.trigger(GunAnimationConstant.INPUT_WALK);
+            } else {
+                animationStateMachine.trigger(GunAnimationConstant.INPUT_IDLE);
+            }
+        });
+    }
+
+
     public static void afterLevel(float pPartialTicks, long pNanoTime, boolean pRenderLevel) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;

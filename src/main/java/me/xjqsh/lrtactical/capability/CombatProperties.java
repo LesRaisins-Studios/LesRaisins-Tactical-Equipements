@@ -54,9 +54,9 @@ public class CombatProperties {
         if (entity.getMainHandItem().getItem() instanceof ICustomItem customItem){
             if (lastSelected != entity.getInventory().selected) {
                 lastSelected = entity.getInventory().selected;
-                reset(customItem);
+                reset(customItem, lastItem);
             } else if (!customItem.isSame(lastItem, entity.getMainHandItem())) {
-                reset(customItem);
+                reset(customItem, lastItem);
             }
         } else if (!ItemStack.matches(lastItem, entity.getMainHandItem())) {
             lastItem = entity.getMainHandItem().copy();
@@ -76,10 +76,14 @@ public class CombatProperties {
         }
     }
 
-    public void reset(ICustomItem customItem) {
+    public void reset(ICustomItem customItem, ItemStack last) {
         lastItem = entity.getMainHandItem().copy();
-        coolDownTick = customItem.getDrawTime(entity.getMainHandItem());
-        lastMaxTick = coolDownTick;
+        int newCoolDown = customItem.getDrawTime(entity.getMainHandItem());
+        if (last.getItem() instanceof ICustomItem customItem1) {
+            newCoolDown += customItem1.getPutAwayTime(last);
+        }
+        coolDownTick = newCoolDown;
+        lastMaxTick = newCoolDown;
         preparingAttack = false;
     }
 

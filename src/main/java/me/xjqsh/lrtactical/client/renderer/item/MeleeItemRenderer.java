@@ -9,6 +9,7 @@ import com.tacz.guns.client.model.BedrockAnimatedModel;
 import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.api.animation.MeleeAnimationStateContext;
 import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,18 +23,18 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, ItemAnimationStateContext> {
+public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, MeleeAnimationStateContext> {
     private static final SlotModel SLOT_MODEL = new SlotModel();
 
     @Override
-    public ItemAnimationStateContext initContext(ItemStack stack, Player player, float partialTick) {
-        var context = new ItemAnimationStateContext();
+    public MeleeAnimationStateContext initContext(ItemStack stack, Player player, float partialTick) {
+        var context = new MeleeAnimationStateContext();
         this.updateContext(context, stack, player, partialTick);
         return context;
     }
 
     @Override
-    public void updateContext(ItemAnimationStateContext context, ItemStack stack, Player player, float partialTick) {
+    public void updateContext(MeleeAnimationStateContext context, ItemStack stack, Player player, float partialTick) {
         context.setPartialTicks(partialTick);
     }
 
@@ -44,7 +45,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
 
     @Override
     @Nullable
-    public LuaAnimationStateMachine<ItemAnimationStateContext> getStateMachine(ItemStack stack) {
+    public LuaAnimationStateMachine<MeleeAnimationStateContext> getStateMachine(ItemStack stack) {
         return LrTacticalAPI.getMeleeDisplay(stack).map(MeleeDisplayInstance::getStateMachine).orElse(null);
     }
 

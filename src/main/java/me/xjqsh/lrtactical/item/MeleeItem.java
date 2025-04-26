@@ -102,6 +102,11 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
+    public int getPutAwayTime(ItemStack stack) {
+        return getMeleeIndex(stack).map(index -> index.getData().getPutAwayTime()).orElse(0);
+    }
+
+    @Override
     public int getAttackDelay(Player attacker, ItemStack stack, MeleeAction action) {
         return getMeleeIndex(stack)
                 .map(index -> index.getData().getAttackInfo())
@@ -118,6 +123,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
                 .map(attackInfos -> attackInfos.getAttackInfo(action))
                 .ifPresent(attackInfo -> {
                     float damage = base * attackInfo.factor();
+                    float knockback = attackInfo.knockback();
                     ITargetFilter filter = attackInfo.hitbox();
                     Vec3 origin1 = new Vec3(origin.x, origin.y, origin.z);
                     Vec3 direction1 = new Vec3(direction.x, direction.y, direction.z);
@@ -140,13 +146,13 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
                         boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
 
                         if (livingentity != attacker && !attacker.isAlliedTo(livingentity) && flag) {
-                            this.performAttack(attacker, livingentity, stack, damage);
+                            this.performAttack(attacker, livingentity, stack, damage, knockback);
                         }
                     }
                 });
     }
 
-    public void performAttack(Player attacker, Entity target, ItemStack stack, float base) {
+    public void performAttack(Player attacker, Entity target, ItemStack stack, float base, float knockback) {
         // forge事件
         if (!ForgeHooks.onPlayerAttackTarget(attacker, target)) return;
         if (!target.isAttackable()) return;
@@ -159,7 +165,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
             modifier = EnchantmentHelper.getDamageBonus(stack, MobType.UNDEFINED);
         }
         if (target instanceof LivingEntity living) {
-            living.knockback(0.4F, Mth.sin(attacker.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(attacker.getYRot() * ((float)Math.PI / 180F)));
+            living.knockback(knockback, Mth.sin(attacker.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(attacker.getYRot() * ((float)Math.PI / 180F)));
         }
 
         boolean flag2 = attacker.fallDistance > 0.0F && !attacker.onGround() && !attacker.onClimbable() && !attacker.isInWater()

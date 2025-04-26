@@ -64,6 +64,10 @@ public interface ICustomItem {
         return 0;
     }
 
+    default int getPutAwayTime(ItemStack stack) {
+        return 0;
+    }
+
     default int getAttackCoolDown(ItemStack stack, MeleeAction action) {
         return 20;
     }

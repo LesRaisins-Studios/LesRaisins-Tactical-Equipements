@@ -1,53 +1,60 @@
 {
-  "name": "item.lrtactical.karambit",
+  "name": "item.lrtactical.dagger",
   "type": "lrtactical:normal",
   "base_item": "lrtactical:melee",
   "data": {
     "attributes": {
-      "generic.attack_damage": 7,
+      "generic.attack_damage": 11,
       "minecraft:generic.movement_speed": {
-        "amount": 0.02,
+        "amount": -0.05,
         "operation": "percent"
       }
     },
     // tick
-    "draw_time": 15,
+    "draw_time": 25,
     // tick
     "put_away_time": 10,
     "attack": {
       "attack_left": {
         // 伤害倍率
-        "factor": 0.875,
+        "factor": 1,
         // 击退
-        "knockback": 0.2,
+        "knockback": 0.25,
         // 攻击冷却(tick)
-        "cooldown": 10,
+        "cooldown": 20,
         // 延迟出伤(tick)
-        "delay": 0,
+        "delay": 6,
         // 判定类型
         "hitbox": {
           // 圆锥区域
           "type": "cone",
           // 最大距离
-          "max_range": 2.5,
+          "max_range": 4,
           // 角度
-          "max_angle": 90,
+          "max_angle": 110,
           // 排除自己
           "exclude_self": true
         }
       },
       "attack_right": {
+        // 伤害倍率
         "factor": 1.5,
+        // 击退
         "knockback": 0.3,
-        "cooldown": 18,
-        "delay": 5,
+        // 攻击冷却(tick)
+        "cooldown": 35,
+        // 延迟出伤(tick)
+        "delay": 12,
+        // 判定类型
         "hitbox": {
-          // 射线
-          "type": "ray",
+          // 圆锥区域
+          "type": "cone",
           // 最大距离
-          "max_range": 2.5,
-          // 穿刺
-          "penetration": 0
+          "max_range": 4,
+          // 角度
+          "max_angle": 60,
+          // 排除自己
+          "exclude_self": true
         }
       }
     }

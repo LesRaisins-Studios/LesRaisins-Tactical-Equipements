@@ -43,9 +43,8 @@ public class RayFilter implements ITargetFilter {
 
     @Override
     public @NotNull List<Entity> filterTargets(LivingEntity attacker, Vec3 origin, Vec3 direction) {
-        var from = attacker.getEyePosition();
-        var to = attacker.getEyePosition().add(direction.normalize().scale(maxRange));
-        List<RayEntityHitResult> targets = findEntitiesOnPath(attacker, from, to);
+        var to = origin.add(direction.normalize().scale(maxRange));
+        List<RayEntityHitResult> targets = findEntitiesOnPath(attacker, origin, to);
 
         return targets.stream().limit(penetration + 1).map(RayEntityHitResult::getEntity).toList();
     }

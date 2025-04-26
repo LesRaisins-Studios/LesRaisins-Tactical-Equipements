@@ -33,7 +33,7 @@ public class CombatData {
             float factor,
 
             @SerializedName("knockback")
-            double knockback,
+            float knockback,
 
             @SerializedName("cooldown")
             int cooldown,
