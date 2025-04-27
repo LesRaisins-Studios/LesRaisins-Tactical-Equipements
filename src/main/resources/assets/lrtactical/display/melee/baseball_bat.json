@@ -3,6 +3,7 @@
   "animation": "lrtactical:melee/baseball_bat",
   "state_machine": "lrtactical:default_melee_state_machine",
   "texture": "lrtactical:melee/baseball_bat_uv",
+  "slot_texture": "lrtactical:melee/slot/baseball_bat",
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 5, 0]

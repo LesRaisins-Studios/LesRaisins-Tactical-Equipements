@@ -7,7 +7,6 @@ import com.tacz.guns.api.client.animation.AnimationController;
 import com.tacz.guns.api.client.animation.Animations;
 import com.tacz.guns.api.client.animation.statemachine.LuaAnimationStateMachine;
 import com.tacz.guns.api.client.animation.statemachine.LuaStateMachineFactory;
-import com.tacz.guns.client.animation.statemachine.ItemAnimationStateContext;
 import com.tacz.guns.client.model.BedrockAnimatedModel;
 import com.tacz.guns.client.model.functional.LeftHandRender;
 import com.tacz.guns.client.model.functional.RightHandRender;
@@ -15,7 +14,6 @@ import com.tacz.guns.client.resource.ClientAssetsManager;
 import com.tacz.guns.client.resource.pojo.model.BedrockModelPOJO;
 import com.tacz.guns.client.resource.pojo.model.BedrockVersion;
 import me.xjqsh.lrtactical.api.animation.MeleeAnimationStateContext;
-import me.xjqsh.lrtactical.api.animation.ThrowableAnimationStateContext;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +29,7 @@ public class MeleeDisplayInstance {
     private BedrockAnimatedModel model;
     private LuaAnimationStateMachine<MeleeAnimationStateContext> stateMachine;
     private ResourceLocation texture;
+    private ResourceLocation slotTexture;
     private ItemTransforms transforms;
     private Map<String, ResourceLocation> sounds;
 
@@ -50,6 +49,10 @@ public class MeleeDisplayInstance {
 
     public ResourceLocation getTexture() {
         return texture;
+    }
+
+    public ResourceLocation getSlotTexture() {
+        return slotTexture;
     }
 
     public ItemTransforms getTransforms() {
@@ -95,6 +98,10 @@ public class MeleeDisplayInstance {
                 .build();
         display.texture = new ResourceLocation(pojo.textureLocation.getNamespace(), "textures/" + pojo.textureLocation.getPath() + ".png");
 
+        if (pojo.slotTextureLocation != null) {
+            display.slotTexture = new ResourceLocation(pojo.slotTextureLocation.getNamespace(), "textures/" + pojo.slotTextureLocation.getPath() + ".png");
+        }
+
         display.transforms = Objects.requireNonNullElse(pojo.transforms, ItemTransforms.NO_TRANSFORMS);
         display.sounds = Objects.requireNonNullElseGet(pojo.sounds, Maps::newHashMap);
 
@@ -110,6 +117,8 @@ public class MeleeDisplayInstance {
             ResourceLocation stateMachineLocation,
             @SerializedName("texture")
             ResourceLocation textureLocation,
+            @SerializedName("slot_texture")
+            ResourceLocation slotTextureLocation,
             @SerializedName("transforms")
             ItemTransforms transforms,
             @SerializedName("sounds")

@@ -23,6 +23,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import static net.minecraft.world.item.ItemDisplayContext.GUI;
+
 public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, MeleeAnimationStateContext> {
     private static final SlotModel SLOT_MODEL = new SlotModel();
 
@@ -67,6 +69,14 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
         if (ctx.firstPerson()) return;
         LrTacticalAPI.getMeleeDisplay(stack).ifPresent(display -> {
             BedrockAnimatedModel model = display.getModel();
+            // GUI 特殊渲染
+            if (ctx == GUI && display.getSlotTexture() != null) {
+                poseStack.translate(0.5, 1.5, 0.5);
+                poseStack.mulPose(Axis.ZN.rotationDegrees(180));
+                VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(display.getSlotTexture()));
+                SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+                return;
+            }
             poseStack.pushPose();
             {
                 ItemTransforms transforms = display.getTransforms();
