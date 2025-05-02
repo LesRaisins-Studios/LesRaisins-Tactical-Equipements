@@ -176,6 +176,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0417": {
+					"effect": "lrtactical:melee/knife/melee_attack_knife_plr_01"
+				}
 			}
 		},
 		"melee_2": {
@@ -323,6 +328,11 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0417": {
+					"effect": "lrtactical:melee/knife/melee_attack_knife_plr_02"
 				}
 			}
 		},
@@ -483,10 +493,24 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0333": {
+					"effect": "lrtactical:melee/knife/iw9_weap_knife_inspect_01c"
+				},
+				"0.1": {
+					"effect": "lrtactical:melee/knife/melee_attack_knife_plr_01"
+				},
+				"0.4333": {
+					"effect": "lrtactical:melee/knife/wfoly_me_knife_inspect_01"
+				},
+				"0.9333": {
+					"effect": "lrtactical:melee/knife/iw9_weap_knife_inspect_01b"
+				}
 			}
 		},
 		"draw": {
-			"loop": true,
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.5333,
 			"bones": {
 				"bullet_new_mag": {
@@ -591,6 +615,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0333": {
+					"effect": "lrtactical:melee/knife/iw9_knife_raise_01"
+				}
 			}
 		},
 		"put_away": {
@@ -684,6 +713,11 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0333": {
+					"effect": "lrtactical:melee/knife/wfoly_me_knife_inspect_01"
 				}
 			}
 		},
@@ -1452,6 +1486,20 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0333": {
+					"effect": "lrtactical:melee/knife/wfoly_me_knife_inspect_01"
+				},
+				"1.7667": {
+					"effect": "lrtactical:melee/knife/iw9_weap_knife_inspect_01b"
+				},
+				"2.4667": {
+					"effect": "lrtactical:melee/knife/iw9_knife_pullout_01"
+				},
+				"3.6": {
+					"effect": "lrtactical:melee/knife/iw9_weap_knife_inspect_01b"
 				}
 			}
 		},

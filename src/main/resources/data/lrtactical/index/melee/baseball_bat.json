@@ -1,5 +1,5 @@
 {
-  "name": "item.lrtactical.dagger",
+  "name": "item.lrtactical.baseball_bat",
   "type": "lrtactical:normal",
   "base_item": "lrtactical:melee",
   "data": {
@@ -11,9 +11,9 @@
       }
     },
     // tick
-    "draw_time": 25,
+    "draw_time": 24,
     // tick
-    "put_away_time": 10,
+    "put_away_time": 14,
     "attack": {
       "attack_left": {
         // 伤害倍率
@@ -21,9 +21,9 @@
         // 击退
         "knockback": 0.25,
         // 攻击冷却(tick)
-        "cooldown": 20,
+        "cooldown": 16,
         // 延迟出伤(tick)
-        "delay": 6,
+        "delay": 7,
         // 判定类型
         "hitbox": {
           // 圆锥区域
@@ -42,7 +42,7 @@
         // 击退
         "knockback": 0.3,
         // 攻击冷却(tick)
-        "cooldown": 35,
+        "cooldown": 36,
         // 延迟出伤(tick)
         "delay": 12,
         // 判定类型

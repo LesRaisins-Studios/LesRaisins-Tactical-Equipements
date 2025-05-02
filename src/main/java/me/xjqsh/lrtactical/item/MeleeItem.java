@@ -138,8 +138,8 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
                         case RIGHT -> SoundEvents.PLAYER_ATTACK_STRONG;
                     };
 
-                    attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
-                            soundEvent, attacker.getSoundSource(), 1.0F, 1.0F);
+//                    attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
+//                            soundEvent, attacker.getSoundSource(), 1.0F, 1.0F);
 
                     if (damage <= 0) return;
                     for (Entity livingentity : filter.filterTargets(attacker, origin1, direction1)) {

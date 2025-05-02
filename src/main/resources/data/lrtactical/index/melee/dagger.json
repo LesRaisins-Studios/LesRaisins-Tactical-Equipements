@@ -11,9 +11,9 @@
       }
     },
     // tick
-    "draw_time": 15,
+    "draw_time": 10,
     // tick
-    "put_away_time": 10,
+    "put_away_time": 6,
     "attack": {
       "attack_left": {
         // 伤害倍率
@@ -29,7 +29,7 @@
           // 圆锥区域
           "type": "cone",
           // 最大距离
-          "max_range": 3,
+          "max_range": 3.5,
           // 角度
           "max_angle": 40,
           // 排除自己
@@ -42,7 +42,7 @@
         // 击退
         "knockback": 0.1,
         // 攻击冷却(tick)
-        "cooldown": 20,
+        "cooldown": 26,
         // 延迟出伤(tick)
         "delay": 2,
         // 判定类型
@@ -50,7 +50,7 @@
           // 圆锥区域
           "type": "cone",
           // 最大距离
-          "max_range": 3,
+          "max_range": 3.5,
           // 角度
           "max_angle": 85,
           // 排除自己

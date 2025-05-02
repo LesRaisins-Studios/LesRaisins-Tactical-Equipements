@@ -5,24 +5,29 @@
   "texture": "lrtactical:melee/dagger_uv",
   "transforms": {
     "thirdperson_righthand": {
-      "translation": [0, 5, 0]
+      "rotation": [90, 0, 0],
+      "translation": [0, 0, 9]
     },
     "thirdperson_lefthand": {
-      "translation": [0, 5, 0]
+      "rotation": [90, 0, 0],
+      "translation": [0, 0, 9]
     },
     "ground": {
-      "rotation": [45, 0, 0],
-      "translation": [0, 5, 0]
+      "rotation": [45, 0, 45],
+      "translation": [-1.25, 2.75, 0]
     },
     "gui": {
-      "rotation": [0, 135, 0],
-      "translation": [0, 7.75, 0],
-      "scale": [1.5, 1.5, 1.5]
+      "rotation": [90, 45, -90],
+      "translation": [13, 9.75, 0],
+      "scale": [2, 2, 2]
+    },
+    "head": {
+      "translation": [0, 4.75, 0]
     },
     "fixed": {
-      "rotation": [0, 90, 0],
-      "translation": [0, 8, 0],
-      "scale": [1.5, 1.5, 1.5]
+      "rotation": [90, 0, 90],
+      "translation": [-15.75, -2, 0],
+      "scale": [2, 2, 2]
     }
   }
 }

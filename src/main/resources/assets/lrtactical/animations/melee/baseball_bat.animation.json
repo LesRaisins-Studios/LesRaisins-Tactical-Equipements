@@ -164,6 +164,14 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0313": {
+					"effect": "lrtactical:melee/stick/melee_first_raise_kali_sticks"
+				},
+				"0.3125": {
+					"effect": "lrtactical:melee/stick/melee_attack_kali_sticks_01"
+				}
 			}
 		},
 		"melee_2": {
@@ -302,6 +310,14 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0313": {
+					"effect": "lrtactical:melee/stick/melee_first_raise_kali_sticks"
+				},
+				"0.2188": {
+					"effect": "lrtactical:melee/stick/melee_attack_kali_sticks_02"
 				}
 			}
 		},
@@ -469,6 +485,14 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0417": {
+					"effect": "lrtactical:melee/stick/wfoly_me_kali_sticks_r_inspect_02"
+				},
+				"0.5417": {
+					"effect": "lrtactical:melee/stick/melee_attack_kali_sticks_04"
+				}
 			}
 		},
 		"draw": {
@@ -612,6 +636,14 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "lrtactical:melee/stick/wfoly_me_kali_sticks_inspect_01"
+				},
+				"0.2667": {
+					"effect": "lrtactical:melee/stick/wfoly_me_kali_sticks_r_inspect_01"
 				}
 			}
 		},
@@ -926,6 +958,17 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0333": {
+					"effect": "lrtactical:melee/stick/wfoly_me_kali_sticks_inspect_01"
+				},
+				"2.0333": {
+					"effect": "lrtactical:melee/stick/wfoly_me_kali_sticks_inspect_02"
+				},
+				"4.3667": {
+					"effect": "lrtactical:melee/stick/melee_attack_kali_sticks_01"
 				}
 			}
 		},
