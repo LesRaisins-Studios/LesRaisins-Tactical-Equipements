@@ -25,7 +25,6 @@ public class CombatProperties {
     private int lastMaxTick = 0;
     private int lastSelected = 0;
 
-    @OnlyIn(Dist.CLIENT)
     private DelayAttack delayedAction = null;
 
     private boolean preparingAttack = false;
