@@ -6,10 +6,10 @@
   "slot_texture": "lrtactical:melee/slot/baseball_bat",
   "transforms": {
     "thirdperson_righthand": {
-      "translation": [0, 8, 0]
+      "translation": [0, 2.5, 1]
     },
     "thirdperson_lefthand": {
-      "translation": [0, 9.75, 0]
+      "translation": [0, 2.5, 1]
     },
     "ground": {
       "rotation": [45, 0, 0],
