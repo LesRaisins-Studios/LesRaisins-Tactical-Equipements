@@ -3,6 +3,7 @@ package me.xjqsh.lrtactical.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.client.animation.statemachine.GunAnimationConstant;
+import com.tacz.guns.client.input.InteractKey;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
@@ -84,6 +85,11 @@ public class ClientEventsHandler {
     public static void onClickInput(InputEvent.InteractionKeyMappingTriggered event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
+            return;
+        }
+
+        // 当交互键按下时，允许交互
+        if (InteractKey.INTERACT_KEY.isDown()) {
             return;
         }
 

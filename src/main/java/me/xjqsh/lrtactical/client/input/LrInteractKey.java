@@ -44,18 +44,17 @@ public class LrInteractKey {
             return;
         }
         if (player.getMainHandItem().getItem() instanceof IMeleeWeapon) {
-            return;
-        }
-        HitResult hitResult = mc.hitResult;
-        if (hitResult == null) {
-            return;
-        }
-        if (hitResult instanceof BlockHitResult blockHitResult) {
-            interactBlock(blockHitResult, player, mc);
-            return;
-        }
-        if (hitResult instanceof EntityHitResult entityHitResult) {
-            interactEntity(entityHitResult, mc);
+            HitResult hitResult = mc.hitResult;
+            if (hitResult == null) {
+                return;
+            }
+            if (hitResult instanceof BlockHitResult blockHitResult) {
+                interactBlock(blockHitResult, player, mc);
+                return;
+            }
+            if (hitResult instanceof EntityHitResult entityHitResult) {
+                interactEntity(entityHitResult, mc);
+            }
         }
     }
 
