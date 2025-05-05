@@ -5,7 +5,9 @@ import me.xjqsh.lrtactical.util.VectorUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +48,9 @@ public class ConeFilter implements ITargetFilter {
             boolean self = this.excludeSelf && livingentity == attacker;
             boolean allies = attacker.isAlliedTo(livingentity);
 
-            if (!self && !allies && flag && inAngle) {
+            boolean see = ITargetFilter.hasLineOfSight(attacker, livingentity);
+
+            if (!self && !allies && flag && inAngle && see) {
                 targets.add(livingentity);
             }
         }

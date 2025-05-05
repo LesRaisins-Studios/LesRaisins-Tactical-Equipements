@@ -56,7 +56,8 @@ public class RayFilter implements ITargetFilter {
 
         List<Entity> entities = attacker.level().getEntities(attacker, area, EntitySelector.NO_SPECTATORS);
         for (Entity entity : entities) {
-            if (entity.equals(attacker) || entity.equals(attacker.getVehicle()) || !entity.isAlive()) {
+            if (entity.equals(attacker) || entity.equals(attacker.getVehicle()) || !entity.isAlive()
+                    || !ITargetFilter.hasLineOfSight(attacker, entity)) {
                 continue;
             }
 
