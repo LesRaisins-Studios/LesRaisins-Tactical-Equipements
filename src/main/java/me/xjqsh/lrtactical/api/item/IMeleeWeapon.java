@@ -16,6 +16,7 @@ import java.util.Optional;
 
 public interface IMeleeWeapon extends ICustomItem {
     String ID_TAG = "MeleeWeaponId";
+    String OVERRIDE_DISPLAY_ID = "DisplayId";
     ResourceLocation EMPTY = new ResourceLocation(EquipmentMod.MOD_ID, "empty");
 
     static IMeleeWeapon of(ItemStack stack) {
@@ -29,10 +30,20 @@ public interface IMeleeWeapon extends ICustomItem {
     default ResourceLocation getId(ItemStack stack) {
         CompoundTag nbt = stack.getOrCreateTag();
         if (nbt.contains(ID_TAG, Tag.TAG_STRING)) {
-            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(ID_TAG));
-            return Objects.requireNonNullElse(gunId, EMPTY);
+            ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(ID_TAG));
+            return Objects.requireNonNullElse(rl, EMPTY);
         }
         return EMPTY;
+    }
+
+    @Override
+    default ResourceLocation getDisplayId(ItemStack stack) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        if (nbt.contains(OVERRIDE_DISPLAY_ID, Tag.TAG_STRING)) {
+            ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(OVERRIDE_DISPLAY_ID));
+            return Objects.requireNonNullElse(rl, EMPTY);
+        }
+        return getId(stack);
     }
 
     @Override

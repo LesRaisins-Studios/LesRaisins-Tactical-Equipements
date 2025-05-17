@@ -22,6 +22,12 @@ public class LrTacticalAPI {
         if (!(stack.getItem() instanceof IThrowable item)) {
             return Optional.empty();
         }
+
+        ThrowableDisplayInstance display = LrClientAssetsManager.INSTANCE.getThrowableDisplay(item.getDisplayId(stack));
+        if (display != null) {
+            return Optional.of(display);
+        }
+
         return Optional.ofNullable(LrClientAssetsManager.INSTANCE.getThrowableDisplay(item.getId(stack)));
     }
 
@@ -35,6 +41,12 @@ public class LrTacticalAPI {
         if (!(stack.getItem() instanceof IMeleeWeapon item)) {
             return Optional.empty();
         }
+
+        MeleeDisplayInstance display = LrClientAssetsManager.INSTANCE.getMeleeDisplay(item.getDisplayId(stack));
+        if (display != null) {
+            return Optional.of(display);
+        }
+
         return Optional.ofNullable(LrClientAssetsManager.INSTANCE.getMeleeDisplay(item.getId(stack)));
     }
 

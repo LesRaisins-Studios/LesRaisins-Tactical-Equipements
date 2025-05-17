@@ -20,6 +20,17 @@ public interface ICustomItem {
     ResourceLocation getId(ItemStack stack);
 
     /**
+     * 获取物品的自定义效果id
+     * 默认情况下与id相同
+     *
+     * @param stack 物品
+     * @return 物品id
+     */
+    default ResourceLocation getDisplayId(ItemStack stack) {
+        return getId(stack);
+    }
+
+    /**
      * 设置物品的自定义id
      *
      * @param stack 物品

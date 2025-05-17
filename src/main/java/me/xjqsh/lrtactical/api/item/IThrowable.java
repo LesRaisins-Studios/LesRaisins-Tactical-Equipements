@@ -15,6 +15,7 @@ import java.util.Optional;
 
 public interface IThrowable extends ICustomItem {
     String ID_TAG = "ThrowableId";
+    String OVERRIDE_DISPLAY_ID = "DisplayId";
     ResourceLocation EMPTY = new ResourceLocation(EquipmentMod.MOD_ID, "empty");
 
     static IThrowable of(ItemStack stack) {
@@ -32,6 +33,16 @@ public interface IThrowable extends ICustomItem {
             return Objects.requireNonNullElse(gunId, EMPTY);
         }
         return EMPTY;
+    }
+
+    @Override
+    default ResourceLocation getDisplayId(ItemStack stack) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        if (nbt.contains(OVERRIDE_DISPLAY_ID, Tag.TAG_STRING)) {
+            ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(OVERRIDE_DISPLAY_ID));
+            return Objects.requireNonNullElse(rl, EMPTY);
+        }
+        return getId(stack);
     }
 
     @Override
