@@ -13,7 +13,7 @@ import com.tacz.guns.client.model.functional.RightHandRender;
 import com.tacz.guns.client.resource.ClientAssetsManager;
 import com.tacz.guns.client.resource.pojo.model.BedrockModelPOJO;
 import com.tacz.guns.client.resource.pojo.model.BedrockVersion;
-import me.xjqsh.lrtactical.api.animation.MeleeAnimationStateContext;
+import me.xjqsh.lrtactical.api.animation.BaseAnimationStateContext;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ import static com.tacz.guns.client.model.GunModelConstant.RIGHTHAND_POS_NODE;
 public class MeleeDisplayInstance {
     private ResourceLocation id;
     private BedrockAnimatedModel model;
-    private LuaAnimationStateMachine<MeleeAnimationStateContext> stateMachine;
+    private LuaAnimationStateMachine<BaseAnimationStateContext> stateMachine;
     private ResourceLocation texture;
     private ResourceLocation slotTexture;
     private ItemTransforms transforms;
@@ -43,7 +43,7 @@ public class MeleeDisplayInstance {
         return model;
     }
 
-    public LuaAnimationStateMachine<MeleeAnimationStateContext> getStateMachine() {
+    public LuaAnimationStateMachine<BaseAnimationStateContext> getStateMachine() {
         return stateMachine;
     }
 
@@ -92,7 +92,7 @@ public class MeleeDisplayInstance {
         var script = ClientAssetsManager.INSTANCE.getScript(pojo.stateMachineLocation);
         Preconditions.checkArgument(script != null, "no corresponding model found for " + pojo.modelLocation);
 
-        display.stateMachine = new LuaStateMachineFactory<MeleeAnimationStateContext>()
+        display.stateMachine = new LuaStateMachineFactory<BaseAnimationStateContext>()
                 .setController(controller)
                 .setLuaScripts(script)
                 .build();

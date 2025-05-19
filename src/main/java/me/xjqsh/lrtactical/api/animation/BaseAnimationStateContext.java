@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public class MeleeAnimationStateContext extends ItemAnimationStateContext {
+public class BaseAnimationStateContext extends ItemAnimationStateContext {
     private ItemStack currentItem = ItemStack.EMPTY;
     private int usingTick = 0;
     private boolean using = false;

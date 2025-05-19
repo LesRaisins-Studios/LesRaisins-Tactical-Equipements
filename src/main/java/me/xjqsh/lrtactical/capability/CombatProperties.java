@@ -11,8 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 @AutoRegisterCapability
@@ -24,6 +22,7 @@ public class CombatProperties {
     private int coolDownTick = 0;
     private int lastMaxTick = 0;
     private int lastSelected = 0;
+    private int drawingTick = 0;
 
     private DelayAttack delayedAction = null;
 
@@ -62,6 +61,9 @@ public class CombatProperties {
         }
         if (coolDownTick > 0) {
             coolDownTick--;
+            if (entity.getMainHandItem().getItem() instanceof IMeleeWeapon weapon && !weapon.canSprintingAttack()) {
+                entity.setSprinting(false);
+            }
             if (coolDownTick <= 0) {
                 preparingAttack = false;
             }
@@ -73,6 +75,14 @@ public class CombatProperties {
                 delayedAction = null;
             }
         }
+
+        if (drawingTick > 0) {
+            drawingTick--;
+        }
+    }
+
+    public boolean isDrawing() {
+        return drawingTick > 0;
     }
 
     public void reset(ICustomItem customItem, ItemStack last) {
@@ -83,12 +93,17 @@ public class CombatProperties {
         }
         coolDownTick = newCoolDown;
         lastMaxTick = newCoolDown;
+        drawingTick = newCoolDown;
         preparingAttack = false;
     }
 
     public boolean preAttack(MeleeAction action, Vec3 origin, Vec3 direction) {
         ItemStack stack = entity.getMainHandItem();
         if (entity.getMainHandItem().getItem() instanceof IMeleeWeapon weapon && coolDownTick <= 0) {
+            if (!weapon.canAttack(entity, stack, action)) {
+                return false;
+            }
+
             coolDownTick = weapon.getAttackCoolDown(stack, action);
             lastMaxTick = coolDownTick;
             int delay = weapon.getAttackDelay(entity, stack, action);

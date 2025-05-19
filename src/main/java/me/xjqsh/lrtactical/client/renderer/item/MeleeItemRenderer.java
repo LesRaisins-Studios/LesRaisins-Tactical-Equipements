@@ -4,12 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.tacz.guns.api.client.animation.statemachine.LuaAnimationStateMachine;
-import com.tacz.guns.client.animation.statemachine.ItemAnimationStateContext;
 import com.tacz.guns.client.model.BedrockAnimatedModel;
 import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
-import me.xjqsh.lrtactical.api.animation.MeleeAnimationStateContext;
+import me.xjqsh.lrtactical.api.animation.BaseAnimationStateContext;
 import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -25,18 +24,18 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.item.ItemDisplayContext.GUI;
 
-public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, MeleeAnimationStateContext> {
+public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, BaseAnimationStateContext> {
     private static final SlotModel SLOT_MODEL = new SlotModel();
 
     @Override
-    public MeleeAnimationStateContext initContext(ItemStack stack, Player player, float partialTick) {
-        var context = new MeleeAnimationStateContext();
+    public BaseAnimationStateContext initContext(ItemStack stack, Player player, float partialTick) {
+        var context = new BaseAnimationStateContext();
         this.updateContext(context, stack, player, partialTick);
         return context;
     }
 
     @Override
-    public void updateContext(MeleeAnimationStateContext context, ItemStack stack, Player player, float partialTick) {
+    public void updateContext(BaseAnimationStateContext context, ItemStack stack, Player player, float partialTick) {
         context.setPartialTicks(partialTick);
     }
 
@@ -47,7 +46,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
 
     @Override
     @Nullable
-    public LuaAnimationStateMachine<MeleeAnimationStateContext> getStateMachine(ItemStack stack) {
+    public LuaAnimationStateMachine<BaseAnimationStateContext> getStateMachine(ItemStack stack) {
         return LrTacticalAPI.getMeleeDisplay(stack).map(MeleeDisplayInstance::getStateMachine).orElse(null);
     }
 
