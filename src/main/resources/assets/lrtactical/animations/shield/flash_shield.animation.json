@@ -939,7 +939,7 @@
 			}
 		},
 		"hit_by_bullet": {
-			"animation_length": 0.4,
+			"animation_length": 0.4333,
 			"bones": {
 				"root": {
 					"rotation": {

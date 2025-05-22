@@ -3,6 +3,7 @@ package me.xjqsh.lrtactical.client.renderer.item;
 import com.tacz.guns.api.client.animation.AnimationController;
 import com.tacz.guns.api.client.animation.Animations;
 import com.tacz.guns.api.client.animation.statemachine.LuaStateMachineFactory;
+import com.tacz.guns.api.client.event.BeforeRenderHandEvent;
 import com.tacz.guns.client.model.BedrockAnimatedModel;
 import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.model.functional.LeftHandRender;
@@ -42,6 +43,13 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
     @Override
     public long getPutAwayTime(ItemStack stack) {
         return 320;
+    }
+
+    @Override
+    public void applyItemInHandCameraAnimation(BeforeRenderHandEvent event, ItemStack stack, float multiplier) {
+        super.applyItemInHandCameraAnimation(event, stack, multiplier);
+        // 截至目前，摄像机动画数据已消费完毕。是否有更好的清理动画数据的方法？
+        model.cleanCameraAnimationTransform();
     }
 
     public void init() {

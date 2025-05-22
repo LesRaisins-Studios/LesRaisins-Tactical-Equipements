@@ -54,6 +54,18 @@ public class NetworkHandler {
                 CPerformMeleeAttack::decode,
                 CPerformMeleeAttack::handle
         );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SShieldShake.class,
+                SShieldShake::encode,
+                SShieldShake::decode,
+                SShieldShake::handle
+        );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SShieldDisable.class,
+                SShieldDisable::encode,
+                SShieldDisable::decode,
+                SShieldDisable::handle
+        );
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

@@ -5,8 +5,8 @@ import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.item.IThrowable;
+import me.xjqsh.lrtactical.item.FlashShieldItem;
 import me.xjqsh.lrtactical.item.MeleeItem;
-import me.xjqsh.lrtactical.item.ShieldItem;
 import me.xjqsh.lrtactical.item.ThrowableItem;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
@@ -43,7 +43,7 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, EquipmentMod.MOD_ID);
     public static RegistryObject<ThrowableItem> THROWABLE = ITEMS.register("throwable", ThrowableItem::new);
     public static RegistryObject<MeleeItem> MELEE = ITEMS.register("melee", MeleeItem::new);
-    public static RegistryObject<ShieldItem> FLASH_SHIELD = ITEMS.register("flash_shield", ShieldItem::new);
+    public static RegistryObject<FlashShieldItem> FLASH_SHIELD = ITEMS.register("flash_shield", FlashShieldItem::new);
 
     public static ItemStack getThrowableIcon() {
         ItemStack stack = new ItemStack(THROWABLE.get());

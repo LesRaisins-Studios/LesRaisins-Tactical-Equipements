@@ -18,6 +18,9 @@ local STATIC_TRACK_LINE = increment(track_line_top)
 local BASE_TRACK = increment(static_track_top)
 local MAIN_TRACK = increment(static_track_top)
 
+-- 收击的轨道行
+local HIT_TRACK_LINE = increment(track_line_top)
+
 -- 混合轨道行
 local BLENDING_TRACK_LINE = increment(track_line_top)
 local MOVEMENT_TRACK = increment(blending_track_top)
@@ -92,11 +95,13 @@ function main_track_states.idle.transition(this, context, input)
     elseif input == "start_use" then
         context:runAnimation("use", context:getTrack(STATIC_TRACK_LINE, MAIN_TRACK), false, PLAY_ONCE_STOP, 0.2)
         return this.main_track_states.using
+    elseif input == "hard_shake" then
+        context:runAnimation("hit_by_knife", context:getTrack(STATIC_TRACK_LINE, MAIN_TRACK), false, PLAY_ONCE_STOP, 0.2)
+        return this.main_track_states.idle
     end
 end
 
 function main_track_states.using.update(this, context)
-
     if not context:isUsing() then
         context:stopAnimation(context:getTrack(STATIC_TRACK_LINE, MAIN_TRACK))
         print("trigger interrupt?")
@@ -284,13 +289,28 @@ function movement_track_states.walk.transition(this, context, input)
 end
 -- 结束移动轨道的状态
 
+-- 射击态,没什么需要调控的
+local hit_state = {}
+
+function hit_state.transition(this, context, input)
+    -- 玩家按下开火键时需要在射击轨道行里寻找空闲轨道去播放射击动画(如果没有空闲会分配新的),需要注意的是射击动画要向下混合
+    if (input == "normal_shake") then
+        local track = context:findIdleTrack(HIT_TRACK_LINE, false)
+        -- 这里是混合动画，一般是可叠加的 gun kick
+        context:runAnimation("hit_by_bullet", track, true, PLAY_ONCE_STOP, 0)
+    end
+    return nil
+end
+
 local M = {
     track_line_top = track_line_top,
     STATIC_TRACK_LINE = STATIC_TRACK_LINE,
+    HIT_KICK_TRACK_LINE = HIT_TRACK_LINE,
 
     base_track_state = base_track_state,
     main_track_states = main_track_states,
     movement_track_states = movement_track_states,
+    hit_state = hit_state,
 }
 
 -- 状态机初始化函数，在切入物品的时候调用
@@ -312,6 +332,7 @@ function M:states()
         self.base_track_state,
         self.main_track_states.start,
         self.movement_track_states.idle,
+        self.hit_state
     }
 end
 

@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "lrtactical.refmap.json",
   "mixins": [
-    "common.LivingEntityMixin"
+    "common.LivingEntityMixin",
+    "common.PlayerMixin"
   ],
   "client": [
     "client.GameRendererMixin"

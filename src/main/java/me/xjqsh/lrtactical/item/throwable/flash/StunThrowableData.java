@@ -17,7 +17,7 @@ public class StunThrowableData extends ThrowableData {
     public static class StunData {
         // 半径内的实体会受到影响
         @SerializedName("radius")
-        private float radius = 32f;
+        private float radius = 24f;
 
         @SerializedName("blind")
         private BlindData blind = new BlindData();
