@@ -109,4 +109,8 @@ public interface ICustomItem {
     default boolean shouldBlockPickBlock() {
         return false;
     }
+
+    default boolean blockOffhandRendering(ItemStack stack) {
+        return true;
+    }
 }

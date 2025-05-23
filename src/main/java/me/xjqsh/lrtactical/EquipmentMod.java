@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical;
 
 import me.xjqsh.lrtactical.config.ClientConfig;
+import me.xjqsh.lrtactical.config.ServerConfig;
 import me.xjqsh.lrtactical.init.*;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,6 +19,7 @@ public class EquipmentMod {
 
     public EquipmentMod() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.init());
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.init());
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

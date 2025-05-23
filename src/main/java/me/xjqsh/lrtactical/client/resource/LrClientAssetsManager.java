@@ -7,6 +7,7 @@ import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
 import me.xjqsh.lrtactical.client.resource.display.ThrowableDisplayInstance;
 import me.xjqsh.lrtactical.client.resource.manager.MeleeDisplayManager;
 import me.xjqsh.lrtactical.client.resource.manager.ThrowableDisplayManager;
+import me.xjqsh.lrtactical.init.ModItems;
 import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,7 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -53,5 +55,6 @@ public enum LrClientAssetsManager {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onClientResourceReload(RegisterClientReloadListenersEvent event) {
         LrClientAssetsManager.INSTANCE.reloadAndRegister(event::registerReloadListener);
+        event.registerReloadListener(IClientItemExtensions.of(ModItems.FLASH_SHIELD.get()).getCustomRenderer());
     }
 }

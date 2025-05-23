@@ -2,6 +2,8 @@ package me.xjqsh.lrtactical.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tacz.guns.api.client.animation.statemachine.LuaAnimationStateMachine;
+import com.tacz.guns.api.client.other.KeepingItemRenderer;
+import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.animation.statemachine.GunAnimationConstant;
 import com.tacz.guns.client.input.InteractKey;
 import me.xjqsh.lrtactical.EquipmentMod;
@@ -21,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,6 +31,20 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EquipmentMod.MOD_ID)
 public class ClientEventsHandler {
+    @SubscribeEvent
+    public static void onRenderHand(RenderHandEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+        if (event.getHand() == InteractionHand.OFF_HAND) {
+            ItemStack stack = KeepingItemRenderer.getRenderer().getCurrentItem();
+            if (stack.getItem() instanceof ICustomItem item && item.blockOffhandRendering(stack)) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void tickAnimation(TickEvent.ClientTickEvent event) {
         LocalPlayer player = Minecraft.getInstance().player;

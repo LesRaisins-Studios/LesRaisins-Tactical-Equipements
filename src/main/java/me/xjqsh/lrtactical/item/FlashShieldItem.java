@@ -9,9 +9,11 @@ import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import me.xjqsh.lrtactical.client.renderer.item.FlashShieldItemRenderer;
+import me.xjqsh.lrtactical.config.ServerConfig;
 import me.xjqsh.lrtactical.init.ModEffects;
 import me.xjqsh.lrtactical.item.throwable.flash.StunThrowableData;
 import me.xjqsh.lrtactical.util.SightTraceUtil;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -32,6 +34,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
@@ -56,21 +59,22 @@ public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationIte
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return super.getMaxDamage(stack);
+        return ServerConfig.FLASH_SHIELD_MAX_DURABILITY.get();
     }
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private FlashShieldItemRenderer renderer = null;
+            private final FlashShieldItemRenderer renderer = new FlashShieldItemRenderer();
 
             @Override
             public FlashShieldItemRenderer getCustomRenderer() {
-                if (this.renderer == null) {
-                    renderer = new FlashShieldItemRenderer();
-                    renderer.init();
-                }
                 return renderer;
+            }
+
+            @Override
+            public HumanoidModel.ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
+                return HumanoidModel.ArmPose.CROSSBOW_HOLD;
             }
         });
     }
@@ -159,7 +163,7 @@ public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationIte
         if (entity.getTicksUsingItem() >= this.getMaxUsingTick(stack)) {
             if (!world.isClientSide()) {
                 if (entity instanceof Player player) {
-                    player.getCooldowns().addCooldown(stack.getItem(), 600);
+                    player.getCooldowns().addCooldown(stack.getItem(), 400);
                     player.addEffect(new MobEffectInstance(ModEffects.BLIND.get(), 45, 0, false, false));
                     player.addEffect(new MobEffectInstance(ModEffects.DEAFENED.get(), 60, 0, false, false));
                 }
