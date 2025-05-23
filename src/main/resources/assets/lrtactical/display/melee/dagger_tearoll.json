@@ -3,6 +3,7 @@
   "animation": "lrtactical:melee/dagger_tearoll",
   "state_machine": "lrtactical:default_melee_state_machine",
   "texture": "lrtactical:melee/dagger_tearoll_uv",
+  "slot_texture": "lrtactical:melee/slot/dagger_tearoll",
   "transforms": {
     "thirdperson_righthand": {
       "rotation": [90, 0, 0],

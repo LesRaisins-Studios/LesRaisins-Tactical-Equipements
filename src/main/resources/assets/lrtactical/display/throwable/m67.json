@@ -3,6 +3,7 @@
   "animation": "lrtactical:throwable/m67_grenade",
   "state_machine": "lrtactical:default_grenade_state_machine",
   "texture": "lrtactical:throwable/m67_uv",
+  "slot_texture": "lrtactical:throwable/slot/m67_grenade",
   "sounds": {
     "death": "lrtactical:entity.grenade.m67.explode"
   },
