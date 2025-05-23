@@ -23,6 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import me.xjqsh.lrtactical.api.animation.ThrowableAnimationStateContext;
 import org.jetbrains.annotations.Nullable;
 
+import static net.minecraft.world.item.ItemDisplayContext.GUI;
+
 /**
  * 投掷物渲染
  */
@@ -72,6 +74,14 @@ public class ThrowableItemRendererWrapper extends AnimateGeoItemRenderer<Bedrock
         if (ctx.firstPerson()) return;
         LrTacticalAPI.getThrowableDisplay(stack).ifPresent(display -> {
             BedrockAnimatedModel model = display.getModel();
+            // GUI 特殊渲染
+            if (ctx == GUI && display.getSlotTexture() != null) {
+                poseStack.translate(0.5, 1.5, 0.5);
+                poseStack.mulPose(Axis.ZN.rotationDegrees(180));
+                VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(display.getSlotTexture()));
+                SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+                return;
+            }
             poseStack.pushPose();
             {
                 ItemTransforms transforms = display.getTransforms();

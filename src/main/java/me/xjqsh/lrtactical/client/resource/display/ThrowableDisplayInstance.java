@@ -30,6 +30,7 @@ public class ThrowableDisplayInstance {
     private BedrockAnimatedModel model;
     private LuaAnimationStateMachine<ThrowableAnimationStateContext> stateMachine;
     private ResourceLocation texture;
+    private ResourceLocation slotTexture;
     private ItemTransforms transforms;
     private Map<String, ResourceLocation> sounds;
 
@@ -49,6 +50,10 @@ public class ThrowableDisplayInstance {
 
     public ResourceLocation getTexture() {
         return texture;
+    }
+
+    public ResourceLocation getSlotTexture() {
+        return slotTexture;
     }
 
     public ItemTransforms getTransforms() {
@@ -93,6 +98,9 @@ public class ThrowableDisplayInstance {
                 .setLuaScripts(script)
                 .build();
         display.texture = new ResourceLocation(pojo.textureLocation.getNamespace(), "textures/" + pojo.textureLocation.getPath() + ".png");
+        if (pojo.slotTextureLocation != null) {
+            display.slotTexture = new ResourceLocation(pojo.slotTextureLocation.getNamespace(), "textures/" + pojo.slotTextureLocation.getPath() + ".png");
+        }
 
         display.transforms = Objects.requireNonNullElse(pojo.transforms, ItemTransforms.NO_TRANSFORMS);
         display.sounds = Objects.requireNonNullElseGet(pojo.sounds, Maps::newHashMap);
@@ -109,6 +117,8 @@ public class ThrowableDisplayInstance {
             ResourceLocation stateMachineLocation,
             @SerializedName("texture")
             ResourceLocation textureLocation,
+            @SerializedName("slot_texture")
+            ResourceLocation slotTextureLocation,
             @SerializedName("transforms")
             ItemTransforms transforms,
             @SerializedName("sounds")
