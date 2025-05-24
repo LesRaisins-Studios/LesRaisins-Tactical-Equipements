@@ -5,29 +5,30 @@
       "item": {
         "tag": "forge:ingots/iron"
       },
-      "count": 5
+      "count": 3
     },
     {
       "item": {
-        "tag": "forge:leather"
+        "tag": "forge:gunpowder"
       },
-      "count": 2
+      "count": 6
     },
     {
       "item": {
-        "tag": "minecraft:logs"
+        "tag": "forge:gems/quartz"
       },
       "count": 1
     }
   ],
   "result": {
     "type": "custom",
-    "group": "lrtactical:melee",
+    "group": "lrtactical:throwable",
     "item": {
-      "item": "lrtactical:melee",
+      "item": "lrtactical:throwable",
       "nbt": {
-        "MeleeWeaponId": "lrtactical:dagger"
-      }
+        "ThrowableId": "lrtactical:m67"
+      },
+      "count" : 2
     }
   }
 }

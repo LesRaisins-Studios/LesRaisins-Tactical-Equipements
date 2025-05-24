@@ -5,19 +5,25 @@
       "item": {
         "tag": "forge:ingots/iron"
       },
-      "count": 5
+      "count": 2
     },
     {
       "item": {
         "tag": "forge:leather"
       },
-      "count": 2
+      "count": 3
     },
     {
       "item": {
         "tag": "minecraft:logs"
       },
-      "count": 1
+      "count": 6
+    },
+    {
+      "item": {
+        "tag": "forge:gems/quartz"
+      },
+      "count": 2
     }
   ],
   "result": {
@@ -26,7 +32,7 @@
     "item": {
       "item": "lrtactical:melee",
       "nbt": {
-        "MeleeWeaponId": "lrtactical:dagger"
+        "MeleeWeaponId": "lrtactical:baseball_bat"
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "item_group.lrtactical.throwable": "LesRaisins - Throwable",
-  "item.lrtactical.m67": "m67 Grenade",
+  "item.lrtactical.m67": "M67 Grenade",
   "item.lrtactical.dagger": "Dagger",
   "item.lrtactical.baseball_bat": "Baseball Bat",
   "item.lrtactical.karambit": "Karambit",
@@ -8,6 +8,10 @@
   "item.lrtactical.smoke_grenade": "Smoke Grenade",
   "item.lrtactical.flash_grenade": "Flash Grenade",
   "item_group.lrtactical.melee": "LesRaisins - Melee Weapon",
+  "lrtactical.block.smith_table.name": "Smithing Table(LRT)",
+  "lrtactical.block.smith_table.desc": "A Classic Forging Table",
+  "lrtactical.type.melee.name": "MELEE",
+  "lrtactical.type.throwable.name": "THROWABLE",
 
   "effect.lrtactical.blinded": "Blinded",
   "effect.lrtactical.deafened": "Defended",

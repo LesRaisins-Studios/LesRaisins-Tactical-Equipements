@@ -1,0 +1,40 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "item" : "minecraft:sugar"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "item" : "minecraft:flint"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "tag": "forge:gems/quartz"
+      },
+      "count": 2
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:throwable",
+    "item": {
+      "item": "lrtactical:throwable",
+      "nbt": {
+        "ThrowableId": "lrtactical:smoke_grenade"
+      },
+      "count" : 2
+    }
+  }
+}

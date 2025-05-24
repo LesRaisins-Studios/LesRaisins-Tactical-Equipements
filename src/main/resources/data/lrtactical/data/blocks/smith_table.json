@@ -18,6 +18,19 @@
           "MeleeWeaponId": "lrtactical:karambit"
         }
       }
+    },
+    {
+      // tab的id，在配方的result中指定
+      "id": "lrtactical:throwable",
+      // tab的名称，将会显示在gui中
+      "name": "lrtactical.type.throwable.name",
+      // tab的图标，可以指定任意一个物品作为图标
+      "icon": {
+        "item": "lrtactical:throwable",
+        "nbt": {
+          "ThrowableId": "lrtactical:flash_grenade"
+        }
+      }
     }
   ]
 }
