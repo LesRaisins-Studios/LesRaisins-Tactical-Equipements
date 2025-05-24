@@ -8,12 +8,15 @@
   "item.lrtactical.smoke_grenade": "Smoke Grenade",
   "item.lrtactical.flash_grenade": "Flash Grenade",
   "item_group.lrtactical.melee": "LesRaisins - Melee Weapon",
-  "config.lrtactical.effect": "Effects",
+
   "effect.lrtactical.blinded": "Blinded",
   "effect.lrtactical.deafened": "Defended",
   "enchantment.lrtactical.backstab": "Backstab",
+
+  "config.lrtactical.effect": "Effects",
   "config.lrtactical.effect.blackflash": "Black Flash",
   "config.lrtactical.effect.blackflash.desc": "Use black overlay instead of white when blinded by flashbang",
+
   "key.category.lrtactical": "LesRaisins Tactical",
   "key.lrtactical.normal_attack.desc": "Normal Attack",
   "key.lrtactical.sp_attack.desc": "Special Attack/Action"
