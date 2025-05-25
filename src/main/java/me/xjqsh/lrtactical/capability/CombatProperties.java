@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
+//todo 临时实现，太丑了，还得改
 @AutoRegisterCapability
 public class CombatProperties {
     public static final ResourceLocation ID = new ResourceLocation(EquipmentMod.MOD_ID, "combat_data");

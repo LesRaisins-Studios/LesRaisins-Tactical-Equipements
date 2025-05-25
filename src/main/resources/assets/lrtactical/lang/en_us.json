@@ -8,6 +8,7 @@
   "item.lrtactical.smoke_grenade": "Smoke Grenade",
   "item.lrtactical.flash_grenade": "Flash Grenade",
   "item_group.lrtactical.melee": "LesRaisins - Melee Weapon",
+
   "lrtactical.block.smith_table.name": "Smithing Table(LRT)",
   "lrtactical.block.smith_table.desc": "A Classic Forging Table",
   "lrtactical.type.melee.name": "MELEE",
@@ -23,5 +24,8 @@
 
   "key.category.lrtactical": "LesRaisins Tactical",
   "key.lrtactical.normal_attack.desc": "Normal Attack",
-  "key.lrtactical.sp_attack.desc": "Special Attack/Action"
+  "key.lrtactical.sp_attack.desc": "Special Attack/Action",
+
+  "pack.lrtactical.default_pack.name": "LesRaisins Tactical",
+  "pack.lrtactical.default_pack.desc": "Default Pack for LesRaisins Tactical",
 }

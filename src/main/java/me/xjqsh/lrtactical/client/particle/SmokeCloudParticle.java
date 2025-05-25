@@ -31,7 +31,7 @@ public class SmokeCloudParticle extends TextureSheetParticle {
     protected SmokeCloudParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(world, x, y, z);
         this.spriteSet = spriteSet;
-        this.quadSize *= 4f;
+        this.quadSize *= 5.5f;
         this.lifetime = 20;
         this.gravity = 0f;
         this.hasPhysics = false;

@@ -116,7 +116,13 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
+        url = "https://api.modrinth.com/maven"
+    }
+    maven {
         url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
         content {
             includeGroup "curse.maven"
         }
@@ -151,7 +157,7 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.104"))
 
-    implementation(fg.deobf("libs:tacz:1.20.1-0411-160405"))
+    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6518539-sources-6518544")
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
     // LuaJ 库，将 lua 脚本语言引入用于控制枪械的逻辑和动画状态机
     compileOnly('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')

@@ -66,7 +66,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
         if (ctx.firstPerson()) return;
-        LrTacticalAPI.getMeleeDisplay(stack).ifPresent(display -> {
+        LrTacticalAPI.getMeleeDisplay(stack).ifPresentOrElse(display -> {
             BedrockAnimatedModel model = display.getModel();
             // GUI 特殊渲染
             if (ctx == GUI && display.getSlotTexture() != null) {
@@ -100,6 +100,11 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
                 }
             }
             poseStack.popPose();
+        }, () -> {
+            poseStack.translate(0.5, 1.5, 0.5);
+            poseStack.mulPose(Axis.ZN.rotationDegrees(180));
+            VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
+            SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         });
     }
 }

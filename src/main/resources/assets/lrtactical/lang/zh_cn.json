@@ -8,17 +8,24 @@
   "item.lrtactical.smoke_grenade": "M18 烟雾弹",
   "item.lrtactical.flash_grenade": "闪光弹",
   "item_group.lrtactical.melee": "LesRaisins - 近战武器",
-  "config.lrtactical.effect": "效果",
+
   "lrtactical.block.smith_table.name": "锻刀台",
   "lrtactical.block.smith_table.desc": "锻刀大赛冠军",
   "lrtactical.type.melee.name": "近战武器",
   "lrtactical.type.throwable.name": "投掷武器",
+
   "effect.lrtactical.blinded": "致盲",
   "effect.lrtactical.deafened": "失聪",
   "enchantment.lrtactical.backstab": "背刺",
+
+  "config.lrtactical.effect": "效果",
   "config.lrtactical.effect.blackflash": "黑色致盲",
   "config.lrtactical.effect.blackflash.desc": "使用黑色遮罩代替闪光弹的白色致盲效果",
+
   "key.category.lrtactical": "LesRaisins 战术装备",
   "key.lrtactical.normal_attack.desc": "普通攻击",
-  "key.lrtactical.sp_attack.desc": "重击/特殊动作"
+  "key.lrtactical.sp_attack.desc": "重击/特殊动作",
+
+  "pack.lrtactical.default_pack.name": "LesRaisins 战术装备",
+  "pack.lrtactical.default_pack.desc": "绿葡萄战术装备默认包"
 }
