@@ -76,5 +76,6 @@ public class ModItems {
             ItemStack stack = index.createItemStack();
             pOutput.accept(stack);
         }
+        pOutput.accept(new ItemStack(FLASH_SHIELD.get()));
     }
 }

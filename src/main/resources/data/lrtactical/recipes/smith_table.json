@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "tacz:workbench_b",
+    "nbt": {
+      "BlockId": "lrtactical:smith_table"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "FBW",
+    "I I"
+  ],
+  "key": {
+    "L": {
+      "tag": "minecraft:logs"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "F": {
+      "item": "minecraft:blast_furnace"
+    },
+    "W": {
+      "item": "minecraft:barrel"
+    }
+  }
+}

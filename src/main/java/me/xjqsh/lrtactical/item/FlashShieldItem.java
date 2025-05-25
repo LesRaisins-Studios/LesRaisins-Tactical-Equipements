@@ -163,7 +163,7 @@ public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationIte
         if (entity.getTicksUsingItem() >= this.getMaxUsingTick(stack)) {
             if (!world.isClientSide()) {
                 if (entity instanceof Player player) {
-                    player.getCooldowns().addCooldown(stack.getItem(), 400);
+                    player.getCooldowns().addCooldown(stack.getItem(), ServerConfig.FLASH_SHIELD_COOLDOWN.get());
                     player.addEffect(new MobEffectInstance(ModEffects.BLIND.get(), 45, 0, false, false));
                     player.addEffect(new MobEffectInstance(ModEffects.DEAFENED.get(), 60, 0, false, false));
                 }

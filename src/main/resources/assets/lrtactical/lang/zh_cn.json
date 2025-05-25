@@ -1,18 +1,23 @@
 {
   "item_group.lrtactical.throwable": "LesRaisins - 投掷物",
+  "item_group.lrtactical.melee": "LesRaisins - 近战武器",
+
   "item.lrtactical.m67": "M67 手雷",
   "item.lrtactical.rgn": "RGN 手雷",
+  "item.lrtactical.smoke_grenade": "M18 烟雾弹",
+  "item.lrtactical.flash_grenade": "闪光弹",
+
   "item.lrtactical.dagger": "军用匕首",
   "item.lrtactical.baseball_bat": "棒球棍",
   "item.lrtactical.karambit": "爪刀",
-  "item.lrtactical.smoke_grenade": "M18 烟雾弹",
-  "item.lrtactical.flash_grenade": "闪光弹",
-  "item_group.lrtactical.melee": "LesRaisins - 近战武器",
+
+  "item.lrtactical.flash_shield": "闪光护盾",
 
   "lrtactical.block.smith_table.name": "锻刀台",
   "lrtactical.block.smith_table.desc": "锻刀大赛冠军",
   "lrtactical.type.melee.name": "近战武器",
   "lrtactical.type.throwable.name": "投掷武器",
+  "lrtactical.type.misc.name": "杂项",
 
   "effect.lrtactical.blinded": "致盲",
   "effect.lrtactical.deafened": "失聪",
