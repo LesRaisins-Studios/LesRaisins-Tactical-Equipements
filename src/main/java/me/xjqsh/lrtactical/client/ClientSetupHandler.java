@@ -2,6 +2,7 @@ package me.xjqsh.lrtactical.client;
 
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.client.audio.SoundHandler;
+import me.xjqsh.lrtactical.client.gui.overlay.InteractKeyTextOverlay;
 import me.xjqsh.lrtactical.client.input.AttackKeys;
 import me.xjqsh.lrtactical.client.overlay.UsingProgressOverlay;
 import me.xjqsh.lrtactical.client.particle.SmokeCloudParticle;
@@ -18,6 +19,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import static net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.CROSSHAIR;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = EquipmentMod.MOD_ID)
 public class ClientSetupHandler {
@@ -52,6 +55,12 @@ public class ClientSetupHandler {
     public static void onClientSetup(RegisterKeyMappingsEvent event) {
         event.register(AttackKeys.NORMAL_ATTACK);
         event.register(AttackKeys.SPECIAL_ATTACK);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
+        // 注册 HUD
+        event.registerAbove(CROSSHAIR.id(), "lrt_interact_key_overlay", new InteractKeyTextOverlay());
     }
 }
 

@@ -119,6 +119,10 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
 
         textureLocation = new ResourceLocation(display.textureLocation.getNamespace(), "textures/" + display.textureLocation.getPath() + ".png");
 
+        if (display.slotTextureLocation != null) {
+            slotTexture = new ResourceLocation(display.slotTextureLocation.getNamespace(), "textures/" + display.slotTextureLocation.getPath() + ".png");
+        }
+
         this.transforms = display.transforms == null ? ItemTransforms.NO_TRANSFORMS : display.transforms;
 
         var animation = ClientAssetsManager.INSTANCE.getBedrockAnimations(display.animationLocation);

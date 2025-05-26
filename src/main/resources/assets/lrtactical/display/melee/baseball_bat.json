@@ -23,8 +23,9 @@
       "translation": [0, 4.75, 0]
     },
     "fixed": {
-      "translation": [0, 11, 0],
-      "scale": [2, 2, 2]
+      "rotation": [0, 0, 45],
+      "translation": [5.5, -5.5, 0],
+      "scale": [0.8, 0.8, 0.8]
     }
   }
 }

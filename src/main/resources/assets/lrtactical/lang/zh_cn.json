@@ -32,5 +32,14 @@
   "key.lrtactical.sp_attack.desc": "重击/特殊动作",
 
   "pack.lrtactical.default_pack.name": "LesRaisins 战术装备",
-  "pack.lrtactical.default_pack.desc": "绿葡萄战术装备默认包"
+  "pack.lrtactical.default_pack.desc": "绿葡萄战术装备默认包",
+
+  "subtitle.lrtactical.entity.grenade.bounce": "手雷弹跳",
+  "subtitle.lrtactical.entity.grenade.flash.explode": "闪光弹爆炸",
+  "subtitle.lrtactical.entity.grenade.m67.explode": "M67 手雷爆炸",
+  "subtitle.lrtactical.entity.grenade.rgn.explode": "RGN 手雷爆炸",
+  "subtitle.lrtactical.entity.grenade.smoke.start": "烟雾弹开启",
+  "subtitle.lrtactical.entity.grenade.smoke.loop": "烟雾弹释放",
+  "subtitle.lrtactical.entity.grenade.smoke.end": "烟雾弹消散",
+  "subtitle.lrtactical.player.ring": "*耳鸣*"
 }

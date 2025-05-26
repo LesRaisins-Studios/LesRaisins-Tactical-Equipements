@@ -3,19 +3,25 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:ingots/iron"
-      },
-      "count": 4
-    },
-    {
-      "item": {
-        "tag": "forge:leather"
+        "item": "minecraft:iron_block"
       },
       "count": 2
     },
     {
       "item": {
-        "tag": "forge:gems/lapis"
+        "item": "minecraft:redstone_lamp"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:amethyst_shard"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "tag": "forge:rods/blaze"
       },
       "count": 2
     }

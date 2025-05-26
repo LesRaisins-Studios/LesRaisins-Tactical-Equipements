@@ -12,7 +12,7 @@ public class ServerConfig {
         builder.push("flash shield");
         FLASH_SHIELD_MAX_DURABILITY = builder
                 .comment("max durability of flash shield")
-                .defineInRange("flash_shield_max_durability", 350, 1, 32767);
+                .defineInRange("flash_shield_max_durability", 450, 1, 32767);
         FLASH_SHIELD_COOLDOWN = builder
                 .comment("cooldown of flash shield in ticks")
                 .defineInRange("flash_shield_cooldown", 200, 20, 32767);
