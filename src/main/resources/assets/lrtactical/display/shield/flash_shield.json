@@ -3,6 +3,7 @@
   "animation": "lrtactical:shield/flash_shield",
   "state_machine": "lrtactical:flash_shield_state_machine",
   "texture": "lrtactical:shield/flash_shield_uv",
+  "slot_texture": "lrtactical:shield/slot/flash_shield",
   "transforms": {
     "thirdperson_righthand": {
       "translation": [6.5, 3, 9.75]
