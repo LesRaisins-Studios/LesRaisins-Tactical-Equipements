@@ -124,6 +124,12 @@ public interface IMeleeWeapon extends ICustomItem {
         target.invulnerableTime = 0;
         target.hurt(attacker.damageSources().playerAttack(attacker), base + modifier);
 
+        if (target instanceof LivingEntity living) {
+            EnchantmentHelper.doPostHurtEffects(living, attacker);
+        }
+
+        EnchantmentHelper.doPostDamageEffects(attacker, target);
+
         if (flag2) {
             attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
                     SoundEvents.PLAYER_ATTACK_CRIT, attacker.getSoundSource(), 1.0F, 1.0F);
