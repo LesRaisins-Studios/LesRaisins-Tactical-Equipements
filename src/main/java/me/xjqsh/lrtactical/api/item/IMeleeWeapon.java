@@ -100,9 +100,7 @@ public interface IMeleeWeapon extends ICustomItem {
         } else {
             modifier = EnchantmentHelper.getDamageBonus(stack, MobType.UNDEFINED);
         }
-        if (target instanceof LivingEntity living) {
-            living.knockback(knockback, Mth.sin(attacker.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(attacker.getYRot() * ((float)Math.PI / 180F)));
-        }
+
 
         boolean flag2 = attacker.fallDistance > 0.0F && !attacker.onGround() && !attacker.onClimbable() && !attacker.isInWater()
                 && !attacker.hasEffect(MobEffects.BLINDNESS) && !attacker.isPassenger() && target instanceof LivingEntity;
@@ -122,9 +120,14 @@ public interface IMeleeWeapon extends ICustomItem {
         }
 
         target.invulnerableTime = 0;
-        target.hurt(attacker.damageSources().playerAttack(attacker), base + modifier);
+        boolean result = target.hurt(attacker.damageSources().playerAttack(attacker), base + modifier);
+        // 如果目标实体实际没有受到攻击，则不应用其他效果了，比如击退和附魔后效等
+        if (!result) {
+            return;
+        }
 
         if (target instanceof LivingEntity living) {
+            living.knockback(knockback, Mth.sin(attacker.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(attacker.getYRot() * ((float)Math.PI / 180F)));
             EnchantmentHelper.doPostHurtEffects(living, attacker);
         }
 

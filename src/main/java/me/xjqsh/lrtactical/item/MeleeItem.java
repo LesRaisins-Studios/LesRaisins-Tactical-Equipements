@@ -144,7 +144,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
                     for (Entity livingentity : filter.filterTargets(attacker, origin1, direction1)) {
                         boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
 
-                        if (livingentity != attacker && !attacker.isAlliedTo(livingentity) && flag) {
+                        if (livingentity != attacker && flag) {
                             this.performAttack(attacker, livingentity, stack, damage, knockback);
                         }
                     }

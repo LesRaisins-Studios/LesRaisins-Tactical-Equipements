@@ -44,11 +44,9 @@ public class ConeFilter implements ITargetFilter {
             boolean inAngle = VectorUtil.isInAngle(origin, direction, livingentity, halfAngle, maxRange);
 
             boolean self = this.excludeSelf && livingentity == attacker;
-            boolean allies = attacker.isAlliedTo(livingentity);
-
             boolean see = ITargetFilter.hasLineOfSight(attacker, livingentity);
 
-            if (!self && !allies && flag && inAngle && see) {
+            if (!self && flag && inAngle && see) {
                 targets.add(livingentity);
             }
         }

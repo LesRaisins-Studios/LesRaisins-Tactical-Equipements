@@ -91,7 +91,7 @@ public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationIte
         for (Entity livingentity : filter.filterTargets(attacker, origin, direction)) {
             boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
 
-            if (livingentity != attacker && !attacker.isAlliedTo(livingentity) && flag) {
+            if (livingentity != attacker && flag) {
                 this.performAttack(attacker, livingentity, stack, base, 1.2f);
             }
         }
