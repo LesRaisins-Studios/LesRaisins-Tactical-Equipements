@@ -87,11 +87,11 @@ public class ThrowableDisplayInstance {
         display.model.setFunctionalRenderer(RIGHTHAND_POS_NODE, bedrockPart -> new RightHandRender(display.model));
 
         var animation = ClientAssetsManager.INSTANCE.getBedrockAnimations(pojo.animationLocation);
-        Preconditions.checkArgument(animation != null, "no corresponding model found for " + pojo.modelLocation);
+        Preconditions.checkArgument(animation != null, "no corresponding animation found for " + pojo.modelLocation);
         AnimationController controller = Animations.createControllerFromBedrock(animation, display.model);
 
         var script = ClientAssetsManager.INSTANCE.getScript(pojo.stateMachineLocation);
-        Preconditions.checkArgument(script != null, "no corresponding model found for " + pojo.modelLocation);
+        Preconditions.checkArgument(script != null, "no corresponding state machine found for " + pojo.modelLocation);
 
         display.stateMachine = new LuaStateMachineFactory<ThrowableAnimationStateContext>()
                 .setController(controller)

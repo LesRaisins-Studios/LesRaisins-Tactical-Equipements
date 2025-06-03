@@ -6,6 +6,8 @@ public class ServerConfig {
     public static ForgeConfigSpec.IntValue FLASH_SHIELD_MAX_DURABILITY;
     public static ForgeConfigSpec.IntValue FLASH_SHIELD_COOLDOWN;
 
+    public static ForgeConfigSpec.DoubleValue CROUCHING_INIT_SPEED_PERCENT;
+
     public static ForgeConfigSpec init() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -16,6 +18,12 @@ public class ServerConfig {
         FLASH_SHIELD_COOLDOWN = builder
                 .comment("cooldown of flash shield in ticks")
                 .defineInRange("flash_shield_cooldown", 200, 20, 32767);
+        builder.pop();
+
+        builder.push("throwable");
+        CROUCHING_INIT_SPEED_PERCENT = builder
+                .comment("modifier of initial speed when crouching, 1.0 means no change")
+                .defineInRange("flash_shield_cooldown", 0.5f, 0.01, 2);
         builder.pop();
 
         return builder.build();

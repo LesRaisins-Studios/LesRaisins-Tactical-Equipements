@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.PlayMessages;
 
 public class GrenadeEntity extends ThrowableItemEntity {
@@ -50,8 +51,10 @@ public class GrenadeEntity extends ThrowableItemEntity {
     public void onDeath() {
         if (!this.level().isClientSide()) {
             CustomExplosion explosion = new CustomExplosion(this.level(), this, this.getDamage(), this.getRadius(), Explosion.BlockInteraction.KEEP);
+            if (ForgeEventFactory.onExplosionStart(level(), explosion)) {
+                return;
+            }
             explosion.explode();
-            net.minecraftforge.event.ForgeEventFactory.onExplosionStart(level(), explosion);
             explosion.finalizeExplosion(true);
             if (this.level() instanceof ServerLevel level) {
                 double x = this.getX();

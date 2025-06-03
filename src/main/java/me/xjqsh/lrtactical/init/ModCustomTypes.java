@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.init;
 
 import me.xjqsh.lrtactical.EquipmentMod;
+import me.xjqsh.lrtactical.entity.EffectCloudGrenadeEntity;
 import me.xjqsh.lrtactical.entity.GrenadeEntity;
 import me.xjqsh.lrtactical.entity.SmokeGrenadeEntity;
 import me.xjqsh.lrtactical.entity.StunGrenadeEntity;
@@ -8,6 +9,8 @@ import me.xjqsh.lrtactical.item.melee.MeleeWeaponData;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponType;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
+import me.xjqsh.lrtactical.item.throwable.area.CloudType;
+import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
 import me.xjqsh.lrtactical.item.throwable.explode.ExplodeThrowableData;
 import me.xjqsh.lrtactical.item.throwable.explode.ExplodeType;
 import me.xjqsh.lrtactical.item.throwable.flash.StunThrowableData;
@@ -32,6 +35,10 @@ public class ModCustomTypes {
 
     public static RegistryObject<ThrowableType<StunThrowableData, StunGrenadeEntity>> STUN = THROWABLE_TYPES.register("stun",
             () -> StunType.STUN
+    );
+
+    public static RegistryObject<ThrowableType<EffectCloudThrowableData, EffectCloudGrenadeEntity>> EFFECT_CLOUD = THROWABLE_TYPES.register("effect_cloud",
+            () -> CloudType.CLOUD
     );
 
     // 近战武器

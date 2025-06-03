@@ -25,6 +25,14 @@ public class StunThrowableData extends ThrowableData {
         @SerializedName("deafened")
         private DeafenedData deafened = new DeafenedData();
 
+        public StunData() {}
+
+        public StunData(float radius, BlindData blind, DeafenedData deafened) {
+            this.radius = radius;
+            this.blind = blind;
+            this.deafened = deafened;
+        }
+
         public float getRadius() {
             return radius;
         }
@@ -61,6 +69,13 @@ public class StunThrowableData extends ThrowableData {
         @SerializedName("min_duration")
         private int minDuration = 10;
 
+        public DeafenedData() {}
+
+        public DeafenedData(int maxDuration, int minDuration) {
+            this.maxDuration = maxDuration;
+            this.minDuration = minDuration;
+        }
+
         public int getMaxDuration() {
             return maxDuration;
         }
@@ -87,6 +102,15 @@ public class StunThrowableData extends ThrowableData {
         // finalDuration = durationBlinded * (1.0 - angle * (1.0 - viewAngleFactor) / maxAngle);
         @SerializedName("view_angle_factor")
         private double viewAngleFactor = 0.5;
+
+        public BlindData() {}
+
+        public BlindData(int maxDuration, int minDuration, double maxAngle, double viewAngleFactor) {
+            this.maxDuration = maxDuration;
+            this.minDuration = minDuration;
+            this.maxAngle = maxAngle;
+            this.viewAngleFactor = viewAngleFactor;
+        }
 
         public int getMaxDuration() {
             return maxDuration;

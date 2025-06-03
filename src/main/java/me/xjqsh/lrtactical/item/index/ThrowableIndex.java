@@ -44,6 +44,11 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
         return data;
     }
 
+    @Override
+    public int getMaxStackSize() {
+        return data.getStackSize();
+    }
+
     public ThrowableType<T, E> getType() {
         return type;
     }

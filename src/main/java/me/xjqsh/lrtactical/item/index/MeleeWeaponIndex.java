@@ -98,6 +98,11 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
     }
 
     @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
+
+    @Override
     public ResourceLocation getId() {
         return id;
     }

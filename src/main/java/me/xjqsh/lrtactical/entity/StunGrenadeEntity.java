@@ -21,7 +21,7 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
             .noSave()
             .noSummon()
             .fireImmune()
-            .build("grenade_entity");
+            .build("stun_grenade_entity");
 
     private StunThrowableData.StunData data = new StunThrowableData.StunData();
 

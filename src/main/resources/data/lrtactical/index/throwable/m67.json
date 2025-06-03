@@ -2,20 +2,35 @@
   "type": "lrtactical:explode",
   "name": "item.lrtactical.m67",
   "data": {
+    // 投掷物物品通用参数
+    // 准备时间（tick）
     "prepare_time": 16,
-    "initial_speed": 1.5,
+    // 出手速度
+    "initial_speed": 1.1,
+    // 冷却（tick）
     "cooldown": 40,
+    // 冷却标签，同标签的物品共享cd
     "cooldown_category": "lrtactical:grenade",
+    // 收起时间（ms）
     "put_away_time": 380,
+    // 最大堆叠数量
     "stack_size": 3,
+    // 投掷物实体参数
     "entity" : {
+      // 最大存活时长
       "life_time": 75,
+      // 重力
       "gravity": 0.07,
+      // 是否反弹，如果false碰到方块会直接执行生命周期结束方法（比如手雷是爆炸）
       "should_bounce": true,
-      "bounceFactor": 0.75
+      // 反弹系数，0.65表示反弹后速度为原来的65%
+      "bounceFactor": 0.65
     },
+    // 爆炸参数，lrtactical:explode类型的投掷物的额外参数
     "explode": {
+      // 爆炸半径
       "radius": 5.5,
+      // 爆心伤害
       "damage": 22.0
     }
   }

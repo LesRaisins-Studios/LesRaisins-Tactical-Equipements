@@ -7,6 +7,8 @@ import net.minecraft.world.item.ItemStack;
 public interface ICustomItemIndex {
     ItemStack createItemStack();
 
+    int getMaxStackSize();
+
     ResourceLocation getId();
 
     Item getBaseItem();

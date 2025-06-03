@@ -8,11 +8,15 @@ import me.xjqsh.lrtactical.client.overlay.UsingProgressOverlay;
 import me.xjqsh.lrtactical.client.particle.SmokeCloudParticle;
 import me.xjqsh.lrtactical.client.renderer.CoolDownDecorations;
 import me.xjqsh.lrtactical.client.renderer.entity.ThrowableEntityRenderer;
+import me.xjqsh.lrtactical.entity.EffectCloudGrenadeEntity;
 import me.xjqsh.lrtactical.entity.GrenadeEntity;
 import me.xjqsh.lrtactical.entity.SmokeGrenadeEntity;
 import me.xjqsh.lrtactical.entity.StunGrenadeEntity;
+import me.xjqsh.lrtactical.entity.sp.SpEffectCloudEntity;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModParticleTypes;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,6 +33,9 @@ public class ClientSetupHandler {
         event.registerEntityRenderer(GrenadeEntity.TYPE, ThrowableEntityRenderer::new);
         event.registerEntityRenderer(SmokeGrenadeEntity.TYPE, ThrowableEntityRenderer::new);
         event.registerEntityRenderer(StunGrenadeEntity.TYPE, ThrowableEntityRenderer::new);
+        event.registerEntityRenderer(EffectCloudGrenadeEntity.TYPE, ThrowableEntityRenderer::new);
+
+        event.registerEntityRenderer(SpEffectCloudEntity.TYPE, NoopRenderer::new);
     }
 
     @SubscribeEvent

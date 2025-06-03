@@ -8,11 +8,14 @@ import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.item.melee.AttributeData;
 import me.xjqsh.lrtactical.item.melee.CombatData;
+import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
 import me.xjqsh.lrtactical.network.DataType;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SPackSyncMessage;
 import me.xjqsh.lrtactical.resource.manager.MeleeIndexManager;
 import me.xjqsh.lrtactical.resource.manager.ThrowableIndexManager;
+import me.xjqsh.lrtactical.resource.serializer.ParticleOptionsDeserializer;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -32,6 +35,8 @@ public class CommonAssetsManager implements ICommonResourceProvider {
             .registerTypeAdapter(CombatData.class, new CombatData.Deserializer())
             .registerTypeAdapter(ITargetFilter.class, new ITargetFilter.Deserializer())
             .registerTypeAdapter(AttributeData.class, new AttributeData.Deserializer())
+            .registerTypeAdapter(ParticleOptions.class, new ParticleOptionsDeserializer())
+            .registerTypeAdapter(EffectCloudThrowableData.EffectData.class, new EffectCloudThrowableData.EffectDataDeSerializer())
             .create();
 
     private CommonAssetsManager() {

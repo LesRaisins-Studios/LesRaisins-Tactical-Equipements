@@ -3,7 +3,7 @@
   "name": "item.lrtactical.flash_grenade",
   "data": {
     "prepare_time": 16,
-    "initial_speed": 1.5,
+    "initial_speed": 1.1,
     "cooldown": 40,
     "cooldown_category": "lrtactical:stun",
     "put_away_time": 380,
@@ -12,17 +12,28 @@
       "life_time": 60,
       "gravity": 0.07,
       "should_bounce": true,
-      "bounceFactor": 0.75
+      "bounceFactor": 0.65
     },
+    // 闪光弹的额外参数
     "stun": {
+      // 最大影响范围
       "radius": 32,
+      // 致盲参数
       "blind": {
+        // 致盲的最大/最小持续时间（tick）
+        // 时长会先根据距离在这两个值之间插值durationBlinded = Math.round(mx - (mx - mn) * (distance / radius))
         "max_duration": 300,
         "min_duration": 80,
+        // 目标实体视线与爆炸位置的最大夹角，超过这个角度则不会致盲
         "max_angle": 85.0,
+        // 致盲时长在计算完距离后再进行依据视角衰减计算
+        // 这个值代表在角度为maxAngle时，时长的百分比
+        // finalDuration = durationBlinded * (1.0 - angle * (1.0 - viewAngleFactor) / maxAngle);
         "view_angle_factor": 0.35
       },
       "deafened": {
+        // 失聪的最大/最小持续时间
+        // 依照目标距离/最大距离在这两个值之间插值: Math.round(mx - (mx - mn) * (distance / radius))
         "max_duration": 300,
         "min_duration": 80
       }

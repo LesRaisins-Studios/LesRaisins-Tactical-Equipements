@@ -3,7 +3,7 @@
   "name": "item.lrtactical.smoke_grenade",
   "data": {
     "prepare_time": 16,
-    "initial_speed": 1.5,
+    "initial_speed": 1.1,
     "cooldown": 0,
     "put_away_time": 380,
     "stack_size": 2,
@@ -11,7 +11,7 @@
       "life_time": 600,
       "gravity": 0.07,
       "should_bounce": true,
-      "bounceFactor": 0.75
+      "bounceFactor": 0.65
     }
   }
 }

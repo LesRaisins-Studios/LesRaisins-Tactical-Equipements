@@ -1,5 +1,6 @@
 package me.xjqsh.lrtactical.item.throwable.flash;
 
+import me.xjqsh.lrtactical.config.ServerConfig;
 import me.xjqsh.lrtactical.entity.StunGrenadeEntity;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
@@ -15,6 +16,9 @@ public class StunType {
     public static StunGrenadeEntity createEntity(ItemStack stack, LivingEntity thrower, StunThrowableData data) {
         var entity = new StunGrenadeEntity(thrower, thrower.level(), data.getEntityData().getLifeTime());
         float initialSpeed = (float) data.getInitialSpeed();
+        if (thrower.isCrouching()) {
+            initialSpeed *= ServerConfig.CROUCHING_INIT_SPEED_PERCENT.get(); // Reduce speed if crouching
+        }
         entity.shootFromRotation(entity, thrower.getXRot(), thrower.getYRot(), 0.0F, initialSpeed, 1.0F);
         entity.setItem(stack);
 

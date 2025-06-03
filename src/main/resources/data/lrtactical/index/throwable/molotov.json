@@ -1,0 +1,35 @@
+{
+  "type": "lrtactical:effect_cloud",
+  "name": "item.lrtactical.molotov",
+  "data": {
+    "prepare_time": 16,
+    "initial_speed": 1.1,
+    "cooldown": 40,
+    "cooldown_category": "lrtactical:grenade",
+    "put_away_time": 380,
+    "stack_size": 3,
+    "entity": {
+      "life_time": 100,
+      "gravity": 0.07,
+      "should_bounce": false,
+      "bounceFactor": 0.75
+    },
+    "cloud": {
+      "radius": 3.0,
+      "radius_per_tick": 0.01,
+      "wait_time": 20,
+      "duration": 300,
+      "particles": "minecraft:flame",
+      "ignite": true,
+      "extinguish_by_smoke": true,
+      "effects": [
+        {
+          "type": "lrtactical:flammable",
+          "duration": 100,
+          "amplifier": 0,
+          "visible": true
+        }
+      ]
+    }
+  }
+}

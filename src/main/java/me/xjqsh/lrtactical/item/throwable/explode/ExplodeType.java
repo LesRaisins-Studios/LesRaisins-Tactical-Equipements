@@ -1,9 +1,11 @@
 package me.xjqsh.lrtactical.item.throwable.explode;
 
+import me.xjqsh.lrtactical.config.ServerConfig;
 import me.xjqsh.lrtactical.entity.GrenadeEntity;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class ExplodeType {
@@ -15,6 +17,9 @@ public class ExplodeType {
     public static GrenadeEntity createEntity(ItemStack stack, LivingEntity thrower, ExplodeThrowableData data) {
         var entity = new GrenadeEntity(thrower, thrower.level(), data.getEntityData().getLifeTime());
         float initialSpeed = (float) data.getInitialSpeed();
+        if (thrower.isCrouching()) {
+            initialSpeed *= ServerConfig.CROUCHING_INIT_SPEED_PERCENT.get(); // Reduce speed if crouching
+        }
         entity.shootFromRotation(entity, thrower.getXRot(), thrower.getYRot(), 0.0F, initialSpeed, 1.0F);
         entity.setItem(stack);
 
