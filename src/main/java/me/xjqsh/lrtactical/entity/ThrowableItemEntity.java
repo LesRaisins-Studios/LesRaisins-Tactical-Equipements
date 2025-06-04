@@ -174,6 +174,14 @@ public abstract class ThrowableItemEntity extends ThrowableItemProjectile implem
         this.shouldBounce = shouldBounce;
     }
 
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
     @Override
     public void writeSpawnData(FriendlyByteBuf buffer) {
         buffer.writeInt(life);

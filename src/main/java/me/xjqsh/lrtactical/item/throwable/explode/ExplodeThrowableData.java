@@ -21,12 +21,19 @@ public class ExplodeThrowableData extends ThrowableData {
         @SerializedName("damage")
         private double damage = 22.0;
 
+        @SerializedName("destroy_blocks")
+        private boolean destroyBlocks = false;
+
         public float getRadius() {
             return radius;
         }
 
         public double getDamage() {
             return damage;
+        }
+
+        public boolean isDestroyBlocks() {
+            return destroyBlocks;
         }
     }
 }

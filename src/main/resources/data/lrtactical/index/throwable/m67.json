@@ -5,6 +5,9 @@
     // 投掷物物品通用参数
     // 准备时间（tick）
     "prepare_time": 16,
+    // 是否可以温雷，准备时间后继续按住右键将会消耗实体本身的lifetime
+    // 如果lifetime也耗尽，会直接在脚底下爆炸
+    "cookable": true,
     // 出手速度
     "initial_speed": 1.1,
     // 冷却（tick）
@@ -31,7 +34,9 @@
       // 爆炸半径
       "radius": 5.5,
       // 爆心伤害
-      "damage": 22.0
+      "damage": 22.0,
+      // 是否炸毁方块
+      "destroy_blocks": false
     }
   }
 }

@@ -27,6 +27,9 @@
   "config.lrtactical.effect": "效果",
   "config.lrtactical.effect.blackflash": "黑色致盲",
   "config.lrtactical.effect.blackflash.desc": "使用黑色遮罩代替闪光弹的白色致盲效果",
+  "config.lrtactical.grenade": "手雷",
+  "config.lrtactical.grenade.explode": "手雷爆炸摧毁方块",
+  "config.lrtactical.grenade.explode.desc": "如果启用，手雷爆炸时可能会摧毁方块（如果它可以的话）",
 
   "key.category.lrtactical": "LesRaisins 战术装备",
   "key.lrtactical.normal_attack.desc": "普通攻击",

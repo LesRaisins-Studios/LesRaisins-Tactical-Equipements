@@ -1,5 +1,6 @@
 package me.xjqsh.lrtactical.entity;
 
+import me.xjqsh.lrtactical.config.CommonConfig;
 import me.xjqsh.lrtactical.util.CustomExplosion;
 import me.xjqsh.lrtactical.util.ParticleUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,6 +27,7 @@ public class GrenadeEntity extends ThrowableItemEntity {
 
     private double damage = 18.0;
     private float radius = 4.5f;
+    private boolean destroyBlocks = false;
 
     public GrenadeEntity(LivingEntity entity, Level level, int lifeTime) {
         super(TYPE, entity, level, lifeTime);
@@ -50,7 +52,9 @@ public class GrenadeEntity extends ThrowableItemEntity {
     @Override
     public void onDeath() {
         if (!this.level().isClientSide()) {
-            CustomExplosion explosion = new CustomExplosion(this.level(), this, this.getDamage(), this.getRadius(), Explosion.BlockInteraction.KEEP);
+            var type = this.isDestroyBlocks() && CommonConfig.GRENADE_EXPLOSION_BLOCK_DAMAGE.get() ?
+                    Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
+            CustomExplosion explosion = new CustomExplosion(this.level(), this, this.getDamage(), this.getRadius(), type);
             if (ForgeEventFactory.onExplosionStart(level(), explosion)) {
                 return;
             }
@@ -81,5 +85,13 @@ public class GrenadeEntity extends ThrowableItemEntity {
 
     public void setRadius(float radius) {
         this.radius = radius;
+    }
+
+    public boolean isDestroyBlocks() {
+        return destroyBlocks;
+    }
+
+    public void setDestroyBlocks(boolean destroyBlocks) {
+        this.destroyBlocks = destroyBlocks;
     }
 }

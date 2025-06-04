@@ -29,6 +29,7 @@ public class ExplodeType {
 
         entity.setDamage(data.getExplode().getDamage());
         entity.setRadius(data.getExplode().getRadius());
+        entity.setDestroyBlocks(data.getExplode().isDestroyBlocks());
 
         return entity;
     }

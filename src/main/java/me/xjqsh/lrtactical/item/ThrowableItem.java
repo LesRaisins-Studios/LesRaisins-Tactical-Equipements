@@ -100,10 +100,38 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
         return InteractionResultHolder.consume(stack);
     }
 
+    public void onThrow(Level world, LivingEntity entity, ItemStack stack, ThrowableIndex<?, ?> index) {
+        ResourceLocation id = index.getData().getCooldownCategory();
+        if (id != null) {
+            var throwable = index.createEntity(stack, entity);
+
+            if (index.getData().isCookable()) {
+                int newLife = throwable.getLife() - (entity.getTicksUsingItem() - index.getData().getPrepareTime());
+                newLife = Math.max(newLife, 0);
+                throwable.setLife(newLife);
+            }
+
+            world.addFreshEntity(throwable);
+            entity.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(cap -> {
+                cap.addCooldown(id, index.getData().getCooldown());
+            });
+        }
+        stack.shrink(1);
+    }
+
 
     @ParametersAreNonnullByDefault
     @Override
-    public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
+    public void onUseTick(Level world, LivingEntity entity, ItemStack stack, int pRemainingUseDuration) {
+        this.getThrowableIndex(stack).ifPresent(index ->{
+            var data = index.getData();
+            if (data.isCookable() && entity.getTicksUsingItem() >= data.getPrepareTime() + data.getEntityData().getLifeTime()) {
+                if (!world.isClientSide()) {
+                    onThrow(world, entity, stack, index);
+                    entity.stopUsingItem();
+                }
+            }
+        });
     }
 
     @ParametersAreNonnullByDefault
@@ -111,21 +139,16 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         this.getThrowableIndex(stack).ifPresent(index ->{
             if (entity.getTicksUsingItem() >= index.getData().getPrepareTime()) {
-                if (world.isClientSide()) {
-                    this.triggerAnimation(stack, "throw");
-                } else {
-                    var throwable = index.createEntity(stack, entity);
-                    world.addFreshEntity(throwable);
-                    ResourceLocation id = index.getData().getCooldownCategory();
-                    if (id != null) {
-                        entity.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(cap -> {
-                            cap.addCooldown(id, index.getData().getCooldown());
-                        });
-                    }
-                    stack.shrink(1);
+                if (!world.isClientSide()) {
+                    onThrow(world, entity, stack, index);
                 }
             }
         });
+    }
+
+    @Override
+    public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
+        super.onStopUsing(stack, entity, count);
     }
 
     @Override

@@ -3,6 +3,7 @@ package me.xjqsh.lrtactical.compat.cloth.client;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.xjqsh.lrtactical.config.ClientConfig;
+import me.xjqsh.lrtactical.config.CommonConfig;
 import net.minecraft.network.chat.Component;
 
 public class BasicClothConfig {
@@ -15,5 +16,14 @@ public class BasicClothConfig {
                     .setSaveConsumer(ClientConfig.BLACK_FLASH::set)
                     .build()
             );
+
+        root.getOrCreateCategory(Component.translatable("config.lrtactical.grenade"))
+                .addEntry(
+                        entryBuilder.startBooleanToggle(Component.translatable("config.lrtactical.grenade.explode"), CommonConfig.GRENADE_EXPLOSION_BLOCK_DAMAGE.get())
+                                .setDefaultValue(true)
+                                .setTooltip(Component.translatable("config.lrtactical.grenade.explode.desc"))
+                                .setSaveConsumer(CommonConfig.GRENADE_EXPLOSION_BLOCK_DAMAGE::set)
+                                .build()
+                );
     }
 }
