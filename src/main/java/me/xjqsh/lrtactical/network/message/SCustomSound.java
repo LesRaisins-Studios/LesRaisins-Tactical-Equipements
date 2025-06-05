@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.network.message;
 
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.client.audio.ICustomSoundSupplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,14 +16,20 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public record SThrowableSound(
+public record SCustomSound(
+        SoundType type,
         ResourceLocation id,
         String key,
         Vec3 pos,
         float volume,
         float pitch
 ) {
-    public static void encode(SThrowableSound message, FriendlyByteBuf buf) {
+    public enum SoundType {
+        MELEE, THROWABLE
+    }
+
+    public static void encode(SCustomSound message, FriendlyByteBuf buf) {
+        buf.writeEnum(message.type());
         buf.writeResourceLocation(message.id());
         buf.writeUtf(message.key());
         buf.writeDouble(message.pos().x);
@@ -32,8 +39,9 @@ public record SThrowableSound(
         buf.writeFloat(message.pitch());
     }
 
-    public static SThrowableSound decode(FriendlyByteBuf buf) {
-        return new SThrowableSound(
+    public static SCustomSound decode(FriendlyByteBuf buf) {
+        return new SCustomSound(
+                buf.readEnum(SoundType.class),
                 buf.readResourceLocation(),
                 buf.readUtf(),
                 new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble()),
@@ -42,7 +50,7 @@ public record SThrowableSound(
         );
     }
 
-    public static void handle(SThrowableSound message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(SCustomSound message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isClient()) {
             context.enqueueWork(() -> handle(message));
@@ -51,21 +59,26 @@ public record SThrowableSound(
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void handle(SThrowableSound message) {
+    private static void handle(SCustomSound message) {
         Player player = Minecraft.getInstance().player;
         ClientLevel level = Minecraft.getInstance().level;
         if (player == null || level == null) {
             return;
         }
-        LrTacticalAPI.getThrowableDisplay(message.id).ifPresent(display -> {
-            ResourceLocation rl = display.getSounds().get(message.key);
-            if (rl != null) {
+        ICustomSoundSupplier supplier = switch (message.type()) {
+            case MELEE -> LrTacticalAPI.getMeleeDisplay(message.id()).orElse(null);
+            case THROWABLE -> LrTacticalAPI.getThrowableDisplay(message.id()).orElse(null);
+            default -> null;
+        };
+        if (supplier != null) {
+            ResourceLocation soundLocation = supplier.getSound(message.key());
+            if (soundLocation != null) {
                 level.playLocalSound(
                         message.pos.x, message.pos.y, message.pos.z,
-                        SoundEvent.createVariableRangeEvent(rl),
-                        SoundSource.BLOCKS, 6.0F, 1.0F, false
+                        SoundEvent.createVariableRangeEvent(soundLocation),
+                        SoundSource.PLAYERS, message.volume, message.pitch, false
                 );
             }
-        });
+        }
     }
 }

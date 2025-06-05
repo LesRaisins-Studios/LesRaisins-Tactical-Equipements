@@ -35,10 +35,10 @@ public class NetworkHandler {
                 SCustomCoolDownMessage::handle
         );
         CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SThrowableSound.class,
-                SThrowableSound::encode,
-                SThrowableSound::decode,
-                SThrowableSound::handle
+                SCustomSound.class,
+                SCustomSound::encode,
+                SCustomSound::decode,
+                SCustomSound::handle
         );
 
         CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),

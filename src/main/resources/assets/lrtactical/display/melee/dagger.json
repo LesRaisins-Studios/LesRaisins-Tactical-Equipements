@@ -4,6 +4,13 @@
   "state_machine": "lrtactical:default_melee_state_machine",
   "texture": "lrtactical:melee/dagger_uv",
   "slot_texture": "lrtactical:melee/slot/dagger",
+  "sounds": {
+//    "attack_left_hit": "minecraft:entity.player.attack.strong",
+//    "attack_right_hit": "minecraft:entity.player.attack.strong",
+//    "attack_left": "minecraft:entity.player.attack.weak",
+//    "attack_right": "minecraft:entity.player.attack.strong",
+    "crit": "minecraft:entity.player.attack.crit"
+  },
   "transforms": {
     "thirdperson_righthand": {
       "rotation": [90, 0, 0],

@@ -7,10 +7,9 @@ import me.xjqsh.lrtactical.api.collision.ITargetFilter;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
+import me.xjqsh.lrtactical.config.CommonConfig;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.melee.CombatData;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -34,7 +33,7 @@ import java.util.function.Consumer;
 
 public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     public MeleeItem() {
-        super(new Properties().stacksTo(1));
+        super(new Properties().stacksTo(1).setNoRepair());
     }
 
     @Override
@@ -47,7 +46,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
 
     @Override
     public boolean isSame(ItemStack stack1, ItemStack stack2) {
-        return ItemStack.matches(stack1, stack2);
+        return IMeleeWeapon.super.isSame(stack1, stack2);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     @NotNull
     @Override
     public String getDescriptionId(@NotNull ItemStack stack) {
-        return getMeleeIndex(stack).map(MeleeWeaponIndex::getDescriptionId).orElse(super.getDescriptionId(stack));
+        return this.getMeleeIndex(stack).map(MeleeWeaponIndex::getDescriptionId).orElse(super.getDescriptionId(stack));
     }
 
     @Override
@@ -88,11 +87,21 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
 
     @Override
     public int getAttackCoolDown(ItemStack stack, MeleeAction action) {
-        return getMeleeIndex(stack)
+        return this.getMeleeIndex(stack)
                 .map(index -> index.getData().getAttackInfo())
                 .map(attackInfos -> attackInfos.getAttackInfo(action))
-                .map(CombatData.MeleeAttackInfo::cooldown)
+                .map(CombatData.MeleeAttackInfo::getCooldown)
                 .orElse(0);
+    }
+
+    @Override
+    public int getMaxDamage(ItemStack stack) {
+        return this.getMeleeIndex(stack).map(MeleeWeaponIndex::getMaxDurability).orElse(0);
+    }
+
+    @Override
+    public boolean isDamageable(ItemStack stack) {
+        return this.getMaxDamage(stack) > 0;
     }
 
     @Override
@@ -110,45 +119,57 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
         return getMeleeIndex(stack)
                 .map(index -> index.getData().getAttackInfo())
                 .map(attackInfos -> attackInfos.getAttackInfo(action))
-                .map(CombatData.MeleeAttackInfo::delay)
+                .map(CombatData.MeleeAttackInfo::getDelay)
                 .orElse(0);
     }
 
     @Override
     public void attack(Player attacker, ItemStack stack, MeleeAction action, final Vec3 origin, final Vec3 direction) {
         float base = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        getMeleeIndex(stack)
-                .map(index -> index.getData().getAttackInfo())
-                .map(attackInfos -> attackInfos.getAttackInfo(action))
-                .ifPresent(attackInfo -> {
-                    float damage = base * attackInfo.factor();
-                    float knockback = attackInfo.knockback();
-                    ITargetFilter filter = attackInfo.hitbox();
-                    Vec3 origin1 = new Vec3(origin.x, origin.y, origin.z);
-                    Vec3 direction1 = new Vec3(direction.x, direction.y, direction.z);
+        this.getMeleeIndex(stack).ifPresent(index -> {
+            CombatData combatData = index.getData().getAttackInfo();
+            if (combatData == null) {
+                return;
+            }
+            var attackInfo = combatData.getAttackInfo(action);
+            if (attackInfo == null) {
+                return;
+            }
+            IMeleeWeapon.playMeleeSound(attacker, index.getId(), action.getId(), 2, 1, true);
 
-                    if (origin1.distanceToSqr(attacker.getEyePosition()) > attacker.getDeltaMovement().lengthSqr() * 4) {
-                        origin1 = attacker.getEyePosition();
-                        direction1 = attacker.getLookAngle();
-                    }
+            float damage = base * attackInfo.getFactor();
+            float knockback = attackInfo.getKnockback();
+            ITargetFilter filter = attackInfo.getHitbox();
+            Vec3 origin1 = new Vec3(origin.x, origin.y, origin.z);
+            Vec3 direction1 = new Vec3(direction.x, direction.y, direction.z);
 
-                    SoundEvent soundEvent = switch (action) {
-                        case LEFT -> SoundEvents.PLAYER_ATTACK_WEAK;
-                        case RIGHT -> SoundEvents.PLAYER_ATTACK_STRONG;
-                    };
+            if (origin1.distanceToSqr(attacker.getEyePosition()) > attacker.getDeltaMovement().lengthSqr() * 4) {
+                origin1 = attacker.getEyePosition();
+                direction1 = attacker.getLookAngle();
+            }
 
-//                    attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
-//                            soundEvent, attacker.getSoundSource(), 1.0F, 1.0F);
+            if (damage <= 0) return;
+            boolean hit = false;
+            boolean crit = false;
+            for (Entity livingentity : filter.filterTargets(attacker, origin1, direction1)) {
+                boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
 
-                    if (damage <= 0) return;
-                    for (Entity livingentity : filter.filterTargets(attacker, origin1, direction1)) {
-                        boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
+                if (livingentity != attacker && flag) {
+                    var result = this.performAttack(attacker, livingentity, stack, damage, knockback);
+                    hit |= result.hit();
+                    crit |= result.crit();
+                }
+            }
 
-                        if (livingentity != attacker && flag) {
-                            this.performAttack(attacker, livingentity, stack, damage, knockback);
-                        }
-                    }
-                });
+            if (hit) {
+                if (CommonConfig.MELEE_ITEM_CONSUME_DURABILITY.get()) {
+                    stack.hurtAndBreak(attackInfo.getDurabilityDamage(), attacker, (player) -> {
+                        player.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+                    });
+                }
+                IMeleeWeapon.playMeleeSound(attacker, index.getId(), crit ? "crit" : action.getId() + "_hit", 2, 1);
+            }
+        });
     }
 
     @Override

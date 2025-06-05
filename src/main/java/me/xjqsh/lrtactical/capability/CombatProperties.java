@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.capability;
 
 import me.xjqsh.lrtactical.EquipmentMod;
+import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
@@ -8,6 +9,8 @@ import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.CPerformMeleeAttack;
 import me.xjqsh.lrtactical.network.message.CPrepareMeleeAttack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -123,6 +126,15 @@ public class CombatProperties {
                 if (delay > 0) {
                     this.delayedAction = new DelayAttack(delay, stack, action);
                 }
+                LrTacticalAPI.getMeleeDisplay(stack).ifPresent(display -> {
+                    if (display.getSounds().containsKey(action.getId())) {
+                        entity.level().playLocalSound(
+                                origin.x, origin.y, origin.z,
+                                SoundEvent.createVariableRangeEvent(display.getSounds().get(action.getId())),
+                                SoundSource.PLAYERS, 1.0F, 1.0F, false
+                        );
+                    }
+                });
             }
             return true;
         }

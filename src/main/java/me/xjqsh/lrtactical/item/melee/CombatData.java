@@ -2,6 +2,7 @@ package me.xjqsh.lrtactical.item.melee;
 
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
+import me.xjqsh.lrtactical.api.collision.ConeFilter;
 import me.xjqsh.lrtactical.api.collision.ITargetFilter;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,8 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class CombatData {
+    public static ITargetFilter DEFAULT_HITBOX = new ConeFilter(3.5, 60);
+
     public EnumMap<MeleeAction, List<MeleeAttackInfo>> attackInfo = new EnumMap<>(MeleeAction.class);
 
     @Nullable
@@ -28,22 +31,49 @@ public class CombatData {
         return null;
     }
 
-    public record MeleeAttackInfo(
-            @SerializedName("factor")
-            float factor,
+    public static class MeleeAttackInfo {
+        @SerializedName("factor")
+        private float factor = 1.0f;
 
-            @SerializedName("knockback")
-            float knockback,
+        @SerializedName("knockback")
+        private float knockback = 0.02f;
 
-            @SerializedName("cooldown")
-            int cooldown,
+        @SerializedName("cooldown")
+        private int cooldown = 20;
 
-            @SerializedName("delay")
-            int delay,
+        @SerializedName("delay")
+        private int delay = 0;
 
-            @SerializedName("hitbox")
-            ITargetFilter hitbox
-    ) {}
+        @SerializedName("hitbox")
+        private ITargetFilter hitbox = DEFAULT_HITBOX;
+
+        @SerializedName("durability_damage")
+        private int durabilityDamage = 1;
+
+        public float getFactor() {
+            return factor;
+        }
+
+        public float getKnockback() {
+            return knockback;
+        }
+
+        public int getCooldown() {
+            return cooldown;
+        }
+
+        public int getDelay() {
+            return delay;
+        }
+
+        public ITargetFilter getHitbox() {
+            return hitbox;
+        }
+
+        public int getDurabilityDamage() {
+            return durabilityDamage;
+        }
+    }
 
     public static class Deserializer implements JsonDeserializer<CombatData> {
         @Override

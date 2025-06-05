@@ -5,7 +5,7 @@ import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModSounds;
 import me.xjqsh.lrtactical.network.NetworkHandler;
-import me.xjqsh.lrtactical.network.message.SThrowableSound;
+import me.xjqsh.lrtactical.network.message.SCustomSound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -141,11 +141,10 @@ public abstract class ThrowableItemEntity extends ThrowableItemProjectile implem
         ItemStack stack = this.getItem();
         if (stack.getItem() instanceof IThrowable iThrowable) {
             ResourceLocation id = iThrowable.getId(stack);
-            var packet = new SThrowableSound(id, key, this.position(), volume, pitch);
-            NetworkHandler.CHANNEL.send(
-                    PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(this.getX(), this.getY(), this.getZ(), 64, this.level().dimension())),
-                    packet
-            );
+            var packet = new SCustomSound(SCustomSound.SoundType.MELEE, id, key, this.position(), volume, pitch);
+            NetworkHandler.CHANNEL.send(PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(
+                    this.getX(), this.getY(), this.getZ(), 64, this.level().dimension())
+            ), packet);
         }
     }
 

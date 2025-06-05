@@ -4,6 +4,9 @@
   "state_machine": "lrtactical:default_melee_state_machine",
   "texture": "lrtactical:melee/karambit_uv",
   "slot_texture": "lrtactical:melee/slot/karambit",
+  "sounds": {
+    "crit": "minecraft:entity.player.attack.crit"
+  },
   "transforms": {
     "thirdperson_righthand": {
       "rotation": [-90, 0, 0],

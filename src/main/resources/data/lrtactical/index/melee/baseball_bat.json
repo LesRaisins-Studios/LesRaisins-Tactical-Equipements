@@ -14,6 +14,8 @@
     "draw_time": 24,
     // tick
     "put_away_time": 14,
+    "max_durability": 240,
+    "enchantment_value": 15,
     "attack": {
       "attack_left": {
         // 伤害倍率
@@ -34,7 +36,9 @@
           "max_angle": 110,
           // 排除自己
           "exclude_self": true
-        }
+        },
+        // 如果攻击到实体的耐久度消耗
+        "durability_damage": 1
       },
       "attack_right": {
         // 伤害倍率

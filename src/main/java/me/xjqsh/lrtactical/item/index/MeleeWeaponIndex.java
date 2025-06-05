@@ -102,6 +102,10 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
         return 1;
     }
 
+    public int getMaxDurability() {
+        return data.getMaxDurability();
+    }
+
     @Override
     public ResourceLocation getId() {
         return id;

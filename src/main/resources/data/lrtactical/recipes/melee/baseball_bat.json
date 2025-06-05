@@ -11,11 +11,11 @@
       "item": {
         "tag": "forge:leather"
       },
-      "count": 3
+      "count": 1
     },
     {
       "item": {
-        "tag": "minecraft:logs"
+        "tag": "minecraft:planks"
       },
       "count": 6
     },
@@ -23,7 +23,7 @@
       "item": {
         "tag": "forge:gems/quartz"
       },
-      "count": 2
+      "count": 1
     }
   ],
   "result": {

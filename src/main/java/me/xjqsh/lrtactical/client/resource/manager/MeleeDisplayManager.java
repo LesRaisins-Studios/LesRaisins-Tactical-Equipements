@@ -6,7 +6,6 @@ import com.google.gson.JsonParseException;
 import com.tacz.guns.GunMod;
 import com.tacz.guns.resource.manager.JsonDataManager;
 import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
-import me.xjqsh.lrtactical.client.resource.display.ThrowableDisplayInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;

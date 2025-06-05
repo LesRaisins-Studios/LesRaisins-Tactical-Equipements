@@ -4,6 +4,9 @@
   "state_machine": "lrtactical:default_melee_state_machine",
   "texture": "lrtactical:melee/baseball_bat_uv",
   "slot_texture": "lrtactical:melee/slot/baseball_bat",
+  "sounds": {
+    "crit": "minecraft:entity.player.attack.crit"
+  },
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 2.5, 1]

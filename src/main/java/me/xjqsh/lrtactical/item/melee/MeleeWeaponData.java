@@ -15,6 +15,12 @@ public class MeleeWeaponData {
     @SerializedName("attributes")
     private AttributeData attributes = new AttributeData();
 
+    @SerializedName("max_durability")
+    private int maxDurability = 0;
+
+    @SerializedName("enchantment_value")
+    private int enchantmentValue = 14;
+
     public int getPutAwayTime() {
         return putAwayTime;
     }
@@ -29,5 +35,13 @@ public class MeleeWeaponData {
 
     public AttributeData getRawAttributes() {
         return attributes;
+    }
+
+    public int getMaxDurability() {
+        return maxDurability;
+    }
+
+    public int getEnchantmentValue() {
+        return enchantmentValue;
     }
 }

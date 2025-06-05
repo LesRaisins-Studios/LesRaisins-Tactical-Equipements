@@ -2,12 +2,15 @@ package me.xjqsh.lrtactical.api.item;
 
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.api.melee.AttackResult;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
+import me.xjqsh.lrtactical.network.NetworkHandler;
+import me.xjqsh.lrtactical.network.message.SCustomSound;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +22,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -88,11 +92,21 @@ public interface IMeleeWeapon extends ICustomItem {
 
     void attack(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction);
 
-    default void performAttack(Player attacker, Entity target, ItemStack stack, float base, float knockback) {
+
+    /**
+     * 执行攻击逻辑
+     * @param attacker 攻击者
+     * @param target 攻击目标
+     * @param stack 攻击使用的物品
+     * @param base 基础伤害
+     * @param knockback 击退强度
+     * @return 是否成功攻击
+     */
+    default AttackResult performAttack(Player attacker, Entity target, ItemStack stack, float base, float knockback) {
         // forge事件
-        if (!ForgeHooks.onPlayerAttackTarget(attacker, target)) return;
-        if (!target.isAttackable()) return;
-        if (target.skipAttackInteraction(attacker)) return;
+        if (!ForgeHooks.onPlayerAttackTarget(attacker, target)) return AttackResult.MISS;
+        if (!target.isAttackable()) return AttackResult.MISS;
+        if (target.skipAttackInteraction(attacker)) return AttackResult.MISS;
 
         float modifier;
         if (target instanceof LivingEntity living) {
@@ -123,7 +137,7 @@ public interface IMeleeWeapon extends ICustomItem {
         boolean result = target.hurt(attacker.damageSources().playerAttack(attacker), base + modifier);
         // 如果目标实体实际没有受到攻击，则不应用其他效果了，比如击退和附魔后效等
         if (!result) {
-            return;
+            return AttackResult.MISS;
         }
 
         if (target instanceof LivingEntity living) {
@@ -134,13 +148,43 @@ public interface IMeleeWeapon extends ICustomItem {
         EnchantmentHelper.doPostDamageEffects(attacker, target);
 
         if (flag2) {
-            attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
-                    SoundEvents.PLAYER_ATTACK_CRIT, attacker.getSoundSource(), 1.0F, 1.0F);
             attacker.crit(target);
         }
+
+        return flag2 ? AttackResult.CRIT : AttackResult.HIT;
+    }
+
+    static void playMeleeSound(Player entity, ResourceLocation id, String key, float volume, float pitch) {
+        playMeleeSound(entity, id, key, volume, pitch, false);
+    }
+
+    static void playMeleeSound(Player entity, ResourceLocation id, String key, float volume, float pitch, boolean exceptSelf) {
+        var packet = new SCustomSound(SCustomSound.SoundType.MELEE, id, key, entity.position(), volume, pitch);
+        ServerPlayer p;
+        if (exceptSelf && entity instanceof ServerPlayer player) {
+            p = player;
+        } else {
+            p = null;
+        }
+        NetworkHandler.CHANNEL.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
+                p, entity.getX(), entity.getY(), entity.getZ(), 64, entity.level().dimension()
+        )), packet);
     }
 
     default boolean canSprintingAttack() {
         return true;
+    }
+
+    @Override
+    default boolean isSame(ItemStack i, ItemStack j) {
+        IMeleeWeapon w1 = IMeleeWeapon.of(i);
+        IMeleeWeapon w2 = IMeleeWeapon.of(j);
+        if (w1 != null && w2 != null) {
+            return w1.getId(i).equals(w2.getId(j));
+        }
+        if (i.isEmpty() || j.isEmpty()) {
+            return i.isEmpty() && j.isEmpty();
+        }
+        return false;
     }
 }

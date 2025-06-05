@@ -14,6 +14,11 @@
     "draw_time": 16,
     // tick
     "put_away_time": 5,
+    // 最大耐久，填0表示无限耐久
+    "max_durability": 384,
+    // 附魔能力，附魔能力越高，魔咒的质量就越好
+    // 作为参考，原版的石/钻石/铁/木/下界合金/金 制工具的附魔能力为 5/10/14/15/15/22
+    "enchantment_value": 14,
     "attack": {
       "attack_left": {
         // 伤害倍率

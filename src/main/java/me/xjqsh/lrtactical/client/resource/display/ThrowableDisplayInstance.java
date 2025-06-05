@@ -15,6 +15,7 @@ import com.tacz.guns.client.resource.ClientAssetsManager;
 import com.tacz.guns.client.resource.pojo.model.BedrockModelPOJO;
 import com.tacz.guns.client.resource.pojo.model.BedrockVersion;
 import me.xjqsh.lrtactical.api.animation.ThrowableAnimationStateContext;
+import me.xjqsh.lrtactical.client.audio.ICustomSoundSupplier;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,7 @@ import java.util.Objects;
 import static com.tacz.guns.client.model.GunModelConstant.LEFTHAND_POS_NODE;
 import static com.tacz.guns.client.model.GunModelConstant.RIGHTHAND_POS_NODE;
 
-public class ThrowableDisplayInstance {
+public class ThrowableDisplayInstance implements ICustomSoundSupplier {
     private ResourceLocation id;
     private BedrockAnimatedModel model;
     private LuaAnimationStateMachine<ThrowableAnimationStateContext> stateMachine;
@@ -60,6 +61,7 @@ public class ThrowableDisplayInstance {
         return transforms;
     }
 
+    @Override
     public Map<String, ResourceLocation> getSounds() {
         return sounds;
     }
