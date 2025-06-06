@@ -141,7 +141,7 @@ public abstract class ThrowableItemEntity extends ThrowableItemProjectile implem
         ItemStack stack = this.getItem();
         if (stack.getItem() instanceof IThrowable iThrowable) {
             ResourceLocation id = iThrowable.getId(stack);
-            var packet = new SCustomSound(SCustomSound.SoundType.MELEE, id, key, this.position(), volume, pitch);
+            var packet = new SCustomSound(SCustomSound.SoundType.THROWABLE, id, key, this.position(), volume, pitch);
             NetworkHandler.CHANNEL.send(PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(
                     this.getX(), this.getY(), this.getZ(), 64, this.level().dimension())
             ), packet);

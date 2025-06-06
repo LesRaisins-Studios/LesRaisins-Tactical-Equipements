@@ -18,8 +18,15 @@ plugins {
 
 apply plugin: 'org.spongepowered.mixin'
 
+import java.text.SimpleDateFormat
+
+// 设置日期格式，用于填充快照版版本号
+SimpleDateFormat FORMAT = new SimpleDateFormat("MMdd-HHmmss")
+FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"))
+
 group = mod_group_id
-version = mod_version
+//version = mod_version
+version = mod_version + '-' + FORMAT.format(new Date())
 
 base {
     archivesName = mod_id + '-' + minecraft_version

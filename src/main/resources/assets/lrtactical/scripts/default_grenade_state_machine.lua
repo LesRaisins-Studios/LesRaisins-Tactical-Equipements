@@ -116,7 +116,7 @@ function main_track_states.using.transition(this, context, input)
 end
 
 function main_track_states.using_hold.entry(this, context)
-    print("using_hold entry")
+    --print("using_hold entry")
 end
 
 function main_track_states.using_hold.update(this, context)
@@ -126,7 +126,7 @@ function main_track_states.using_hold.update(this, context)
 end
 
 function main_track_states.using_hold.transition(this, context, input)
-    print("using_hold transition - " .. input)
+    --print("using_hold transition - " .. input)
     if (input == INPUT_PUT_AWAY) then
         runPutAwayAnimation(context)
         -- 丢枪后转到最终态
@@ -140,7 +140,7 @@ function main_track_states.using_hold.transition(this, context, input)
 end
 
 function main_track_states.after_use.entry(this, context)
-    print("after_use entry")
+    --print("after_use entry")
 end
 
 function main_track_states.after_use.update(this, context)
@@ -151,13 +151,13 @@ function main_track_states.after_use.update(this, context)
 end
 
 function main_track_states.after_use.transition(this, context, input)
-    print("after_use transition - " .. input)
+    --print("after_use transition - " .. input)
     if (input == INPUT_PUT_AWAY) then
         runPutAwayAnimation(context)
         -- 丢枪后转到最终态
         return this.main_track_states.final
     elseif (input == "end_throw") then
-        print("end_throw? - " .. input)
+        --print("end_throw? - " .. input)
         -- 还有剩余物品，触发重新切入动画并返回idle
         if context:getStackCount() > 0 then
             context:runAnimation("re_draw", context:getTrack(STATIC_TRACK_LINE, MAIN_TRACK), false, PLAY_ONCE_STOP, 0)

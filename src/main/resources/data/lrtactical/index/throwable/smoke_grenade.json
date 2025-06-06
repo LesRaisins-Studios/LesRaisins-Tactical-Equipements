@@ -4,7 +4,8 @@
   "data": {
     "prepare_time": 16,
     "initial_speed": 1.1,
-    "cooldown": 0,
+    "cooldown": 40,
+    "cooldown_category": "lrtactical:grenade",
     "put_away_time": 380,
     "stack_size": 2,
     "entity" : {

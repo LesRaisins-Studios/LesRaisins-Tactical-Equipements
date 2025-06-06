@@ -101,17 +101,17 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
     }
 
     public void onThrow(Level world, LivingEntity entity, ItemStack stack, ThrowableIndex<?, ?> index) {
+        var throwable = index.createEntity(stack, entity);
+        if (index.getData().isCookable()) {
+            int newLife = throwable.getLife() - (entity.getTicksUsingItem() - index.getData().getPrepareTime());
+            newLife = Math.max(newLife, 0);
+            throwable.setLife(newLife);
+        }
+        world.addFreshEntity(throwable);
+
         ResourceLocation id = index.getData().getCooldownCategory();
         if (id != null) {
-            var throwable = index.createEntity(stack, entity);
 
-            if (index.getData().isCookable()) {
-                int newLife = throwable.getLife() - (entity.getTicksUsingItem() - index.getData().getPrepareTime());
-                newLife = Math.max(newLife, 0);
-                throwable.setLife(newLife);
-            }
-
-            world.addFreshEntity(throwable);
             entity.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(cap -> {
                 cap.addCooldown(id, index.getData().getCooldown());
             });

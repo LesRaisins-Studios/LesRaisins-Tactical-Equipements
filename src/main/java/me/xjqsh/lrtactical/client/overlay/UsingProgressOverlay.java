@@ -1,20 +1,20 @@
 package me.xjqsh.lrtactical.client.overlay;
 
+import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.api.item.IThrowable;
-import me.xjqsh.lrtactical.capability.CombatProperties;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
-import me.xjqsh.lrtactical.item.ThrowableItem;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public class UsingProgressOverlay implements IGuiOverlay {
+    public static final ResourceLocation ARROW_TEXTURE = new ResourceLocation(EquipmentMod.MOD_ID, "textures/gui/arrow.png");
     @Override
     public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
         Minecraft mc = Minecraft.getInstance();
@@ -45,6 +45,9 @@ public class UsingProgressOverlay implements IGuiOverlay {
                         guiGraphics.fill(x, y, (int) (x + cookProgress * 32), y + 4, 0xFF0000 | (alpha << 24));
                     }
                 });
+                if (player.isCrouching()) {
+                    guiGraphics.blit(ARROW_TEXTURE, x + 12, y + 6, 0, 0, 8, 4, 8, 4);
+                }
             }
         }
 
