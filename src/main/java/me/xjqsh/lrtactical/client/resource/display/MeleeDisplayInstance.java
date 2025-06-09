@@ -15,6 +15,7 @@ import com.tacz.guns.client.resource.pojo.model.BedrockModelPOJO;
 import com.tacz.guns.client.resource.pojo.model.BedrockVersion;
 import me.xjqsh.lrtactical.api.animation.BaseAnimationStateContext;
 import me.xjqsh.lrtactical.client.audio.ICustomSoundSupplier;
+import me.xjqsh.lrtactical.client.renderer.model.CustomBedrockModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,7 @@ import static com.tacz.guns.client.model.GunModelConstant.RIGHTHAND_POS_NODE;
 
 public class MeleeDisplayInstance implements ICustomSoundSupplier {
     private ResourceLocation id;
-    private BedrockAnimatedModel model;
+    private CustomBedrockModel model;
     private LuaAnimationStateMachine<BaseAnimationStateContext> stateMachine;
     private ResourceLocation texture;
     private ResourceLocation slotTexture;
@@ -40,7 +41,7 @@ public class MeleeDisplayInstance implements ICustomSoundSupplier {
         return id;
     }
 
-    public BedrockAnimatedModel getModel() {
+    public CustomBedrockModel getModel() {
         return model;
     }
 
@@ -79,13 +80,9 @@ public class MeleeDisplayInstance implements ICustomSoundSupplier {
         Preconditions.checkArgument(modelPOJO != null, "no corresponding model found for " + pojo.modelLocation);
 
         if (BedrockVersion.isLegacyVersion(modelPOJO)) {
-            display.model = new BedrockAnimatedModel(modelPOJO, BedrockVersion.LEGACY);
+            display.model = new CustomBedrockModel(modelPOJO, BedrockVersion.LEGACY);
         }
-        display.model = new BedrockAnimatedModel(modelPOJO, BedrockVersion.NEW);
-        // 左手手臂
-        display.model.setFunctionalRenderer(LEFTHAND_POS_NODE, bedrockPart -> new LeftHandRender(display.model));
-        // 右手手臂
-        display.model.setFunctionalRenderer(RIGHTHAND_POS_NODE, bedrockPart -> new RightHandRender(display.model));
+        display.model = new CustomBedrockModel(modelPOJO, BedrockVersion.NEW);
 
         var animation = ClientAssetsManager.INSTANCE.getBedrockAnimations(pojo.animationLocation);
         Preconditions.checkArgument(animation != null, "no corresponding animation found for " + pojo.modelLocation);

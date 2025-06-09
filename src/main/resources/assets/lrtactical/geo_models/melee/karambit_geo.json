@@ -4,8 +4,8 @@
 		{
 			"description": {
 				"identifier": "geometry.unknown",
-				"texture_width": 64,
-				"texture_height": 64,
+				"texture_width": 128,
+				"texture_height": 128,
 				"visible_bounds_width": 4,
 				"visible_bounds_height": 3,
 				"visible_bounds_offset": [0, 0.5, 0]
@@ -3036,6 +3036,42 @@
 								"west": {"uv": [5, 32], "uv_size": [0.25, 0.25]},
 								"up": {"uv": [11, 24], "uv_size": [0.5, 0.25]},
 								"down": {"uv": [24, 11.25], "uv_size": [0.5, -0.25]}
+							}
+						}
+					]
+				},
+				{
+					"name": "effect",
+					"parent": "karambit",
+					"pivot": [0, 9.6875, 4.3375]
+				},
+				{
+					"name": "light1",
+					"parent": "effect",
+					"pivot": [0, 12.67319, -2.02144],
+					"rotation": [5, 0, 0],
+					"cubes": [
+						{
+							"origin": [-0.125, 3.48569, -6.97456],
+							"size": [0, 11, 5.16326],
+							"uv": {
+								"east": {"uv": [30.5, 66.75], "uv_size": [-28.75, 61.25]},
+								"west": {"uv": [1.75, 66.75], "uv_size": [28.75, 61.25]}
+							}
+						}
+					]
+				},
+				{
+					"name": "light2",
+					"parent": "effect",
+					"pivot": [-0.1875, 14.48098, -2.225],
+					"cubes": [
+						{
+							"origin": [-0.1875, 13.9375, -2.225],
+							"size": [0, 1.08696, 10],
+							"uv": {
+								"east": {"uv": [97.75, 64.5], "uv_size": [-57.5, 6.25]},
+								"west": {"uv": [40.25, 64.5], "uv_size": [57.5, 6.25]}
 							}
 						}
 					]

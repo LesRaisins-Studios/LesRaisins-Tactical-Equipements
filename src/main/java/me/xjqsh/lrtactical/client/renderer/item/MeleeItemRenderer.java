@@ -6,14 +6,13 @@ import com.mojang.math.Axis;
 import com.tacz.guns.api.client.animation.statemachine.LuaAnimationStateMachine;
 import com.tacz.guns.api.client.event.BeforeRenderHandEvent;
 import com.tacz.guns.client.model.BedrockAnimatedModel;
-import com.tacz.guns.client.model.BedrockGunModel;
 import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.model.bedrock.BedrockPart;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
-import com.tacz.guns.util.math.SecondOrderDynamics;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.animation.BaseAnimationStateContext;
 import me.xjqsh.lrtactical.client.renderer.JumpSwayUtil;
+import me.xjqsh.lrtactical.client.renderer.model.CustomBedrockModel;
 import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import net.minecraft.client.Minecraft;
@@ -30,11 +29,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
 
 import static net.minecraft.world.item.ItemDisplayContext.GUI;
 
-public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, BaseAnimationStateContext> {
+public class MeleeItemRenderer extends AnimateGeoItemRenderer<CustomBedrockModel, BaseAnimationStateContext> {
     private static final SlotModel SLOT_MODEL = new SlotModel();
 
     @Override
@@ -61,7 +59,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
     }
 
     @Override
-    public BedrockAnimatedModel getModel(ItemStack stack) {
+    public CustomBedrockModel getModel(ItemStack stack) {
         return LrTacticalAPI.getMeleeDisplay(stack).map(MeleeDisplayInstance::getModel).orElse(null);
     }
 
@@ -76,7 +74,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
     @Override
     public void renderFirstPerson(LocalPlayer player, ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource bufferSource,
                                   int light, float partialTick) {
-        BedrockAnimatedModel model = getModel(stack);
+        var model = getModel(stack);
         if (model != null) {
             poseStack.pushPose();
             var stateMachine = getStateMachine(stack);
@@ -109,7 +107,9 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
             poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
             doExtraTransforms(poseStack, model, stack);
 
+            model.setEffectVisible(true);
             model.render(poseStack, ctx, getRenderType(stack), light, OverlayTexture.NO_OVERLAY);
+            model.setEffectVisible(false);
 
             // 渲染结束后清除动画变换
             model.cleanAnimationTransform();
@@ -128,7 +128,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedMod
     }
 
     @Override
-    public void doExtraTransforms(PoseStack poseStack, BedrockAnimatedModel model, ItemStack stack) {
+    public void doExtraTransforms(PoseStack poseStack, CustomBedrockModel model, ItemStack stack) {
         super.doExtraTransforms(poseStack, model, stack);
         JumpSwayUtil.applyJumpingSway(model, Minecraft.getInstance().getFrameTime());
     }
