@@ -3041,13 +3041,13 @@
 					]
 				},
 				{
-					"name": "effect",
+					"name": "1p_effect",
 					"parent": "karambit",
 					"pivot": [0, 9.6875, 4.3375]
 				},
 				{
 					"name": "light1",
-					"parent": "effect",
+					"parent": "1p_effect",
 					"pivot": [0, 12.67319, -2.02144],
 					"rotation": [5, 0, 0],
 					"cubes": [
@@ -3063,7 +3063,7 @@
 				},
 				{
 					"name": "light2",
-					"parent": "effect",
+					"parent": "1p_effect",
 					"pivot": [-0.1875, 14.48098, -2.225],
 					"cubes": [
 						{
