@@ -3041,42 +3041,6 @@
 					]
 				},
 				{
-					"name": "1p_effect",
-					"parent": "karambit",
-					"pivot": [0, 9.6875, 4.3375]
-				},
-				{
-					"name": "light1",
-					"parent": "1p_effect",
-					"pivot": [0, 12.67319, -2.02144],
-					"rotation": [5, 0, 0],
-					"cubes": [
-						{
-							"origin": [-0.125, 3.48569, -6.97456],
-							"size": [0, 11, 5.16326],
-							"uv": {
-								"east": {"uv": [30.5, 66.75], "uv_size": [-28.75, 61.25]},
-								"west": {"uv": [1.75, 66.75], "uv_size": [28.75, 61.25]}
-							}
-						}
-					]
-				},
-				{
-					"name": "light2",
-					"parent": "1p_effect",
-					"pivot": [-0.1875, 14.48098, -2.225],
-					"cubes": [
-						{
-							"origin": [-0.1875, 13.9375, -2.225],
-							"size": [0, 1.08696, 10],
-							"uv": {
-								"east": {"uv": [97.75, 64.5], "uv_size": [-57.5, 6.25]},
-								"west": {"uv": [40.25, 64.5], "uv_size": [57.5, 6.25]}
-							}
-						}
-					]
-				},
-				{
 					"name": "righthand",
 					"parent": "knife_and_right",
 					"pivot": [6, 19, 0]
