@@ -3,7 +3,7 @@
   "animation": "lrtactical:throwable/m67_grenade",
   "state_machine": "lrtactical:default_grenade_state_machine",
   "texture": "lrtactical:throwable/molotov_uv",
-  "slot_texture": "lrtactical:throwable/slot/m67_grenade",
+  "slot_texture": "lrtactical:throwable/slot/molotov",
   "sounds": {
     "death": "minecraft:block.glass.break"
   },
