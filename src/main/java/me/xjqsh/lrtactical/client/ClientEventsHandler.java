@@ -3,12 +3,9 @@ package me.xjqsh.lrtactical.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tacz.guns.api.client.animation.statemachine.LuaAnimationStateMachine;
 import com.tacz.guns.api.client.other.KeepingItemRenderer;
-import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.animation.statemachine.GunAnimationConstant;
 import com.tacz.guns.client.input.InteractKey;
 import me.xjqsh.lrtactical.EquipmentMod;
-import me.xjqsh.lrtactical.api.LrTacticalAPI;
-import me.xjqsh.lrtactical.api.animation.BaseAnimationStateContext;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.client.renderer.item.FlashShieldItemRenderer;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
@@ -17,13 +14,18 @@ import me.xjqsh.lrtactical.init.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,6 +33,55 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EquipmentMod.MOD_ID)
 public class ClientEventsHandler {
+    public static double shakeTime = 0;
+    public static double shakeRadius = 0;
+    public static double shakeAmplitude = 0;
+    public static Vec3 shakePos = Vec3.ZERO;
+    public static double shakeType = 0;
+
+    public static void handleShakeClient(double time, double radius, double amplitude, Vec3 position) {
+        Player player = Minecraft.getInstance().player;
+        if (player == null || player.isSpectator()) return;
+
+        float shakeStrength = 1.0f;
+        shakeTime = time;
+        shakeRadius = radius;
+        shakeAmplitude = amplitude * Mth.DEG_TO_RAD * shakeStrength;
+        shakePos = position;
+        shakeType = 2 * (Math.random() - 0.5);
+    }
+
+    @SubscribeEvent
+    public static void computeCameraAngles(ViewportEvent.ComputeCameraAngles event) {
+        Entity entity = event.getCamera().getEntity();
+        if (!(entity instanceof LivingEntity)) return;
+
+        LocalPlayer player = Minecraft.getInstance().player;
+
+        float yaw = event.getYaw();
+        float pitch = event.getPitch();
+        float roll = event.getRoll();
+
+        shakeTime = Mth.lerp(0.05 * event.getPartialTick(), shakeTime, 0);
+
+        if (player != null && shakeTime > 0) {
+            float shakeRadiusAmplitude = (float) Mth.clamp(1 - player.position().distanceTo(shakePos) / shakeRadius, 0, 1);
+
+            boolean onVehicle = player.getVehicle() != null;
+            double f = shakeTime * Math.sin(0.5 * Math.PI * shakeTime) * shakeAmplitude * shakeRadiusAmplitude * (onVehicle ? 0.1 : 1);
+
+            if (shakeType > 0) {
+                event.setYaw((float) (yaw + f * shakeType));
+                event.setPitch((float) (pitch - f * shakeType));
+                event.setRoll((float) (roll - f));
+            } else {
+                event.setYaw((float) (yaw - (f * shakeType)));
+                event.setPitch((float) (pitch + (f * shakeType)));
+                event.setRoll((float) (roll + f));
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onRenderHand(RenderHandEvent event) {
         LocalPlayer player = Minecraft.getInstance().player;

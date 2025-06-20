@@ -28,6 +28,8 @@ public class GrenadeEntity extends ThrowableItemEntity {
     private double damage = 18.0;
     private float radius = 4.5f;
     private boolean destroyBlocks = false;
+    private double screenShakeTime = 20;
+    private double screenShakeAmplitude = 50;
 
     public GrenadeEntity(LivingEntity entity, Level level, int lifeTime) {
         super(TYPE, entity, level, lifeTime);
@@ -55,6 +57,8 @@ public class GrenadeEntity extends ThrowableItemEntity {
             var type = this.isDestroyBlocks() && CommonConfig.GRENADE_EXPLOSION_BLOCK_DAMAGE.get() ?
                     Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
             CustomExplosion explosion = new CustomExplosion(this.level(), this, this.getDamage(), this.getRadius(), type);
+            explosion.setScreenShakeAmplitude(this.screenShakeAmplitude);
+            explosion.setScreenShakeTime(this.screenShakeTime);
             if (ForgeEventFactory.onExplosionStart(level(), explosion)) {
                 return;
             }
@@ -93,5 +97,21 @@ public class GrenadeEntity extends ThrowableItemEntity {
 
     public void setDestroyBlocks(boolean destroyBlocks) {
         this.destroyBlocks = destroyBlocks;
+    }
+
+    public double getScreenShakeTime() {
+        return screenShakeTime;
+    }
+
+    public void setScreenShakeTime(double screenShakeTime) {
+        this.screenShakeTime = screenShakeTime;
+    }
+
+    public double getScreenShakeAmplitude() {
+        return screenShakeAmplitude;
+    }
+
+    public void setScreenShakeAmplitude(double screenShakeAmplitude) {
+        this.screenShakeAmplitude = screenShakeAmplitude;
     }
 }

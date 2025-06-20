@@ -16,6 +16,9 @@ public class EntityData {
     @SerializedName("bounce_factor")
     private double bounceFactor = 0.75;
 
+    @SerializedName("hit_damage")
+    private float hitDamage = 1.0f;
+
     public int getLifeTime() {
         return lifeTime;
     }
@@ -30,5 +33,9 @@ public class EntityData {
 
     public double getBounceFactor() {
         return bounceFactor;
+    }
+
+    public float getHitDamage() {
+        return hitDamage;
     }
 }

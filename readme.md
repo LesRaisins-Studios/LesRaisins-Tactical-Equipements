@@ -15,7 +15,7 @@ and more support for gun packs.
 
 ## Credits
 - Special thanks to MrCrayfish, who provided me with a lot of valuable experience and references in my mod making process.
-    - throwable entity physics and deafened/blind effect implementation in this mod reference from MrCrayfish's Gun Mod
+    - deafened/blind effect implementation in this mod reference from MrCrayfish's Gun Mod
 - Other players who have helped me in any ways, and you
 
 ## License

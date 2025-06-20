@@ -12,7 +12,7 @@
       "life_time": 100,
       "gravity": 0.07,
       "should_bounce": false,
-      "bounceFactor": 0.75
+      "bounce_factor": 0.7
     },
     "cloud": {
       "radius": 3.0,

@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -15,7 +16,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NetworkHandler {
-    private static final String VERSION = "0.1.0";
+    private static final String VERSION = "0.2.5";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(EquipmentMod.MOD_ID, "network"),
             () -> VERSION, it -> it.equals(VERSION), it -> it.equals(VERSION));
 
@@ -66,6 +67,12 @@ public class NetworkHandler {
                 SShieldDisable::decode,
                 SShieldDisable::handle
         );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SShakeScreenMessage.class,
+                SShakeScreenMessage::encode,
+                SShakeScreenMessage::decode,
+                SShakeScreenMessage::handle
+        );
     }
 
     public static void sendToClientPlayer(Object message, Player player) {
@@ -90,5 +97,11 @@ public class NetworkHandler {
     public static void sendToDimension(Object message, final Entity centerEntity) {
         ResourceKey<Level> dimension = centerEntity.level().dimension();
         CHANNEL.send(PacketDistributor.DIMENSION.with(() -> dimension), message);
+    }
+
+    public static void sendToNearbyPlayers(Object message, Level level, Vec3 position, double radius) {
+        CHANNEL.send(PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(
+                position.x, position.y, position.z, radius, level.dimension()
+        )), message);
     }
 }

@@ -24,19 +24,26 @@
       "life_time": 75,
       // 重力
       "gravity": 0.07,
+      // 弹射物撞到实体时造成的撞击伤害
+      "hit_damage": 1.0,
       // 是否反弹，如果false碰到方块会直接执行生命周期结束方法（比如手雷是爆炸）
       "should_bounce": true,
-      // 反弹系数，0.65表示反弹后速度为原来的65%
-      "bounceFactor": 0.65
+      // 反弹系数，0.7表示反弹后速度为原来的70%，直接撞击的方向损失量会x1.5倍
+      "bounce_factor": 0.7
     },
     // 爆炸参数，lrtactical:explode类型的投掷物的额外参数
     "explode": {
       // 爆炸半径
       "radius": 5.5,
       // 爆心伤害
-      "damage": 22.0,
+      "damage": 28.0,
       // 是否炸毁方块
-      "destroy_blocks": false
+      "destroy_blocks": false,
+      // 屏幕抖动的强度会依据爆心到玩家的距离和时间进行衰减
+      // 屏幕抖动时间系数
+      "screen_shake_time": 20.0,
+      // 屏幕抖动强度系数
+      "screen_shake_amplitude": 65.0
     }
   }
 }

@@ -24,6 +24,12 @@ public class ExplodeThrowableData extends ThrowableData {
         @SerializedName("destroy_blocks")
         private boolean destroyBlocks = false;
 
+        @SerializedName("screen_shake_time")
+        private double screenShakeTime = 20;
+
+        @SerializedName("screen_shake_amplitude")
+        private double screenShakeAmplitude = 50;
+
         public float getRadius() {
             return radius;
         }
@@ -34,6 +40,14 @@ public class ExplodeThrowableData extends ThrowableData {
 
         public boolean isDestroyBlocks() {
             return destroyBlocks;
+        }
+
+        public double getScreenShakeTime() {
+            return screenShakeTime;
+        }
+
+        public double getScreenShakeAmplitude() {
+            return screenShakeAmplitude;
         }
     }
 }

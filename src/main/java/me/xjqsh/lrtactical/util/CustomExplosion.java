@@ -1,6 +1,8 @@
 package me.xjqsh.lrtactical.util;
 
 import com.google.common.collect.Sets;
+import me.xjqsh.lrtactical.network.NetworkHandler;
+import me.xjqsh.lrtactical.network.message.SShakeScreenMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -36,6 +38,8 @@ public class CustomExplosion extends Explosion {
     private final double damage;
     private int fireTime;
     private float damageMultiplier;
+    private double screenShakeTime = 20;
+    private double screenShakeAmplitude = 50;
 
     public CustomExplosion(Level pLevel, @Nullable Entity pSource, @Nullable DamageSource source, @Nullable ExplosionDamageCalculator pDamageCalculator,
                            double damage, double pToBlowX, double pToBlowY, double pToBlowZ, float pRadius,
@@ -66,8 +70,22 @@ public class CustomExplosion extends Explosion {
         return this;
     }
 
+    public void setScreenShakeTime(double screenShakeTime) {
+        this.screenShakeTime = screenShakeTime;
+    }
+
+    public void setScreenShakeAmplitude(double screenShakeAmplitude) {
+        this.screenShakeAmplitude = screenShakeAmplitude;
+    }
+
     @Override
     public void explode() {
+        if (!this.level.isClientSide()) {
+            NetworkHandler.sendToNearbyPlayers(
+                    new SShakeScreenMessage(screenShakeTime, this.radius * 2, screenShakeAmplitude, this.getPosition()),
+                    this.level, this.getPosition(), this.radius * 2
+            );
+        }
         this.level.gameEvent(this.source, GameEvent.EXPLODE, new Vec3(this.x, this.y, this.z));
         Set<BlockPos> set = Sets.newHashSet();
 

@@ -30,7 +30,7 @@ public class SpEffectCloudEntity extends AreaEffectCloud {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide() && this.ignite && tickCount % 10 == 0){
+        if (!this.level().isClientSide() && this.isIgnite() && tickCount % 10 == 0){
             List<LivingEntity> list1 = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox());
             for (LivingEntity entity : list1) {
                 if (!entity.fireImmune()) {

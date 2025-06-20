@@ -25,6 +25,7 @@ public class CloudType {
         entity.setGravity(data.getEntityData().getGravity());
         entity.setBounceFactor(data.getEntityData().getBounceFactor());
         entity.setShouldBounce(data.getEntityData().isShouldBounce());
+        entity.setHitDamage(data.getEntityData().getHitDamage());
 
         entity.setCloudData(data.getCloudData());
 

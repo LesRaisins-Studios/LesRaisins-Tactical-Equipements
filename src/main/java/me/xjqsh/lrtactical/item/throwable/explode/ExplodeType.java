@@ -5,7 +5,6 @@ import me.xjqsh.lrtactical.entity.GrenadeEntity;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class ExplodeType {
@@ -26,10 +25,13 @@ public class ExplodeType {
         entity.setGravity(data.getEntityData().getGravity());
         entity.setBounceFactor(data.getEntityData().getBounceFactor());
         entity.setShouldBounce(data.getEntityData().isShouldBounce());
+        entity.setHitDamage(data.getEntityData().getHitDamage());
 
         entity.setDamage(data.getExplode().getDamage());
         entity.setRadius(data.getExplode().getRadius());
         entity.setDestroyBlocks(data.getExplode().isDestroyBlocks());
+        entity.setScreenShakeTime(data.getExplode().getScreenShakeTime());
+        entity.setScreenShakeAmplitude(data.getExplode().getScreenShakeAmplitude());
 
         return entity;
     }
