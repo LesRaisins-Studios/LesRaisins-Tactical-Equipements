@@ -18,7 +18,9 @@ import static com.tacz.guns.client.model.GunModelConstant.*;
 
 public class CustomBedrockModel extends BedrockAnimatedModel {
     private static final Pattern FIRSTPERSON_EFFECT_PATTERN = Pattern.compile("^1p_effect(_(\\d+))?$");
+    private static final Pattern ENTITY_HIDE_PATTERN = Pattern.compile("^entity_hide(_(\\d+))?$");
     private boolean effectVisible = false;
+    private boolean entityRendering = false;
 
     public CustomBedrockModel(BedrockModelPOJO pojo, BedrockVersion version) {
         super(pojo, version);
@@ -32,6 +34,10 @@ public class CustomBedrockModel extends BedrockAnimatedModel {
                 if (entry.getValue().getModelRenderer() instanceof FunctionalBedrockPart functionalPart) {
                     functionalPart.functionalRenderer = this::renderEffect;
                 }
+            } else if (ENTITY_HIDE_PATTERN.matcher(entry.getKey()).find()) {
+                if (entry.getValue().getModelRenderer() instanceof FunctionalBedrockPart functionalPart) {
+                    functionalPart.functionalRenderer = this::renderEntityHide;
+                }
             }
         }
     }
@@ -42,7 +48,25 @@ public class CustomBedrockModel extends BedrockAnimatedModel {
         return null;
     }
 
+    @Nullable
+    private IFunctionalRenderer renderEntityHide(BedrockPart part) {
+        part.visible = !entityRendering;
+        return null;
+    }
+
     public void setEffectVisible(boolean visible) {
         this.effectVisible = visible;
+    }
+
+    public boolean isEffectVisible() {
+        return effectVisible;
+    }
+
+    public void setEntityRendering(boolean entityRendering) {
+        this.entityRendering = entityRendering;
+    }
+
+    public boolean isEntityRendering() {
+        return entityRendering;
     }
 }
