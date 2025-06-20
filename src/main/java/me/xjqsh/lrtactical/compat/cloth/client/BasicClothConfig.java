@@ -24,6 +24,13 @@ public class BasicClothConfig {
                                 .setTooltip(Component.translatable("config.lrtactical.grenade.explode.desc"))
                                 .setSaveConsumer(CommonConfig.GRENADE_EXPLOSION_BLOCK_DAMAGE::set)
                                 .build()
+                )
+                .addEntry(
+                        entryBuilder.startDoubleField(Component.translatable("config.lrtactical.grenade.screen_shake"), ClientConfig.EXPLODE_SCREEN_SHAKE_MULTIPLIER.get())
+                                .setDefaultValue(1.0)
+                                .setTooltip(Component.translatable("config.lrtactical.grenade.screen_shake.desc"))
+                                .setSaveConsumer(ClientConfig.EXPLODE_SCREEN_SHAKE_MULTIPLIER::set)
+                                .build()
                 );
     }
 }

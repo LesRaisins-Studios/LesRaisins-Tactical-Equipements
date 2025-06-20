@@ -30,6 +30,8 @@
   "config.lrtactical.grenade": "Grenades",
   "config.lrtactical.grenade.explode": "Grenade Explosion Destroy Blocks",
   "config.lrtactical.grenade.explode.desc": "If enabled, grenades may destroy blocks on explosion if it can",
+  "config.lrtactical.grenade.screen_shake": "Explosion Screen Shake Strength Multiplier",
+  "config.lrtactical.grenade.screen_shake.desc": "The multiplier for the screen shake effect when a grenade explodes. Set to 0 to disable.",
 
   "key.category.lrtactical": "LesRaisins Tactical",
   "key.lrtactical.normal_attack.desc": "Normal Attack",

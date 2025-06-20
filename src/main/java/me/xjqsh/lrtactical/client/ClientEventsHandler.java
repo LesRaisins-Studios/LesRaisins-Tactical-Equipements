@@ -43,7 +43,11 @@ public class ClientEventsHandler {
         Player player = Minecraft.getInstance().player;
         if (player == null || player.isSpectator()) return;
 
-        float shakeStrength = 1.0f;
+        float shakeStrength = ClientConfig.EXPLODE_SCREEN_SHAKE_MULTIPLIER.get().floatValue();
+        if (shakeStrength <= 0) {
+            return;
+        }
+
         shakeTime = time;
         shakeRadius = radius;
         shakeAmplitude = amplitude * Mth.DEG_TO_RAD * shakeStrength;
@@ -53,6 +57,7 @@ public class ClientEventsHandler {
 
     @SubscribeEvent
     public static void computeCameraAngles(ViewportEvent.ComputeCameraAngles event) {
+        // 来自sbw的神秘配方
         Entity entity = event.getCamera().getEntity();
         if (!(entity instanceof LivingEntity)) return;
 
