@@ -11,17 +11,26 @@
     "entity": {
       "life_time": 100,
       "gravity": 0.07,
-      "should_bounce": false,
-      "bounce_factor": 0.7
+      "should_bounce": true,
+      "broke_on_ground": true,
+      "bounce_factor": 0.55
     },
     "cloud": {
+      // 生成时的半径
       "radius": 3.0,
+      // 每tick扩大
       "radius_per_tick": 0.01,
+      // 在扩大前的等待时间（tick）
       "wait_time": 20,
+      // 持续时间（tick）
       "duration": 300,
+      // 粒子效果
       "particles": "minecraft:flame",
+      // 点燃范围内的实体
       "ignite": true,
+      // 是否能被烟雾弹的烟雾熄灭
       "extinguish_by_smoke": true,
+      // 为范围内的实体附加的状态效果列表，每10tick进行一次判定
       "effects": [
         {
           "type": "lrtactical:flammable",

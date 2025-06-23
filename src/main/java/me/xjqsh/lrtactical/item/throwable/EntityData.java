@@ -13,6 +13,9 @@ public class EntityData {
     @SerializedName("should_bounce")
     private boolean shouldBounce = true;
 
+    @SerializedName("broke_on_ground")
+    private boolean brokeOnGround = false;
+
     @SerializedName("bounce_factor")
     private double bounceFactor = 0.75;
 
@@ -29,6 +32,10 @@ public class EntityData {
 
     public boolean isShouldBounce() {
         return shouldBounce;
+    }
+
+    public boolean isBrokeOnGround() {
+        return brokeOnGround;
     }
 
     public double getBounceFactor() {

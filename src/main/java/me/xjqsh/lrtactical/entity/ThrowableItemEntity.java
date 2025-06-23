@@ -4,6 +4,7 @@ package me.xjqsh.lrtactical.entity;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModSounds;
+import me.xjqsh.lrtactical.item.throwable.EntityData;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SCustomSound;
 import net.minecraft.core.BlockPos;
@@ -35,9 +36,9 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -47,6 +48,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
     private float gravity = 0.07f;
     private double bounceFactor = 0.75;
     private boolean shouldBounce = true;
+    private boolean brokeOnGround = false;
     private float hitDamage = 1.0f;
 
     public ThrowableItemEntity(EntityType<? extends Projectile> type, LivingEntity shooter, Level level, int lifeTime) {
@@ -107,9 +109,13 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
 
     @Override
     protected void onHit(HitResult result) {
-        if (result.getType() != HitResult.Type.MISS && !this.shouldBounce) {
-            this.onDeath();
-            return;
+        if (result.getType() != HitResult.Type.MISS) {
+            boolean flag = this.brokeOnGround && result instanceof BlockHitResult blockHitResult
+                    && blockHitResult.getDirection() == Direction.UP;
+            if (!this.shouldBounce || flag) {
+                this.onDeath(result);
+                return;
+            }
         }
         switch (result.getType()) {
             case BLOCK -> {
@@ -155,10 +161,13 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
             HitResult hitResult = this.getHitResult(start, end, endVecOffset, this::canHitEntity, this.level());
             if (hitResult.getType() == HitResult.Type.BLOCK) {
                 BlockHitResult blockResult = (BlockHitResult) hitResult;
+                Vec3 hit = blockResult.getLocation();
+                if (blockResult.getDirection() == Direction.UP && start.y() - hit.y() < 0.01) {
+                    hit = new Vec3(hit.x(), start.y(), hit.z());
+                }
                 if (i < 2) {
                     // 起点设置为碰撞点，稍微偏移一点，避免粘在方块上
-                    Vec3 hit = hitResult.getLocation();
-                    start = start.add(hit.subtract(start).scale(0.9));
+                    start = start.lerp(hit, 0.8);
 
                     // 消耗并反转没走完的向量
                     Vec3 rest = end.subtract(start);
@@ -168,7 +177,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
                     deltaMovement = this.bounce(blockResult.getDirection(), deltaMovement);
                 } else {
                     // 如果已经在1tick内连着第三次撞上了，我们认为这该死的玩意已经卡住了，直接返回碰撞点
-                    end = hitResult.getLocation();
+                    end = start.lerp(hit, 0.8);
                     deltaMovement = Vec3.ZERO;
                 }
             } else if (hitResult.getType() == HitResult.Type.ENTITY) {
@@ -179,7 +188,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
                 Direction direction = Direction.getNearest(endVecOffset.x(), endVecOffset.y(), endVecOffset.z()).getOpposite();
 
                 Vec3 hit = hitResult.getLocation();
-                start = start.add(hit.subtract(start).scale(0.9));
+                start = start.lerp(hit, 0.8);
                 // 消耗并反转没走完的向量
                 Vec3 rest = end.subtract(start);
                 endVecOffset = this.bounce(direction, rest);
@@ -265,17 +274,28 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
 
         if (this.tickCount >= life) {
             if (!this.level().isClientSide()) {
-                this.onDeath();
+                this.onDeath(null);
             }
         }
     }
 
-
-    public void onDeath() {
+    /**
+     * 生命周期结束时调用的方法
+     * @param hitResult 碰撞结果，如果是由撞击导致的，否则为null
+     */
+    public void onDeath(@Nullable HitResult hitResult) {
         this.discard();
         if (!this.level().isClientSide()) {
             playThrowableSound("death", 16.0F, 1.0F);
         }
+    }
+
+    /** @deprecated 请使用 {@link #onDeath(HitResult)} <br/>
+     * 注意，不应该在重写的方法中调用！
+     */
+    @Deprecated
+    public void onDeath() {
+        this.onDeath(null);
     }
 
     public void playThrowableSound(String key, float volume, float pitch) {
@@ -299,8 +319,15 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         return pDistance < d0 * d0;
     }
 
+    public void setBaseData(EntityData data) {
+        this.setGravity(data.getGravity());
+        this.setBounceFactor(data.getBounceFactor());
+        this.setShouldBounce(data.isShouldBounce());
+        this.setHitDamage(data.getHitDamage());
+        this.setBrokeOnGround(data.isBrokeOnGround());
+    }
 
-    protected float getGravity() {
+    public float getGravity() {
         return gravity;
     }
 
@@ -340,12 +367,21 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         this.hitDamage = hitDamage;
     }
 
+    public boolean isBrokeOnGround() {
+        return brokeOnGround;
+    }
+
+    public void setBrokeOnGround(boolean brokeOnGround) {
+        this.brokeOnGround = brokeOnGround;
+    }
+
     @Override
     public void writeSpawnData(FriendlyByteBuf buffer) {
         buffer.writeInt(life);
         buffer.writeFloat(gravity);
         buffer.writeDouble(bounceFactor);
         buffer.writeBoolean(shouldBounce);
+        buffer.writeBoolean(brokeOnGround);
     }
 
     @Override
@@ -354,5 +390,6 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         gravity = additionalData.readFloat();
         bounceFactor = additionalData.readDouble();
         shouldBounce = additionalData.readBoolean();
+        brokeOnGround = additionalData.readBoolean();
     }
 }

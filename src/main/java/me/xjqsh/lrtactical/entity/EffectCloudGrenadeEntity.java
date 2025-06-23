@@ -2,20 +2,15 @@ package me.xjqsh.lrtactical.entity;
 
 import me.xjqsh.lrtactical.entity.sp.SpEffectCloudEntity;
 import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
-import me.xjqsh.lrtactical.util.CustomExplosion;
-import me.xjqsh.lrtactical.util.ParticleUtil;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.Nullable;
 
 public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
     public static EntityType<EffectCloudGrenadeEntity> TYPE = EntityType.Builder.<EffectCloudGrenadeEntity>of(EffectCloudGrenadeEntity::new, MobCategory.MISC)
@@ -52,9 +47,11 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
     }
 
     @Override
-    public void onDeath() {
+    public void onDeath(@Nullable HitResult hitResult) {
+        Vec3 pos = hitResult == null ? this.position() : hitResult.getLocation();
+
         if (!this.level().isClientSide() && this.cloudData != null) {
-            var cloud = new SpEffectCloudEntity(this.level(), this.getX(), this.getY(), this.getZ());
+            var cloud = new SpEffectCloudEntity(this.level(), pos.x(), pos.y(), pos.z());
             var cloudData = this.getCloudData();
 
             cloud.setRadius(cloudData.getRadius());
@@ -63,6 +60,7 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
             cloud.setWaitTime(cloudData.getWaitTime());
             cloud.setParticle(cloudData.getParticles());
             cloud.setIgnite(cloudData.isIgnite());
+            cloud.setExtinguishBySmoke(cloudData.isExtinguishBySmoke());
             for (var effect : cloudData.getEffects()) {
                 cloud.addEffect(effect.toInstance());
             }
@@ -73,7 +71,7 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
 
             this.level().addFreshEntity(cloud);
         }
-        super.onDeath();
+        super.onDeath(hitResult);
     }
 
     public EffectCloudThrowableData.CloudData getCloudData() {

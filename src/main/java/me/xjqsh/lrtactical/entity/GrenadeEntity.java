@@ -10,6 +10,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.PlayMessages;
 
@@ -52,7 +54,8 @@ public class GrenadeEntity extends ThrowableItemEntity {
     }
 
     @Override
-    public void onDeath() {
+    public void onDeath(HitResult hitResult) {
+        Vec3 pos = hitResult == null ? this.position() : this.position().lerp(hitResult.getLocation(), 0.8);
         if (!this.level().isClientSide()) {
             var type = this.isDestroyBlocks() && CommonConfig.GRENADE_EXPLOSION_BLOCK_DAMAGE.get() ?
                     Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
@@ -65,14 +68,14 @@ public class GrenadeEntity extends ThrowableItemEntity {
             explosion.explode();
             explosion.finalizeExplosion(true);
             if (this.level() instanceof ServerLevel level) {
-                double x = this.getX();
-                double y = this.getY();
-                double z = this.getZ();
+                double x = pos.x();
+                double y = pos.y();
+                double z = pos.z();
                 ParticleUtil.sendParticle(level, ParticleTypes.FLASH, x, y + 0.5, z, 50, 0.2, 0.2, 0.2, 20, true);
                 ParticleUtil.sendParticle(level, ParticleTypes.EXPLOSION_EMITTER, x, y + 1, z, 5, 0.7, 0.7, 0.7, 1, true);
             }
         }
-        super.onDeath();
+        super.onDeath(hitResult);
     }
 
     public double getDamage() {

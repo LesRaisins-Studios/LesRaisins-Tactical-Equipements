@@ -8,8 +8,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.Nullable;
 
 public class StunGrenadeEntity extends ThrowableItemEntity {
     public static EntityType<StunGrenadeEntity> TYPE = EntityType.Builder.<StunGrenadeEntity>of(StunGrenadeEntity::new, MobCategory.MISC)
@@ -42,7 +44,7 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
         return data;
     }
 
-    public void setData(StunThrowableData.StunData data) {
+    public void setStunData(StunThrowableData.StunData data) {
         this.data = data;
     }
 
@@ -55,7 +57,7 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
     }
 
     @Override
-    public void onDeath() {
+    public void onDeath(@Nullable HitResult hitResult) {
         if (!this.level().isClientSide()) {
             double radius = this.getData().getRadius();
             AABB aabb = this.getBoundingBox().inflate(radius);
@@ -65,7 +67,7 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
                 }
             }
         }
-        super.onDeath();
+        super.onDeath(hitResult);
     }
 
     public static void calculateAndApplyEffect(Entity starter, LivingEntity target, StunThrowableData.StunData data) {

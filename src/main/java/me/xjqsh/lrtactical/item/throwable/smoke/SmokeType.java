@@ -23,10 +23,7 @@ public class SmokeType {
         entity.shootFromRotation(entity, thrower.getXRot(), thrower.getYRot(), 0.0F, initialSpeed, 1.0F);
         entity.setItem(stack);
 
-        entity.setGravity(data.getEntityData().getGravity());
-        entity.setBounceFactor(data.getEntityData().getBounceFactor());
-        entity.setShouldBounce(data.getEntityData().isShouldBounce());
-        entity.setHitDamage(data.getEntityData().getHitDamage());
+        entity.setBaseData(data.getEntityData());
 
         return entity;
     }

@@ -22,12 +22,9 @@ public class StunType {
         entity.shootFromRotation(entity, thrower.getXRot(), thrower.getYRot(), 0.0F, initialSpeed, 1.0F);
         entity.setItem(stack);
 
-        entity.setGravity(data.getEntityData().getGravity());
-        entity.setBounceFactor(data.getEntityData().getBounceFactor());
-        entity.setShouldBounce(data.getEntityData().isShouldBounce());
-        entity.setHitDamage(data.getEntityData().getHitDamage());
+        entity.setBaseData(data.getEntityData());
 
-        entity.setData(data.getStunData());
+        entity.setStunData(data.getStunData());
 
         return entity;
     }
