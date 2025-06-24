@@ -3,7 +3,6 @@ package me.xjqsh.lrtactical.entity;
 import me.xjqsh.lrtactical.init.ModEffects;
 import me.xjqsh.lrtactical.item.throwable.flash.StunThrowableData;
 import me.xjqsh.lrtactical.util.SightTraceUtil;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
@@ -46,14 +45,6 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
 
     public void setStunData(StunThrowableData.StunData data) {
         this.data = data;
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.level().isClientSide()) {
-            this.level().addParticle(ParticleTypes.SMOKE, true, this.getX(), this.getY() + 0.1, this.getZ(), 0.0D, 0.01D, 0.0D);
-        }
     }
 
     @Override

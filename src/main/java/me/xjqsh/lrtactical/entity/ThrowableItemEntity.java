@@ -9,6 +9,7 @@ import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SCustomSound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -50,6 +51,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
     private boolean shouldBounce = true;
     private boolean brokeOnGround = false;
     private float hitDamage = 1.0f;
+    private ParticleOptions tailParticle = null;
 
     public ThrowableItemEntity(EntityType<? extends Projectile> type, LivingEntity shooter, Level level, int lifeTime) {
         super(type, level);
@@ -277,6 +279,16 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
                 this.onDeath(null);
             }
         }
+
+        if (this.level().isClientSide()) {
+            this.renderTailParticle();
+        }
+    }
+
+    public void renderTailParticle() {
+        if (this.getTailParticle() != null) {
+            this.level().addParticle(this.getTailParticle(), true, this.getX(), this.getY() + 0.1, this.getZ(), 0.0D, 0.01D, 0.0D);
+        }
     }
 
     /**
@@ -325,6 +337,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         this.setShouldBounce(data.isShouldBounce());
         this.setHitDamage(data.getHitDamage());
         this.setBrokeOnGround(data.isBrokeOnGround());
+        this.setTailParticle(data.getTailParticles());
     }
 
     public float getGravity() {
@@ -375,6 +388,14 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         this.brokeOnGround = brokeOnGround;
     }
 
+    public ParticleOptions getTailParticle() {
+        return tailParticle;
+    }
+
+    public void setTailParticle(ParticleOptions tailParticle) {
+        this.tailParticle = tailParticle;
+    }
+
     @Override
     public void writeSpawnData(FriendlyByteBuf buffer) {
         buffer.writeInt(life);
@@ -382,6 +403,12 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         buffer.writeDouble(bounceFactor);
         buffer.writeBoolean(shouldBounce);
         buffer.writeBoolean(brokeOnGround);
+        if (tailParticle != null) {
+            buffer.writeBoolean(true);
+            EntityDataSerializers.PARTICLE.write(buffer, tailParticle);
+        } else {
+            buffer.writeBoolean(false);
+        }
     }
 
     @Override
@@ -391,5 +418,10 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         bounceFactor = additionalData.readDouble();
         shouldBounce = additionalData.readBoolean();
         brokeOnGround = additionalData.readBoolean();
+        if (additionalData.readBoolean()) {
+            tailParticle = EntityDataSerializers.PARTICLE.read(additionalData);
+        } else {
+            tailParticle = null;
+        }
     }
 }

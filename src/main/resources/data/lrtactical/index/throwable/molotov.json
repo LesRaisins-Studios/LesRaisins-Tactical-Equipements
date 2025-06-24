@@ -13,9 +13,14 @@
       "gravity": 0.07,
       "should_bounce": true,
       "broke_on_ground": true,
-      "bounce_factor": 0.55
+      "bounce_factor": 0.55,
+      "tail_particles": "minecraft:flame"
     },
     "cloud": {
+      // 是区域云还是一次性的喷溅效果
+      "area_cloud": false,
+
+      // -- 区域云参数开始 --
       // 生成时的半径
       "radius": 3.0,
       // 每tick扩大
@@ -26,8 +31,12 @@
       "duration": 300,
       // 粒子效果
       "particles": "minecraft:flame",
+      // -- 区域云参数结束 --
+
       // 点燃范围内的实体
       "ignite": true,
+      // 每次点燃时长，单位秒（必须是整数）
+      "ignite_time": 2,
       // 是否能被烟雾弹的烟雾熄灭
       "extinguish_by_smoke": true,
       // 为范围内的实体附加的状态效果列表，每10tick进行一次判定

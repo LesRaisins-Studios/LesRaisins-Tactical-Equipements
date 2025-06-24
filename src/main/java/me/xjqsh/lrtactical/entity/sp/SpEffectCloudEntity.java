@@ -18,6 +18,7 @@ public class SpEffectCloudEntity extends AreaEffectCloud {
             .build("sp_effect_cloud");
 
     private boolean ignite = false;
+    private int igniteTime = 2;
     private boolean extinguishBySmoke = false;
 
     public SpEffectCloudEntity(EntityType<? extends AreaEffectCloud> type, Level level) {
@@ -32,7 +33,7 @@ public class SpEffectCloudEntity extends AreaEffectCloud {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide() && this.isIgnite() && tickCount % 10 == 0){
+        if (!this.level().isClientSide() && tickCount % 10 == 0){
             List<Entity> list1 = this.level().getEntitiesOfClass(Entity.class, this.getBoundingBox().inflate(0, 2, 0));
             for (Entity entity : list1) {
                 if (this.isExtinguishBySmoke() && entity instanceof SmokeGrenadeEntity smokeGrenade) {
@@ -42,10 +43,9 @@ public class SpEffectCloudEntity extends AreaEffectCloud {
                     continue;
                 }
 
-                if (entity instanceof LivingEntity && this.getBoundingBox().intersects(entity.getBoundingBox())) {
-                    if (!entity.fireImmune()) {
-                        entity.setSecondsOnFire(2);
-                    }
+                if (this.isIgnite() && !entity.fireImmune() && entity instanceof LivingEntity
+                        && this.getBoundingBox().intersects(entity.getBoundingBox())) {
+                    entity.setSecondsOnFire(this.getIgniteTime());
                 }
             }
         }
@@ -74,5 +74,13 @@ public class SpEffectCloudEntity extends AreaEffectCloud {
 
     public void setExtinguishBySmoke(boolean extinguishBySmoke) {
         this.extinguishBySmoke = extinguishBySmoke;
+    }
+
+    public int getIgniteTime() {
+        return igniteTime;
+    }
+
+    public void setIgniteTime(int igniteTime) {
+        this.igniteTime = igniteTime;
     }
 }

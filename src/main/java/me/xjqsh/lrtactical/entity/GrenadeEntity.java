@@ -46,14 +46,6 @@ public class GrenadeEntity extends ThrowableItemEntity {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (this.level().isClientSide()) {
-            this.level().addParticle(ParticleTypes.SMOKE, true, this.getX(), this.getY() + 0.1, this.getZ(), 0.0D, 0.01D, 0.0D);
-        }
-    }
-
-    @Override
     public void onDeath(HitResult hitResult) {
         Vec3 pos = hitResult == null ? this.position() : this.position().lerp(hitResult.getLocation(), 0.8);
         if (!this.level().isClientSide()) {

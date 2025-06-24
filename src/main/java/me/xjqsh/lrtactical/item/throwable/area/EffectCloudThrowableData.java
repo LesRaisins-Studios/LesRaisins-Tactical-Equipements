@@ -6,13 +6,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.annotations.SerializedName;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
-import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.effect.MobEffect;
@@ -34,6 +30,9 @@ public class EffectCloudThrowableData extends ThrowableData {
     }
 
     public static class CloudData {
+        @SerializedName("area_cloud")
+        private boolean areaCloud = true;
+
         @SerializedName("radius")
         private float radius = 5.5f;
 
@@ -52,6 +51,9 @@ public class EffectCloudThrowableData extends ThrowableData {
         @SerializedName("ignite")
         private boolean ignite = false;
 
+        @SerializedName("ignite_time")
+        private int igniteTime = 2;
+
         @SerializedName("extinguish_by_smoke")
         private boolean extinguishBySmoke = false;
 
@@ -60,16 +62,22 @@ public class EffectCloudThrowableData extends ThrowableData {
 
         public CloudData() {}
 
-        public CloudData(float radius, float radiusPerTick, int waitTime, int duration, ParticleOptions particles,
-                         boolean ignite, boolean extinguishBySmoke, List<EffectData> effects) {
+        public CloudData(boolean areaCloud, float radius, float radiusPerTick, int waitTime, int duration, ParticleOptions particles,
+                         boolean ignite, int igniteTime, boolean extinguishBySmoke, List<EffectData> effects) {
+            this.areaCloud = areaCloud;
             this.radius = radius;
             this.radiusPerTick = radiusPerTick;
             this.waitTime = waitTime;
             this.duration = duration;
             this.particles = particles;
             this.ignite = ignite;
+            this.igniteTime = igniteTime;
             this.extinguishBySmoke = extinguishBySmoke;
             this.effects = effects;
+        }
+
+        public boolean isAreaCloud() {
+            return areaCloud;
         }
 
         public float getRadius() {
@@ -94,6 +102,10 @@ public class EffectCloudThrowableData extends ThrowableData {
 
         public boolean isIgnite() {
             return ignite;
+        }
+
+        public int getIgniteTime() {
+            return igniteTime;
         }
 
         public boolean isExtinguishBySmoke() {

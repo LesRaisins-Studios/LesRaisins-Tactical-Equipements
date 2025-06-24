@@ -13,7 +13,8 @@
       "gravity": 0.07,
       "should_bounce": true,
       "bounce_factor": 0.7,
-      "hit_damage": 1.0
+      "hit_damage": 1.0,
+      "tail_particles": "minecraft:cloud"
     }
   }
 }

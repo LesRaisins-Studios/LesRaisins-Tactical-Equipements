@@ -1,6 +1,9 @@
 package me.xjqsh.lrtactical.item.throwable;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import org.jetbrains.annotations.Nullable;
 
 // 投掷物实体基础属性
 public class EntityData {
@@ -21,6 +24,9 @@ public class EntityData {
 
     @SerializedName("hit_damage")
     private float hitDamage = 1.0f;
+
+    @SerializedName("tail_particles")
+    private ParticleOptions tailParticles = ParticleTypes.SMOKE;
 
     public int getLifeTime() {
         return lifeTime;
@@ -44,5 +50,10 @@ public class EntityData {
 
     public float getHitDamage() {
         return hitDamage;
+    }
+
+    @Nullable
+    public ParticleOptions getTailParticles() {
+        return tailParticles;
     }
 }
