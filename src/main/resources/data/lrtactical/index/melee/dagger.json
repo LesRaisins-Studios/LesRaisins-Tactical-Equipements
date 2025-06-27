@@ -62,7 +62,27 @@
           "max_angle": 85,
           // 排除自己
           "exclude_self": true
+        },
+        // 突进
+        "movement": {
+          "delay": 0,
+          "speed": 0.5
         }
+//         另外一种示例
+//        "hitbox": {
+//          // obb区域，以玩家视线位置为起点延伸
+//          "type": "obb",
+//          // 最大距离（深度）
+//          "max_range": 4,
+//          // x轴方向的半长
+//          "half_width": 0.5,
+//          // y轴方向的半长
+//          "half_height": 0.5,
+//          // 旋转
+//          "roll": 0,
+//          // 排除自己
+//          "exclude_self": true
+//        }
       }
     }
   }

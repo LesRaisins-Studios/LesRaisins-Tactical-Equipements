@@ -31,6 +31,22 @@ public class CombatData {
         return null;
     }
 
+    public static class MeleeMovement {
+        @SerializedName("delay")
+        private int delay = 0;
+
+        @SerializedName("speed")
+        private float speed = 0.5f;
+
+        public int getDelay() {
+            return delay;
+        }
+
+        public float getSpeed() {
+            return speed;
+        }
+    }
+
     public static class MeleeAttackInfo {
         @SerializedName("factor")
         private float factor = 1.0f;
@@ -49,6 +65,9 @@ public class CombatData {
 
         @SerializedName("durability_damage")
         private int durabilityDamage = 1;
+
+        @SerializedName("movement")
+        private MeleeMovement movement = null;
 
         public float getFactor() {
             return factor;
@@ -72,6 +91,11 @@ public class CombatData {
 
         public int getDurabilityDamage() {
             return durabilityDamage;
+        }
+
+        @Nullable
+        public MeleeMovement getMovement() {
+            return movement;
         }
     }
 

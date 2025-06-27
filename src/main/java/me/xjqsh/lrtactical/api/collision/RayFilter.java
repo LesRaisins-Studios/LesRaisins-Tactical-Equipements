@@ -1,24 +1,13 @@
 package me.xjqsh.lrtactical.api.collision;
 
 import com.google.gson.annotations.SerializedName;
-import com.tacz.guns.config.util.HeadShotAABBConfigRead;
-import com.tacz.guns.entity.EntityKineticBullet;
-import com.tacz.guns.util.HitboxHelper;
-import me.xjqsh.lrtactical.util.VectorUtil;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,5 +80,10 @@ public class RayFilter implements ITargetFilter {
         public double getDistanceSqr() {
             return distanceSqr;
         }
+    }
+
+    @Override
+    public double getMaxRange() {
+        return maxRange;
     }
 }

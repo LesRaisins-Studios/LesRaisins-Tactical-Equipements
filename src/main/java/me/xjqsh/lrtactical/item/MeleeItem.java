@@ -28,6 +28,8 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -124,7 +126,34 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
-    public void attack(Player attacker, ItemStack stack, MeleeAction action, final Vec3 origin, final Vec3 direction) {
+    public CombatData.MeleeMovement getAttackMovement(Player entity, ItemStack stack, MeleeAction action) {
+        return getMeleeIndex(stack)
+                .map(index -> index.getData().getAttackInfo())
+                .map(attackInfos -> attackInfos.getAttackInfo(action))
+                .map(CombatData.MeleeAttackInfo::getMovement)
+                .orElse(null);
+    }
+
+    @Override
+    public List<Entity> collectTargets(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {
+        List<Entity> entities = new ArrayList<>();
+        this.getMeleeIndex(stack).ifPresent(index -> {
+            CombatData combatData = index.getData().getAttackInfo();
+            if (combatData == null) {
+                return;
+            }
+            var attackInfo = combatData.getAttackInfo(action);
+            if (attackInfo == null) {
+                return;
+            }
+            ITargetFilter filter = attackInfo.getHitbox();
+            entities.addAll(filter.filterTargets(attacker, origin, direction));
+        });
+        return entities;
+    }
+
+    @Override
+    public void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets) {
         float base = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
         this.getMeleeIndex(stack).ifPresent(index -> {
             CombatData combatData = index.getData().getAttackInfo();
@@ -135,26 +164,20 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
             if (attackInfo == null) {
                 return;
             }
+            ITargetFilter filter = attackInfo.getHitbox();
             IMeleeWeapon.playMeleeSound(attacker, index.getId(), action.getId(), 2, 1, true);
 
             float damage = base * attackInfo.getFactor();
             float knockback = attackInfo.getKnockback();
-            ITargetFilter filter = attackInfo.getHitbox();
-            Vec3 origin1 = new Vec3(origin.x, origin.y, origin.z);
-            Vec3 direction1 = new Vec3(direction.x, direction.y, direction.z);
-
-            if (origin1.distanceToSqr(attacker.getEyePosition()) > attacker.getDeltaMovement().lengthSqr() * 4) {
-                origin1 = attacker.getEyePosition();
-                direction1 = attacker.getLookAngle();
-            }
 
             if (damage <= 0) return;
             boolean hit = false;
             boolean crit = false;
-            for (Entity livingentity : filter.filterTargets(attacker, origin1, direction1)) {
+            for (Entity livingentity : targets) {
                 boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
+                boolean inRange = livingentity.distanceToSqr(attacker) <= filter.getMaxRange() * filter.getMaxRange();
 
-                if (livingentity != attacker && flag) {
+                if (livingentity != attacker && flag && inRange) {
                     var result = this.performAttack(attacker, livingentity, stack, damage, knockback);
                     hit |= result.hit();
                     crit |= result.crit();

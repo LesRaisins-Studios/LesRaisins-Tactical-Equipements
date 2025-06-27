@@ -16,7 +16,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NetworkHandler {
-    private static final String VERSION = "0.2.5";
+    private static final String VERSION = "0.3.0";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(EquipmentMod.MOD_ID, "network"),
             () -> VERSION, it -> it.equals(VERSION), it -> it.equals(VERSION));
 
@@ -43,18 +43,18 @@ public class NetworkHandler {
         );
 
         CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                CMeleeAttackRequest.class,
+                CMeleeAttackRequest::encode,
+                CMeleeAttackRequest::decode,
+                CMeleeAttackRequest::handle
+        );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
                 CPrepareMeleeAttack.class,
                 CPrepareMeleeAttack::encode,
                 CPrepareMeleeAttack::decode,
                 CPrepareMeleeAttack::handle
         );
 
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                CPerformMeleeAttack.class,
-                CPerformMeleeAttack::encode,
-                CPerformMeleeAttack::decode,
-                CPerformMeleeAttack::handle
-        );
         CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
                 SShieldShake.class,
                 SShieldShake::encode,

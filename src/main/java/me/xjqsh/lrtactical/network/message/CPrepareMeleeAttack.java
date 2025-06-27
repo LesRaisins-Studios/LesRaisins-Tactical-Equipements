@@ -32,10 +32,7 @@ public record CPrepareMeleeAttack(
         );
     }
 
-    // 在客户端执行相应攻击指令后发送
-    // 收到此包后，服务端应准备进行近战判定，准备监听客户端发来的实际延迟攻击包
-    // 如果攻击延迟为0则直接进行攻击
-    // 同时，开始进入攻击冷却读条
+    // 服务端接到指令后，开始冷却读条
     public static void handle(CPrepareMeleeAttack message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isServer()) {

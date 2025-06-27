@@ -1,11 +1,14 @@
 package me.xjqsh.lrtactical.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.tacz.guns.api.client.animation.statemachine.LuaAnimationStateMachine;
 import com.tacz.guns.api.client.other.KeepingItemRenderer;
 import com.tacz.guns.client.animation.statemachine.GunAnimationConstant;
 import com.tacz.guns.client.input.InteractKey;
 import me.xjqsh.lrtactical.EquipmentMod;
+import me.xjqsh.lrtactical.api.collision.OBB;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.client.renderer.item.FlashShieldItemRenderer;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
@@ -14,6 +17,7 @@ import me.xjqsh.lrtactical.init.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -25,11 +29,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EquipmentMod.MOD_ID)
 public class ClientEventsHandler {
@@ -197,4 +204,42 @@ public class ClientEventsHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void renderAttackHitBox(RenderLevelStageEvent event) {
+//        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES) {
+//            Vec3 cameraPos = event.getCamera().getPosition();
+//            Player p = Minecraft.getInstance().player;
+//            var center = p.getEyePosition(event.getPartialTick()).add(p.getLookAngle().scale(2.5)).toVector3f();
+//
+//            PoseStack poseStack = event.getPoseStack();
+//            var buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
+//            RenderType renderType = RenderType.lines();
+//            var vertexConsumer = buffersource.getBuffer(renderType);
+//
+//            // 创建 OBB
+//            OBB obb = new OBB(center, new Vector3f(0.5f, 0.5f, 2f), event.getCamera().rotation());
+//            renderOBB(cameraPos, obb, poseStack, vertexConsumer, 1f, 0f, 0f, 1f);
+//        }
+    }
+
+    public static void renderOBB(PoseStack poseStack, VertexConsumer buffer, float centerX, float centerY, float centerZ, Quaternionf rotation, float halfX, float halfY, float halfZ, float red, float green, float blue, float alpha) {
+        poseStack.pushPose();
+        poseStack.translate(centerX, centerY, centerZ);
+        poseStack.mulPose(rotation);
+        LevelRenderer.renderLineBox(poseStack, buffer, -halfX, -halfY, -halfZ, halfX, halfY, halfZ, red, green, blue, alpha);
+        poseStack.popPose();
+    }
+
+    public static void renderOBB(Vec3 position, OBB obb, PoseStack poseStack, VertexConsumer buffer, float red, float green, float blue, float alpha) {
+        Vector3f center = obb.center();
+        Vector3f halfExtents = obb.extents();
+        Quaternionf rotation = obb.rotation();
+        renderOBB(
+                poseStack, buffer,
+                (float) (center.x() - position.x()), (float) (center.y() - position.y()), (float) (center.z() - position.z()),
+                rotation,
+                halfExtents.x(), halfExtents.y(), halfExtents.z(),
+                red, green, blue, alpha
+        );
+    }
 }

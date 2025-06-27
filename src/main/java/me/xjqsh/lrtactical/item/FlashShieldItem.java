@@ -34,9 +34,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationItem {
@@ -82,6 +82,21 @@ public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationIte
     @Override
     public int getDrawTime(ItemStack stack) {
         return 10;
+    }
+
+    @Override
+    public void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets) {
+
+    }
+
+    @Override
+    public void attack(Player attacker, ItemStack stack, MeleeAction action) {
+        IMeleeWeapon.super.attack(attacker, stack, action);
+    }
+
+    @Override
+    public List<Entity> collectTargets(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {
+        return List.of();
     }
 
     @Override

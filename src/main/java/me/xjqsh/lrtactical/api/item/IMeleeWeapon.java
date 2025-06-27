@@ -5,6 +5,7 @@ import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.melee.AttackResult;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
+import me.xjqsh.lrtactical.item.melee.CombatData;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SCustomSound;
 import net.minecraft.nbt.CompoundTag;
@@ -23,7 +24,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -78,6 +81,18 @@ public interface IMeleeWeapon extends ICustomItem {
         return 0;
     }
 
+    /**
+     * 获取攻击的位移信息
+     * @param entity 攻击者
+     * @param stack 攻击使用的物品
+     * @param action 攻击动作
+     * @return 位移信息
+     */
+    @Nullable
+    default CombatData.MeleeMovement getAttackMovement(Player entity, ItemStack stack, MeleeAction action) {
+        return null;
+    }
+
     default boolean canAttack(Player attacker, ItemStack stack, MeleeAction action) {
         return true;
     }
@@ -90,11 +105,28 @@ public interface IMeleeWeapon extends ICustomItem {
         return LrTacticalAPI.getMeleeIndex(stack);
     }
 
-    void attack(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction);
-
+    /**
+     * 应在客户端进行。根据攻击信息进行索敌
+     * @param attacker 攻击者
+     * @param stack 攻击使用的物品
+     * @param action 攻击动作
+     * @return 受到攻击的实体列表
+     */
+    List<Entity> collectTargets(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction);
 
     /**
-     * 执行攻击逻辑
+     * 应在服务端进行。根据攻击信息和索敌结果执行攻击逻辑
+     * @param attacker 攻击者
+     * @param stack 攻击使用的物品
+     * @param action 攻击动作
+     */
+    void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets);
+
+    @Deprecated
+    default void attack(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {}
+
+    /**
+     * 对特定的目标执行攻击逻辑
      * @param attacker 攻击者
      * @param target 攻击目标
      * @param stack 攻击使用的物品

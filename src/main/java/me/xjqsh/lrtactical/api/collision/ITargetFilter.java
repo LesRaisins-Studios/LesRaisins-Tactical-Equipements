@@ -17,6 +17,10 @@ import java.util.List;
 public interface ITargetFilter {
     @NotNull List<Entity> filterTargets(LivingEntity attacker, Vec3 origin, Vec3 direction);
 
+    default double getMaxRange() {
+        return 2.5d;
+    }
+
     static boolean hasLineOfSight(LivingEntity attacker, Entity pEntity) {
         if (pEntity.level() == attacker.level()) {
             Vec3 vec3 = new Vec3(attacker.getX(), attacker.getEyeY(), attacker.getZ());
@@ -59,6 +63,7 @@ public interface ITargetFilter {
             return switch (typeName) {
                 case "cone" ->  ctx.deserialize(jsonObject, ConeFilter.class);
                 case "ray" ->  ctx.deserialize(jsonObject, RayFilter.class);
+                case "obb" ->  ctx.deserialize(jsonObject, OBBFilter.class);
                 default -> throw new JsonParseException("Unknown filter type: " + typeName);
             };
         }

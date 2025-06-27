@@ -6,30 +6,32 @@ import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.network.NetworkHandler;
-import me.xjqsh.lrtactical.network.message.CPerformMeleeAttack;
+import me.xjqsh.lrtactical.network.message.CMeleeAttackRequest;
 import me.xjqsh.lrtactical.network.message.CPrepareMeleeAttack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //todo 临时实现，太丑了，还得改
 @AutoRegisterCapability
 public class CombatProperties {
     public static final ResourceLocation ID = new ResourceLocation(EquipmentMod.MOD_ID, "combat_data");
 
+    private final List<DelayTask> delayedActions = new ArrayList<>();
     private ItemStack lastItem = ItemStack.EMPTY;
     private final Player entity;
     private int coolDownTick = 0;
     private int lastMaxTick = 0;
     private int lastSelected = 0;
     private int drawingTick = 0;
-
-    private DelayAttack delayedAction = null;
-
     private boolean preparingAttack = false;
 
     public CombatProperties(Player entity) {
@@ -63,6 +65,7 @@ public class CombatProperties {
         } else if (!ItemStack.matches(lastItem, entity.getMainHandItem())) {
             lastItem = entity.getMainHandItem().copy();
         }
+
         if (coolDownTick > 0) {
             coolDownTick--;
             if (entity.getMainHandItem().getItem() instanceof IMeleeWeapon weapon && !weapon.canSprintingAttack()) {
@@ -73,11 +76,13 @@ public class CombatProperties {
             }
         }
 
-        if (this.entity.level().isClientSide() && delayedAction != null) {
-            if (delayedAction.tick()) {
-                delayedAction.perform(entity);
-                delayedAction = null;
+        if (this.entity.level().isClientSide()) {
+            for (DelayTask task : delayedActions) {
+                if (task.tick()) {
+                    task.perform(entity);
+                }
             }
+            delayedActions.removeIf(DelayTask::expired);
         }
 
         if (drawingTick > 0) {
@@ -110,22 +115,34 @@ public class CombatProperties {
 
             coolDownTick = weapon.getAttackCoolDown(stack, action);
             lastMaxTick = coolDownTick;
-            int delay = weapon.getAttackDelay(entity, stack, action);
 
             if (!entity.level().isClientSide()) {
                 // 服务端，准备进行攻击
                 this.preparingAttack = true;
                 // 服务器宽限1tick以平衡延迟
                 this.coolDownTick = Math.max(0, coolDownTick - 1);
-                if (delay == 0){
-                    this.postAttack(action, entity.position(), entity.getLookAngle());
-                }
             } else {
-                // 客户端，通知服务端准备进行攻击判断并安排延迟任务
+                // 客户端，通知服务端进入cd
                 NetworkHandler.CHANNEL.sendToServer(new CPrepareMeleeAttack(action, origin, direction));
-                if (delay > 0) {
-                    this.delayedAction = new DelayAttack(delay, stack, action);
+
+                int delay = weapon.getAttackDelay(entity, stack, action);
+                var attack = new DelayAttack(delay, stack, action);
+                if (attack.getDelay() == 0) {
+                    attack.perform(entity);
+                } else {
+                    this.delayedActions.add(attack);
                 }
+
+                var moveInfo = weapon.getAttackMovement(entity, stack, action);
+                if (moveInfo != null) {
+                    var move = new DelayMove(moveInfo.getDelay(), moveInfo.getSpeed(), stack);
+                    if (move.getDelay() == 0) {
+                        move.perform(entity);
+                    } else {
+                        this.delayedActions.add(move);
+                    }
+                }
+
                 LrTacticalAPI.getMeleeDisplay(stack).ifPresent(display -> {
                     if (display.getSounds().containsKey(action.getId())) {
                         entity.level().playLocalSound(
@@ -141,37 +158,76 @@ public class CombatProperties {
         return false;
     }
 
-    public void postAttack(MeleeAction action, Vec3 origin, Vec3 direction) {
+    public void postAttack(MeleeAction action, List<Entity> entities) {
         ItemStack stack = entity.getMainHandItem();
         if (!this.preparingAttack) {
             return;
         }
         if (stack.getItem() instanceof IMeleeWeapon weapon) {
-            weapon.attack(entity, stack, action, origin, direction);
+            weapon.attack(entity, stack, action, entities);
         }
         preparingAttack = false;
     }
 
-    public static class DelayAttack {
-        private int delay;
+    public static class DelayMove extends DelayTask {
+        private final ItemStack stack;
+        private final double speed;
+
+        DelayMove(int delay, double speed, ItemStack stack) {
+            super(delay);
+            this.stack = stack;
+            this.speed = speed;
+        }
+
+        @Override
+        public void perform(Player player) {
+            if (stack.getItem() instanceof IMeleeWeapon weapon && weapon.isSame(stack, player.getMainHandItem())) {
+                double factor = player.onGround() ? 1.0 : 0.5;
+                Vec3 motion = player.getLookAngle().multiply(1, 0, 1).normalize().scale(factor * speed);
+                player.addDeltaMovement(motion);
+            }
+        }
+    }
+
+    public static class DelayAttack extends DelayTask {
         private final ItemStack stack;
         private final MeleeAction action;
 
         DelayAttack(int delay, ItemStack stack, MeleeAction action) {
-            this.delay = delay;
+            super(delay);
             this.action = action;
             this.stack = stack;
         }
 
+        @Override
         public void perform(Player player) {
             if (stack.getItem() instanceof IMeleeWeapon weapon && weapon.isSame(stack, player.getMainHandItem())) {
-                NetworkHandler.CHANNEL.sendToServer(new CPerformMeleeAttack(action, player.getEyePosition(), player.getLookAngle()));
+                List<Entity> entities = weapon.collectTargets(player, stack, action, player.getEyePosition(), player.getLookAngle());
+                NetworkHandler.CHANNEL.sendToServer(new CMeleeAttackRequest(action, entities));
             }
         }
+    }
+
+    public abstract static class DelayTask {
+        protected int delay;
+
+        protected DelayTask(int delay) {
+            this.delay = delay;
+        }
+
+        abstract void perform(Player player);
 
         public boolean tick() {
             delay--;
             return delay <= 0;
+        }
+
+        public boolean expired() {
+            return delay <= 0;
+        }
+
+        public int getDelay() {
+            return delay;
         }
     }
 }
