@@ -8,6 +8,8 @@ public class ServerConfig {
 
     public static ForgeConfigSpec.DoubleValue CROUCHING_INIT_SPEED_PERCENT;
 
+    public static ForgeConfigSpec.IntValue MELEE_MAX_TARGET_PER_PACKET;
+
     public static ForgeConfigSpec init() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -24,6 +26,12 @@ public class ServerConfig {
         CROUCHING_INIT_SPEED_PERCENT = builder
                 .comment("modifier of initial speed when crouching, 1.0 means no change")
                 .defineInRange("flash_shield_cooldown", 0.5f, 0.01, 2);
+        builder.pop();
+
+        builder.push("melee");
+        MELEE_MAX_TARGET_PER_PACKET = builder
+                .comment("maximum number of targets can contains in melee attack request packet")
+                .defineInRange("melee_max_target", 32, 1, 512);
         builder.pop();
 
         return builder.build();

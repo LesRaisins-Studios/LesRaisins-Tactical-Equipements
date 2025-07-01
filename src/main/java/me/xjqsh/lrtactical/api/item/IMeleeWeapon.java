@@ -4,6 +4,7 @@ import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.melee.AttackResult;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
+import me.xjqsh.lrtactical.config.CommonConfig;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.melee.CombatData;
 import me.xjqsh.lrtactical.network.NetworkHandler;
@@ -165,7 +166,10 @@ public interface IMeleeWeapon extends ICustomItem {
             }
         }
 
-        target.invulnerableTime = 0;
+        if (target.invulnerableTime < CommonConfig.MELEE_IGNORE_INVULNERABLE_TICK_THRESHOLD.get()) {
+            target.invulnerableTime = 0;
+        }
+
         boolean result = target.hurt(attacker.damageSources().playerAttack(attacker), base + modifier);
         // 如果目标实体实际没有受到攻击，则不应用其他效果了，比如击退和附魔后效等
         if (!result) {

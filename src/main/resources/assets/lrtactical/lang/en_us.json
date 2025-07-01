@@ -32,6 +32,11 @@
   "config.lrtactical.grenade.explode.desc": "If enabled, grenades may destroy blocks on explosion if it can",
   "config.lrtactical.grenade.screen_shake": "Explosion Screen Shake Strength Multiplier",
   "config.lrtactical.grenade.screen_shake.desc": "The multiplier for the screen shake effect when a grenade explodes. Set to 0 to disable.",
+  "config.lrtactical.melee": "Melee",
+  "config.lrtactical.melee.durability": "Consume Durability",
+  "config.lrtactical.melee.durability.desc": "If enabled, melee weapons will consume durability when used (if it will).",
+  "config.lrtactical.melee.max_target": "Max Target Count",
+  "config.lrtactical.melee.max_target.desc": "The maximum number of targets that can be hit by a single melee attack.",
 
   "key.category.lrtactical": "LesRaisins Tactical",
   "key.lrtactical.normal_attack.desc": "Normal Attack",

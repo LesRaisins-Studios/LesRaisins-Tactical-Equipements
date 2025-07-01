@@ -32,5 +32,23 @@ public class BasicClothConfig {
                                 .setSaveConsumer(ClientConfig.EXPLODE_SCREEN_SHAKE_MULTIPLIER::set)
                                 .build()
                 );
+
+        root.getOrCreateCategory(Component.translatable("config.lrtactical.melee"))
+                .addEntry(
+                        entryBuilder.startBooleanToggle(Component.translatable("config.lrtactical.melee.durability"), CommonConfig.MELEE_ITEM_CONSUME_DURABILITY.get())
+                                .setDefaultValue(true)
+                                .setTooltip(Component.translatable("config.lrtactical.effect.durability.desc"))
+                                .setSaveConsumer(CommonConfig.MELEE_ITEM_CONSUME_DURABILITY::set)
+                                .build()
+                )
+                .addEntry(
+                        entryBuilder.startIntField(Component.translatable("config.lrtactical.melee.max_target"), CommonConfig.MELEE_IGNORE_INVULNERABLE_TICK_THRESHOLD.get())
+                                .setDefaultValue(32)
+                                .setMin(1)
+                                .setMax(512)
+                                .setTooltip(Component.translatable("config.lrtactical.effect.max_target.desc"))
+                                .setSaveConsumer(CommonConfig.MELEE_IGNORE_INVULNERABLE_TICK_THRESHOLD::set)
+                                .build()
+                );
     }
 }

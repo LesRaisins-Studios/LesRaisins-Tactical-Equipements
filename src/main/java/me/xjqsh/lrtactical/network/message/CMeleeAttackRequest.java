@@ -1,7 +1,9 @@
 package me.xjqsh.lrtactical.network.message;
 
+import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
+import me.xjqsh.lrtactical.config.ServerConfig;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +22,7 @@ public record CMeleeAttackRequest(
     }
 
     private static int[] toList(List<Entity> entities) {
-        return entities.stream().mapToInt(Entity::getId).toArray();
+        return entities.stream().mapToInt(Entity::getId).limit(ServerConfig.MELEE_MAX_TARGET_PER_PACKET.get()).toArray();
     }
 
     public static void encode(CMeleeAttackRequest message, FriendlyByteBuf buf) {
@@ -40,6 +42,15 @@ public record CMeleeAttackRequest(
             context.enqueueWork(() -> {
                 ServerPlayer player = context.getSender();
                 if (player == null) {
+                    return;
+                }
+
+                if (message.entityIds.length > ServerConfig.MELEE_MAX_TARGET_PER_PACKET.get()) {
+                    EquipmentMod.LOGGER.info(
+                            "Player {} tried to attack too many entities at once: {}! Ignoring.",
+                            player.getName().getString(),
+                            message.entityIds.length
+                    );
                     return;
                 }
 
