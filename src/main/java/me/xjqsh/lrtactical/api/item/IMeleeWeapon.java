@@ -98,10 +98,6 @@ public interface IMeleeWeapon extends ICustomItem {
         return true;
     }
 
-    default void attack(Player attacker, ItemStack stack, MeleeAction action) {
-        this.attack(attacker, stack, action, attacker.position(), attacker.getLookAngle());
-    }
-
     default Optional<MeleeWeaponIndex<?>> getMeleeIndex(ItemStack stack) {
         return LrTacticalAPI.getMeleeIndex(stack);
     }

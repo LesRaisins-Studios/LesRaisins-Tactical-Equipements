@@ -74,6 +74,9 @@ public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationIte
 
             @Override
             public HumanoidModel.ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
+                if (hand == InteractionHand.OFF_HAND) {
+                    return HumanoidModel.ArmPose.EMPTY;
+                }
                 return HumanoidModel.ArmPose.CROSSBOW_HOLD;
             }
         });
@@ -86,30 +89,21 @@ public class FlashShieldItem extends Item implements IMeleeWeapon, IAnimationIte
 
     @Override
     public void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets) {
+        float base = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        for (Entity livingentity : targets) {
+            boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
+            boolean inRange = livingentity.distanceToSqr(attacker) <= 2.5 * 2.5;
 
-    }
-
-    @Override
-    public void attack(Player attacker, ItemStack stack, MeleeAction action) {
-        IMeleeWeapon.super.attack(attacker, stack, action);
+            if (livingentity != attacker && flag && inRange) {
+                this.performAttack(attacker, livingentity, stack, base, 1.2f);
+            }
+        }
     }
 
     @Override
     public List<Entity> collectTargets(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {
-        return List.of();
-    }
-
-    @Override
-    public void attack(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {
         ConeFilter filter = new ConeFilter(2.5f, 105);
-        float base = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        for (Entity livingentity : filter.filterTargets(attacker, origin, direction)) {
-            boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
-
-            if (livingentity != attacker && flag) {
-                this.performAttack(attacker, livingentity, stack, base, 1.2f);
-            }
-        }
+        return filter.filterTargets(attacker, origin, direction);
     }
 
     @Override
