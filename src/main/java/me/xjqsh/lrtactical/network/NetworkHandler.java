@@ -73,6 +73,13 @@ public class NetworkHandler {
                 SShakeScreenMessage::decode,
                 SShakeScreenMessage::handle
         );
+
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SSplashParticle.class,
+                SSplashParticle::encode,
+                SSplashParticle::decode,
+                SSplashParticle::handle
+        );
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

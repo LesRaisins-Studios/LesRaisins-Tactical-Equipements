@@ -1,5 +1,6 @@
 package me.xjqsh.lrtactical.client.overlay;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.api.item.IThrowable;
@@ -46,7 +47,11 @@ public class UsingProgressOverlay implements IGuiOverlay {
                     }
                 });
                 if (player.isCrouching()) {
+                    RenderSystem.enableBlend();
+                    RenderSystem.setShaderColor(1f, 1f, 1f, 0.7f);
                     guiGraphics.blit(ARROW_TEXTURE, x + 12, y + 6, 0, 0, 8, 4, 8, 4);
+                    RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+                    RenderSystem.disableBlend();
                 }
             }
         }

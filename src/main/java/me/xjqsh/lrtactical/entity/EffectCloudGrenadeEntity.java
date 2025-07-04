@@ -2,6 +2,8 @@ package me.xjqsh.lrtactical.entity;
 
 import me.xjqsh.lrtactical.entity.sp.SpEffectCloudEntity;
 import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
+import me.xjqsh.lrtactical.network.NetworkHandler;
+import me.xjqsh.lrtactical.network.message.SSplashParticle;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -10,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -60,8 +61,10 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
                 Entity target = hitResult instanceof EntityHitResult entityHitResult ? entityHitResult.getEntity() : null;
                 int color = PotionUtils.getColor(effects);
 
-                applySplash(effects, cloudData.isIgnite(), cloudData.getIgniteTime(), target);
-                this.level().levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, this.blockPosition(), color);
+                applySplash(effects, cloudData.isIgnite(), cloudData.getIgniteTime(), target, cloudData.getRadius());
+                NetworkHandler.sendToNearbyPlayers(
+                        new SSplashParticle(this.blockPosition(), color), this.level(), pos, 64
+                );
             }
         }
         super.onDeath(hitResult);
@@ -87,8 +90,10 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
         this.level().addFreshEntity(cloud);
     }
 
-    public void applySplash(List<MobEffectInstance> effectInstances, boolean ignite, int igniteTime, @Nullable Entity target) {
-        AABB area = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+    public void applySplash(List<MobEffectInstance> effectInstances, boolean ignite, int igniteTime,
+                            @Nullable Entity target, double radius) {
+        if (effectInstances.isEmpty() || radius <= 0.0D) return;
+        AABB area = this.getBoundingBox().inflate(radius, 2.0D, radius);
         List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, area);
 
         if (!entities.isEmpty()) {
@@ -100,7 +105,7 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
                 }
                 double distanceSqr = this.distanceToSqr(entity);
                 if (distanceSqr < 16.0D) {
-                    double d = (entity == target) ? 1.0D : 1.0D - Math.sqrt(distanceSqr) / 4.0D;
+                    double d = (entity == target) ? 1.0D : 1.0D - Math.sqrt(distanceSqr) / radius;
                     applyAllEffects(effectInstances, entity, d, source, ignite, igniteTime);
                 }
             }

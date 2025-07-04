@@ -18,11 +18,11 @@
     },
     "cloud": {
       // 是区域云还是一次性的喷溅效果
-      "area_cloud": false,
+      "area_cloud": true,
 
-      // -- 区域云参数开始 --
       // 生成时的半径
       "radius": 3.0,
+      // -- 区域云参数开始 --
       // 每tick扩大
       "radius_per_tick": 0.01,
       // 在扩大前的等待时间（tick）
