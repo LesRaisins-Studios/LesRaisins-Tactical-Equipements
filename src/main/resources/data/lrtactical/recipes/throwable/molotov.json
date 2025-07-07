@@ -1,0 +1,34 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "item": "minecraft:blaze_powder"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "item": "minecraft:dragon_breath"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:throwable",
+    "item": {
+      "item": "lrtactical:throwable",
+      "nbt": {
+        "ThrowableId": "lrtactical:molotov"
+      },
+      "count" : 3
+    }
+  }
+}

@@ -162,7 +162,7 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.104"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.106"))
 
     implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6654541-sources-6654543")
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")

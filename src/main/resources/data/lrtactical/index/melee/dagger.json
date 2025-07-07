@@ -62,13 +62,13 @@
           "max_angle": 85,
           // 排除自己
           "exclude_self": true
-        },
-        // 突进
-        "movement": {
-          "delay": 0,
-          "speed": 0.5
         }
-//         另外一种示例
+        // 突进
+//        "movement": {
+//          "delay": 0,
+//          "speed": 0.5
+//        }
+        // 另外一种示例
 //        "hitbox": {
 //          // obb区域，以玩家视线位置为起点延伸
 //          "type": "obb",
