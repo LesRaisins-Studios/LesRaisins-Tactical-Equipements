@@ -1,0 +1,58 @@
+{
+  "item_group.lrtactical.throwable": "Метальна зброя",
+  "item_group.lrtactical.melee": "Зброя ближнього бою",
+
+  "item.lrtactical.m67": "Осколкова граната M67",
+  "item.lrtactical.rgn": "Осколкова граната РГН",
+  "item.lrtactical.smoke_grenade": "Димова граната",
+  "item.lrtactical.flash_grenade": "Світлозвукова граната",
+  "item.lrtactical.molotov": "Коктейль Молотова",
+
+  "item.lrtactical.dagger": "Кинджал",
+  "item.lrtactical.baseball_bat": "Бейсбольна бита",
+  "item.lrtactical.karambit": "Керамбіт",
+
+  "item.lrtactical.flash_shield": "Світлозвуковий щит",
+
+  "lrtactical.block.smith_table.name": "Збройний стіл LRT",
+  "lrtactical.block.smith_table.desc": "Там, де народжується зброя",
+  "lrtactical.type.melee.name": "Ближній бій",
+  "lrtactical.type.throwable.name": "Метальне",
+  "lrtactical.type.misc.name": "Інше",
+
+  "effect.lrtactical.blinded": "Засліплення",
+  "effect.lrtactical.deafened": "Оглушення",
+  "effect.lrtactical.flammable": "Горіння",
+
+  "enchantment.lrtactical.backstab": "Удар зі спини",
+
+  "config.lrtactical.effect": "Ефекти",
+  "config.lrtactical.effect.blackflash": "Чорний спалах",
+  "config.lrtactical.effect.blackflash.desc": "Використовувати чорний екран замість білого при засліпленні світлозвуковою гранатою",
+  "config.lrtactical.grenade": "Гранати",
+  "config.lrtactical.grenade.explode": "Руйнування блоків гранатами",
+  "config.lrtactical.grenade.explode.desc": "Якщо увімкнено, гранати можуть руйнувати блоки при вибуху, якщо це можливо",
+  "config.lrtactical.grenade.screen_shake": "Трусіння екрану під час вибуху",
+  "config.lrtactical.grenade.screen_shake.desc": "Множник ефекту трусіння екрану [0 ~ 100]",
+  "config.lrtactical.melee": "Ближній бій",
+  "config.lrtactical.melee.durability": "Витрачати міцність",
+  "config.lrtactical.melee.durability.desc": "Якщо увімкнено, зброя ближнього бою витрачатиме міцність під час використання",
+  "config.lrtactical.melee.max_target": "Максимальна кількість цілей",
+  "config.lrtactical.melee.max_target.desc": "Максимальна кількість цілей, які можуть бути уражені однією атакою",
+
+  "key.category.lrtactical": "LesRaisins Tactical",
+  "key.lrtactical.normal_attack.desc": "Атакувати",
+  "key.lrtactical.sp_attack.desc": "Спец. атака/Дія",
+
+  "pack.lrtactical.default_pack.name": "LesRaisins Tactical",
+  "pack.lrtactical.default_pack.desc": "Стандартний набір LesRaisins Tactical",
+
+  "subtitle.lrtactical.entity.grenade.bounce": "Відскок гранати",
+  "subtitle.lrtactical.entity.grenade.flash.explode": "Флешка вибухнула",
+  "subtitle.lrtactical.entity.grenade.m67.explode": "Вибух гранати M67",
+  "subtitle.lrtactical.entity.grenade.rgn.explode": "Вибух гранати РГН",
+  "subtitle.lrtactical.entity.grenade.smoke.start": "Димова граната впала",
+  "subtitle.lrtactical.entity.grenade.smoke.loop": "Димова завіса",
+  "subtitle.lrtactical.entity.grenade.smoke.end": "Дим зникає",
+  "subtitle.lrtactical.player.ring": "*Оглушення*"
+}
