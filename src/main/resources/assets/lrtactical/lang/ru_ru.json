@@ -33,7 +33,7 @@
   "config.lrtactical.grenade.explode": "Разрушение блоков гранатами",
   "config.lrtactical.grenade.explode.desc": "Если включено, гранаты могут разрушать блоки при взрыве, если это возможно",
   "config.lrtactical.grenade.screen_shake": "Тряска экрана при взрыве",
-  "config.lrtactical.grenade.screen_shake.desc": "Множитель эффекта тряски экрана. [0 ~ 100]",
+  "config.lrtactical.grenade.screen_shake.desc": "Множитель эффекта тряски экрана [0 ~ 100]",
   "config.lrtactical.melee": "Ближний бой",
   "config.lrtactical.melee.durability": "Расходовать Прочность",
   "config.lrtactical.melee.durability.desc": "Если включено, оружие ближнего боя будет тратить прочность при использовании",
