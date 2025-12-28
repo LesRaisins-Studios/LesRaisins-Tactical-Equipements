@@ -25,9 +25,11 @@ public class ThrowableEntityRenderer extends EntityRenderer<ThrowableItemEntity>
     public void render(ThrowableItemEntity entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int light) {
         poseStack.pushPose();
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(90 + Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
-        poseStack.translate(0.1, 0.3, 0);
+        poseStack.translate(0, 0.15, 0);
+        float yRot = Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot());
+        poseStack.mulPose(Axis.YN.rotationDegrees(yRot));
+        poseStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
+        poseStack.translate(0, 0.35, -0.15);
 
         if (entityIn.getItem() != null) {
             CustomBedrockModel model = null;

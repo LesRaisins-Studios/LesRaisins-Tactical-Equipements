@@ -43,11 +43,17 @@
       "damage": 28.0,
       // 是否炸毁方块
       "destroy_blocks": false,
+      // 额外的方块破坏威力乘数，默认1.0
+      "destroy_multiplier": 1.0,
       // 屏幕抖动的强度会依据爆心到玩家的距离和时间进行衰减
       // 屏幕抖动时间系数
       "screen_shake_time": 20.0,
       // 屏幕抖动强度系数
-      "screen_shake_amplitude": 65.0
+      "screen_shake_amplitude": 65.0,
+      // 是否在受到爆炸伤害时触发自身的爆炸效果
+      "trigger_on_explode": false,
+      // 遥控起爆，注意堆叠上限应该为1，否则遥控器会覆盖剩余的物品
+      "remote_detonation": false
     }
   }
 }

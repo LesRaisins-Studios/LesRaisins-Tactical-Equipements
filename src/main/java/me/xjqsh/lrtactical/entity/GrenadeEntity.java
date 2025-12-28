@@ -5,6 +5,8 @@ import me.xjqsh.lrtactical.util.CustomExplosion;
 import me.xjqsh.lrtactical.util.ParticleUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
@@ -30,8 +32,15 @@ public class GrenadeEntity extends ThrowableItemEntity {
     private double damage = 18.0;
     private float radius = 4.5f;
     private boolean destroyBlocks = false;
+    private float destroyMultiplier = 1.0f;
     private double screenShakeTime = 20;
     private double screenShakeAmplitude = 50;
+    private boolean triggerOnExplode = false;
+    private boolean exploded = false; // 防止循环调用
+
+    public GrenadeEntity(EntityType<? extends GrenadeEntity> type, LivingEntity entity, Level level, int lifeTime) {
+        super(type, entity, level, lifeTime);
+    }
 
     public GrenadeEntity(LivingEntity entity, Level level, int lifeTime) {
         super(TYPE, entity, level, lifeTime);
@@ -41,12 +50,13 @@ public class GrenadeEntity extends ThrowableItemEntity {
         super(TYPE, level);
     }
 
-    public GrenadeEntity(EntityType<GrenadeEntity> type, Level level) {
+    public GrenadeEntity(EntityType<? extends GrenadeEntity> type, Level level) {
         super(type, level);
     }
 
     @Override
     public void onDeath(HitResult hitResult) {
+        exploded = true;
         Vec3 pos = hitResult == null ? this.position() : this.position().lerp(hitResult.getLocation(), 0.8);
         if (!this.level().isClientSide()) {
             var type = this.isDestroyBlocks() && CommonConfig.GRENADE_EXPLOSION_BLOCK_DAMAGE.get() ?
@@ -54,6 +64,7 @@ public class GrenadeEntity extends ThrowableItemEntity {
             CustomExplosion explosion = new CustomExplosion(this.level(), this, this.getDamage(), this.getRadius(), type);
             explosion.setScreenShakeAmplitude(this.screenShakeAmplitude);
             explosion.setScreenShakeTime(this.screenShakeTime);
+            explosion.setDestroyMultiplier(this.destroyMultiplier);
             if (ForgeEventFactory.onExplosionStart(level(), explosion)) {
                 return;
             }
@@ -68,6 +79,15 @@ public class GrenadeEntity extends ThrowableItemEntity {
             }
         }
         super.onDeath(hitResult);
+    }
+
+    @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if (!this.level().isClientSide() && triggerOnExplode && pSource.is(DamageTypeTags.IS_EXPLOSION) && !exploded) {
+            this.setLife(this.tickCount + 3);
+            return true;
+        }
+        return super.hurt(pSource, pAmount);
     }
 
     public double getDamage() {
@@ -108,5 +128,21 @@ public class GrenadeEntity extends ThrowableItemEntity {
 
     public void setScreenShakeAmplitude(double screenShakeAmplitude) {
         this.screenShakeAmplitude = screenShakeAmplitude;
+    }
+
+    public float getDestroyMultiplier() {
+        return destroyMultiplier;
+    }
+
+    public void setExplodeDestroyMultiplier(float destroyMultiplier) {
+        this.destroyMultiplier = destroyMultiplier;
+    }
+
+    public void setTriggerOnExplode(boolean triggerOnExplode) {
+        this.triggerOnExplode = triggerOnExplode;
+    }
+
+    public boolean isTriggerOnExplode() {
+        return triggerOnExplode;
     }
 }

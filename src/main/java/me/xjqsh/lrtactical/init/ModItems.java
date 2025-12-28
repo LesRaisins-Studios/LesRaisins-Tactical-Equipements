@@ -5,6 +5,7 @@ import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.item.IThrowable;
+import me.xjqsh.lrtactical.item.DetonatorItem;
 import me.xjqsh.lrtactical.item.FlashShieldItem;
 import me.xjqsh.lrtactical.item.MeleeItem;
 import me.xjqsh.lrtactical.item.ThrowableItem;
@@ -44,6 +45,7 @@ public class ModItems {
     public static RegistryObject<ThrowableItem> THROWABLE = ITEMS.register("throwable", ThrowableItem::new);
     public static RegistryObject<MeleeItem> MELEE = ITEMS.register("melee", MeleeItem::new);
     public static RegistryObject<FlashShieldItem> FLASH_SHIELD = ITEMS.register("flash_shield", FlashShieldItem::new);
+    public static RegistryObject<DetonatorItem> DETONATOR = ITEMS.register("detonator", DetonatorItem::new);
 
     public static ItemStack getThrowableIcon() {
         ItemStack stack = new ItemStack(THROWABLE.get());
@@ -69,6 +71,7 @@ public class ModItems {
             ItemStack stack = index.createItemStack();
             pOutput.accept(stack);
         }
+        pOutput.accept(new ItemStack(DETONATOR.get()));
     }
 
     public static void fillMeleeWeapons(CreativeModeTab.ItemDisplayParameters pParameters, CreativeModeTab.Output pOutput) {

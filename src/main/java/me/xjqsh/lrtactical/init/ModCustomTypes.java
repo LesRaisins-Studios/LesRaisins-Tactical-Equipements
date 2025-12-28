@@ -1,10 +1,7 @@
 package me.xjqsh.lrtactical.init;
 
 import me.xjqsh.lrtactical.EquipmentMod;
-import me.xjqsh.lrtactical.entity.EffectCloudGrenadeEntity;
-import me.xjqsh.lrtactical.entity.GrenadeEntity;
-import me.xjqsh.lrtactical.entity.SmokeGrenadeEntity;
-import me.xjqsh.lrtactical.entity.StunGrenadeEntity;
+import me.xjqsh.lrtactical.entity.*;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponData;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponType;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
@@ -13,6 +10,7 @@ import me.xjqsh.lrtactical.item.throwable.area.CloudType;
 import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
 import me.xjqsh.lrtactical.item.throwable.explode.ExplodeThrowableData;
 import me.xjqsh.lrtactical.item.throwable.explode.ExplodeType;
+import me.xjqsh.lrtactical.item.throwable.explode.StickyType;
 import me.xjqsh.lrtactical.item.throwable.flash.StunThrowableData;
 import me.xjqsh.lrtactical.item.throwable.flash.StunType;
 import me.xjqsh.lrtactical.item.throwable.smoke.SmokeType;
@@ -27,6 +25,10 @@ public class ModCustomTypes {
 
     public static RegistryObject<ThrowableType<ExplodeThrowableData, GrenadeEntity>> EXPLODE = THROWABLE_TYPES.register("explode",
             () -> ExplodeType.EXPLODE
+    );
+
+    public static RegistryObject<ThrowableType<ExplodeThrowableData, StickyGrenadeEntity>> STICKY = THROWABLE_TYPES.register("sticky",
+            () -> StickyType.STICKY
     );
 
     public static RegistryObject<ThrowableType<ThrowableData, SmokeGrenadeEntity>> SMOKE = THROWABLE_TYPES.register("smoke",

@@ -25,22 +25,19 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public abstract class ThrowableItemEntity extends Projectile implements IEntityAdditionalSpawnData {
@@ -228,12 +225,34 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
             end = hitresult.getLocation();
         }
 
-        HitResult hitresult1 = ProjectileUtil.getEntityHitResult(pLevel, this, start, end, this.getBoundingBox().expandTowards(endVecOffset).inflate(1.0D), pFilter);
+        HitResult hitresult1 = getEntityHitResult(pLevel, this, start, end, this.getBoundingBox().expandTowards(endVecOffset).inflate(1.0D), pFilter);
         if (hitresult1 != null) {
             hitresult = hitresult1;
         }
 
         return hitresult;
+    }
+
+    @Nullable
+    public static EntityHitResult getEntityHitResult(Level pLevel, Entity pProjectile, Vec3 pStartVec, Vec3 pEndVec, AABB pBoundingBox, Predicate<Entity> pFilter) {
+        double d0 = Double.MAX_VALUE;
+        Entity entity = null;
+        Vec3 hitPos = null;
+
+        for(Entity entity1 : pLevel.getEntities(pProjectile, pBoundingBox, pFilter)) {
+            AABB aabb = entity1.getBoundingBox().inflate(0.3);
+            Optional<Vec3> optional = aabb.clip(pStartVec, pEndVec);
+            if (optional.isPresent()) {
+                double d1 = pStartVec.distanceToSqr(optional.get());
+                if (d1 < d0) {
+                    entity = entity1;
+                    d0 = d1;
+                    hitPos = optional.get();
+                }
+            }
+        }
+
+        return entity == null ? null : new EntityHitResult(entity, hitPos);
     }
 
     public void playBounceSound() {
@@ -274,7 +293,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
 
         this.setPos(x, y, z);
 
-        if (this.tickCount >= life) {
+        if (this.tickCount >= life && life > 0) {
             if (!this.level().isClientSide()) {
                 this.onDeath(null);
             }
@@ -287,7 +306,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
 
     public void renderTailParticle() {
         if (this.getTailParticle() != null) {
-            this.level().addParticle(this.getTailParticle(), true, this.getX(), this.getY() + 0.1, this.getZ(), 0.0D, 0.01D, 0.0D);
+            this.level().addParticle(this.getTailParticle(), true, this.getX(), this.getY() + 0.35, this.getZ(), 0.0D, 0.01D, 0.0D);
         }
     }
 

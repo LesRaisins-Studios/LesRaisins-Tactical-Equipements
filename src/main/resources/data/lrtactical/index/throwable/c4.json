@@ -1,0 +1,46 @@
+{
+  // 粘性炸弹
+  "type": "lrtactical:sticky",
+  "name": "item.lrtactical.c4",
+  "data": {
+    // 投掷物物品通用参数
+    // 准备时间（tick）
+    "prepare_time": 10,
+    // 是否可以温雷，准备时间后继续按住右键将会消耗实体本身的lifetime
+    // 如果lifetime也耗尽，会直接在脚底下爆炸
+    "cookable": false,
+    // 出手速度
+    "initial_speed": 1.1,
+    // 冷却（tick）
+    "cooldown": 40,
+    // 冷却标签，同标签的物品共享cd
+    "cooldown_category": "lrtactical:c4",
+    // 收起时间（ms）
+    "put_away_time": 670,
+    // 最大堆叠数量
+    "stack_size": 1,
+    // 投掷物实体参数
+    "entity" : {
+      // 最大存活时长
+      "life_time": -1,
+      // 重力
+      "gravity": 0.07,
+      // 弹射物撞到实体时造成的撞击伤害
+      "hit_damage": 1.0,
+      // 尾迹粒子，null表示不生成，默认为minecraft:smoke
+      "tail_particles": null
+    },
+    // 与lrtactical:explode类型相同
+    "explode": {
+      "radius": 7.5,
+      "damage": 55.0,
+      "destroy_blocks": true,
+      "screen_shake_time": 20.0,
+      "screen_shake_amplitude": 65.0,
+      // 额外的方块破坏威力乘数，默认1.0
+      "destroy_multiplier": 2.0,
+      "trigger_on_explode": true,
+      "remote_detonation": true
+    }
+  }
+}

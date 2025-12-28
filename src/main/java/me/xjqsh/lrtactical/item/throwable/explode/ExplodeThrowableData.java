@@ -24,6 +24,15 @@ public class ExplodeThrowableData extends ThrowableData {
         @SerializedName("destroy_blocks")
         private boolean destroyBlocks = false;
 
+        @SerializedName("destroy_multiplier")
+        private float destroyMultiplier = 1.0f;
+
+        @SerializedName("trigger_on_explode")
+        private boolean triggerOnExplode = false;
+
+        @SerializedName("remote_detonation")
+        private boolean remoteDetonation = false;
+
         @SerializedName("screen_shake_time")
         private double screenShakeTime = 20;
 
@@ -42,12 +51,24 @@ public class ExplodeThrowableData extends ThrowableData {
             return destroyBlocks;
         }
 
+        public float getDestroyMultiplier() {
+            return destroyMultiplier;
+        }
+
+        public boolean isTriggerOnExplode() {
+            return triggerOnExplode;
+        }
+
         public double getScreenShakeTime() {
             return screenShakeTime;
         }
 
         public double getScreenShakeAmplitude() {
             return screenShakeAmplitude;
+        }
+
+        public boolean isRemoteDetonation() {
+            return remoteDetonation;
         }
     }
 }
