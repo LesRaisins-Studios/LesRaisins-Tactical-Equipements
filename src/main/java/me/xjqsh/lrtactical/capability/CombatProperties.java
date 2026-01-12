@@ -199,12 +199,12 @@ public class CombatProperties {
             this.stack = stack;
         }
 
+        /**
+         * 由服务器判断
+         */
         @Override
         public void perform(Player player) {
-            if (stack.getItem() instanceof IMeleeWeapon weapon && weapon.isSame(stack, player.getMainHandItem())) {
-                List<Entity> entities = weapon.collectTargets(player, stack, action, player.getEyePosition(), player.getLookAngle());
-                NetworkHandler.CHANNEL.sendToServer(new CMeleeAttackRequest(action, entities));
-            }
+            NetworkHandler.CHANNEL.sendToServer(new CMeleeAttackRequest(action));
         }
     }
 
