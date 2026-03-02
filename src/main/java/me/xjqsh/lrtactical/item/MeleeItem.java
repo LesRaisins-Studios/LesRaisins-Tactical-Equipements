@@ -179,6 +179,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
             if (damage <= 0) return;
             boolean hit = false;
             boolean crit = false;
+            boolean kill = false;
             for (Entity livingentity : targets) {
                 boolean flag = !(livingentity instanceof ArmorStand armorStand) || !armorStand.isMarker();
                 boolean inRange = livingentity.distanceToSqr(attacker) <= filter.getMaxRange() * filter.getMaxRange();
@@ -187,6 +188,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
                     var result = this.performAttack(attacker, livingentity, stack, damage, knockback);
                     hit |= result.hit();
                     crit |= result.crit();
+                    kill |= result.kill();
                 }
             }
 
@@ -196,7 +198,15 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
                         player.broadcastBreakEvent(EquipmentSlot.MAINHAND);
                     });
                 }
-                IMeleeWeapon.playMeleeSound(attacker, index.getId(), crit ? "crit" : action.getId() + "_hit", 2, 1);
+                String soundKey;
+                if (kill) {
+                    soundKey = "kill";
+                } else if (crit) {
+                    soundKey = "crit";
+                } else {
+                    soundKey = action.getId() + "_hit";
+                }
+                IMeleeWeapon.playMeleeSound(attacker, index.getId(), soundKey, 2, 1);
             }
         });
     }

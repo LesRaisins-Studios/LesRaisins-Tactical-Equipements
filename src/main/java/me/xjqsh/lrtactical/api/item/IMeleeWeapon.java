@@ -183,6 +183,13 @@ public interface IMeleeWeapon extends ICustomItem {
             attacker.crit(target);
         }
 
+        // 检测是否击杀目标
+        boolean killed = target instanceof LivingEntity living && living.isDeadOrDying();
+
+        if (killed) {
+            return flag2 ? AttackResult.CRIT_KILL : AttackResult.KILL;
+        }
+
         return flag2 ? AttackResult.CRIT : AttackResult.HIT;
     }
 
