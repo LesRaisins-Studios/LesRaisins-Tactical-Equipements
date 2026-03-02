@@ -9,6 +9,8 @@ import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
 import me.xjqsh.lrtactical.item.throwable.explode.ExplodeThrowableData;
+import me.xjqsh.lrtactical.network.NetworkHandler;
+import me.xjqsh.lrtactical.network.message.SThrowableAnimationSync;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -96,6 +98,15 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
                 ).orElse(false);
         if (!flag) {
             player.startUsingItem(pUsedHand);
+
+            // Sync PREPARE animation to tracking players
+            if (!pLevel.isClientSide()) {
+                var animationId = this.getId(stack);
+                NetworkHandler.sendToTrackingEntity(
+                        new SThrowableAnimationSync(player.getId(), SThrowableAnimationSync.ThrowableState.PREPARE, animationId),
+                        player
+                );
+            }
         }
         return InteractionResultHolder.consume(stack);
     }
@@ -116,6 +127,15 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
             });
         }
         stack.shrink(1);
+
+        // Sync THROW animation to tracking players
+        if (entity instanceof Player player) {
+            var animationId = this.getId(stack);
+            NetworkHandler.sendToTrackingEntity(
+                    new SThrowableAnimationSync(player.getId(), SThrowableAnimationSync.ThrowableState.THROW, animationId),
+                    player
+            );
+        }
 
         if (index.getData() instanceof ExplodeThrowableData explode && explode.getExplode().isRemoteDetonation()) {
             ItemStack detonatorStack = new ItemStack(ModItems.DETONATOR.get());

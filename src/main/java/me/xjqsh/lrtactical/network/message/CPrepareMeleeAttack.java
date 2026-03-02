@@ -1,7 +1,9 @@
 package me.xjqsh.lrtactical.network.message;
 
+import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
+import me.xjqsh.lrtactical.network.NetworkHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -44,6 +46,15 @@ public record CPrepareMeleeAttack(
                 player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
                     cap.preAttack(message.action, message.origin, message.direction);
                 });
+
+                // 通知其他客户端攻击动画开始（3p）
+                if (player.getMainHandItem().getItem() instanceof IMeleeWeapon weapon) {
+                    var animationId = weapon.getId(player.getMainHandItem());
+                    NetworkHandler.sendToTrackingEntityAndSelf(
+                            player,
+                            new SMeleeAnimationSync(player.getId(), message.action, animationId)
+                    );
+                }
             });
         }
         context.setPacketHandled(true);

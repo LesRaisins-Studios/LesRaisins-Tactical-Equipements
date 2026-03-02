@@ -80,6 +80,19 @@ public class NetworkHandler {
                 SSplashParticle::decode,
                 SSplashParticle::handle
         );
+
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SMeleeAnimationSync.class,
+                SMeleeAnimationSync::encode,
+                SMeleeAnimationSync::decode,
+                SMeleeAnimationSync::handle
+        );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SThrowableAnimationSync.class,
+                SThrowableAnimationSync::encode,
+                SThrowableAnimationSync::decode,
+                SThrowableAnimationSync::handle
+        );
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

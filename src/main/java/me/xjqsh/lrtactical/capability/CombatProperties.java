@@ -18,7 +18,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //todo 临时实现，太丑了，还得改
 @AutoRegisterCapability
@@ -26,6 +28,7 @@ public class CombatProperties {
     public static final ResourceLocation ID = new ResourceLocation(EquipmentMod.MOD_ID, "combat_data");
 
     private final List<DelayTask> delayedActions = new ArrayList<>();
+    private final Map<String, Integer> animationIndexMap = new HashMap<>();
     private ItemStack lastItem = ItemStack.EMPTY;
     private final Player entity;
     private int coolDownTick = 0;
@@ -104,6 +107,14 @@ public class CombatProperties {
         lastMaxTick = newCoolDown;
         drawingTick = newCoolDown;
         preparingAttack = false;
+    }
+
+    public int getAnimationIndex(String key) {
+        return animationIndexMap.getOrDefault(key, 0);
+    }
+
+    public void setAnimationIndex(String key, int index) {
+        animationIndexMap.put(key, index);
     }
 
     public boolean preAttack(MeleeAction action, Vec3 origin, Vec3 direction) {

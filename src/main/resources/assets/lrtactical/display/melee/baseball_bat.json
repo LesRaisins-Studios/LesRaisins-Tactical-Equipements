@@ -30,5 +30,30 @@
       "translation": [5.5, -5.5, 0],
       "scale": [0.8, 0.8, 0.8]
     }
+  },
+  "third_person_animation": {
+    "animation": "lrtactical:melee/baseball_bat",
+    "upper": {
+      "idle": "hold_upper",
+      "attack_right": ["melee_upper3"],
+      "attack_left": ["melee_upper", "melee_upper2"],
+      "walk": "walk_upper",
+      "run": "run_upper",
+      "sprint": "run_upper",
+      "sneak": "hold_upper",
+      "sneak_walk": "hold_upper",
+      "jump": "hold_upper",
+      "fall": "hold_upper"
+    },
+    "lower": {
+      "idle": "hold_lower",
+      "walk": "walk_lower",
+      "run": "run_lower",
+      "sprint": "run_lower",
+      "sneak": "crouch_lower",
+      "sneak_walk": "crouch_walk_lower",
+      "jump": "hold_lower",
+      "fall": "hold_lower"
+    }
   }
 }
