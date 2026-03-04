@@ -1,13 +1,31 @@
 {
+  // 模型位置
   "model": "lrtactical:melee/baseball_bat_geo",
+  // 第一人称动画位置
   "animation": "lrtactical:melee/baseball_bat",
+  // 第一人称状态机
   "state_machine": "lrtactical:default_melee_state_machine",
+  // 模型材质
   "texture": "lrtactical:melee/baseball_bat_uv",
+  // 物品栏材质
   "slot_texture": "lrtactical:melee/slot/baseball_bat",
+  // 音效，在特定时机触发，为原版音效，需要在sounds.json注册
+  // sounds.json 写法可参见本包或者mcwiki
   "sounds": {
+    // 造成暴击
     "crit": "minecraft:entity.player.attack.crit"
-//    "kill": "minecraft:entity.player.attack.knockback"
+    // 击杀
+//    "kill": "minecraft:entity.player.attack.knockback",
+    // 左键命中
+//    "attack_left_hit": "minecraft:entity.player.attack.strong",
+    // 右键命中
+//    "attack_right_hit": "minecraft:entity.player.attack.strong",
+    // 左键挥舞
+//    "attack_left": "minecraft:entity.player.attack.weak",
+    // 右键挥舞
+//    "attack_right": "minecraft:entity.player.attack.strong",
   },
+  // 各个视角下的调整，可参考tacz wiki工作台部分
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 2.5, 1]
@@ -32,20 +50,34 @@
       "scale": [0.8, 0.8, 0.8]
     }
   },
+  // 第三人称动画，需要安装pa；实现比较简单，因为本质不是专业的战斗模组）
   "third_person_animation": {
+    // pa动画路径
     "animation": "lrtactical:melee/baseball_bat",
+    // 上半身动画
     "upper": {
+      // 待机时
       "idle": "hold_upper",
+      // 右键攻击时（触发一次），填多个即在列表中循环；为了从简，和第一人称的攻击没有关联
       "attack_right": ["melee_upper3"],
+      // 左键攻击时（触发一次）
       "attack_left": ["melee_upper", "melee_upper2"],
+      // 行走时
       "walk": "walk_upper",
+      // 跑步时
       "run": "run_upper",
+      // 疾跑时
       "sprint": "run_upper",
+      // 潜行不动时
       "sneak": "hold_upper",
+      // 潜行
       "sneak_walk": "hold_upper",
+      // 跳跃
       "jump": "hold_upper",
+      // 掉落
       "fall": "hold_upper"
     },
+    // 下半身动画，同上，不过左右键不可用
     "lower": {
       "idle": "hold_lower",
       "walk": "walk_lower",

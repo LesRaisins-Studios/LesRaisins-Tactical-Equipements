@@ -2,8 +2,12 @@
   "name": "item.lrtactical.baseball_bat",
   "type": "lrtactical:normal",
   "base_item": "lrtactical:melee",
+  // 数据配置
   "data": {
+    // 基础属性修饰，可参见原版的"实体属性"，属性的名称可在mcwiki查阅
+    // 注意此处的实际上是修饰符，也就是要加上实体自己的面板
     "attributes": {
+      // 比如实体一般默认有1点的基础伤害，这里+11，所以没有其他buff的情况下这把武器的基础伤害是12
       "generic.attack_damage": 11,
       "minecraft:generic.movement_speed": {
         "amount": -0.05,
@@ -15,7 +19,7 @@
     // tick
     "put_away_time": 14,
     "max_durability": 240,
-    "enchantment_value": 15,
+    "enchantment_value": 8,
     "attack": {
       "attack_left": {
         // 伤害倍率
