@@ -6,6 +6,7 @@ import com.tacz.guns.api.item.IAnimationItem;
 import me.xjqsh.lrtactical.api.collision.ITargetFilter;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
+import me.xjqsh.lrtactical.client.audio.ICustomSoundSupplier;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
 import me.xjqsh.lrtactical.config.CommonConfig;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
@@ -206,7 +207,8 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
                 } else {
                     soundKey = action.getId() + "_hit";
                 }
-                IMeleeWeapon.playMeleeSound(attacker, index.getId(), soundKey, 2, 1);
+                IMeleeWeapon.playMeleeSound(attacker, index.getId(), soundKey, 2, 1, true);
+                IMeleeWeapon.playMeleeSoundToAttacker(attacker, index.getId(), soundKey + ICustomSoundSupplier.FEEDBACK_SUFFIX, 2, 1);
             }
         });
     }

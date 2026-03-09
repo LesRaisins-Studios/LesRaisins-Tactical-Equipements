@@ -46,9 +46,10 @@ public record CPrepareMeleeAttack(
                     if (cap.preAttack(message.action, message.origin, message.direction)
                             && player.getMainHandItem().getItem() instanceof IMeleeWeapon weapon) {
                         var animationId = weapon.getId(player.getMainHandItem());
+                        int actionCount = cap.getActionCount(message.action);
                         NetworkHandler.sendToTrackingEntityAndSelf(
                                 player,
-                                new SMeleeAnimationSync(player.getId(), message.action, animationId)
+                                new SMeleeAnimationSync(player.getId(), message.action, actionCount, animationId)
                         );
                     }
                 });

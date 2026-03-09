@@ -14,12 +14,14 @@ import javax.annotation.Nullable;
 public class MeleePreAttackEvent extends Event {
     private final int playerId;
     private final MeleeAction state;
+    private final int actionCount;
     private final ResourceLocation animationId;
     private AbstractClientPlayer player;
 
-    public MeleePreAttackEvent(int playerId, MeleeAction state, @Nullable ResourceLocation animationId) {
+    public MeleePreAttackEvent(int playerId, MeleeAction state, int actionCount, @Nullable ResourceLocation animationId) {
         this.playerId = playerId;
         this.state = state;
+        this.actionCount = actionCount;
         this.animationId = animationId;
         if (playerId > 0 && Minecraft.getInstance().level != null) {
             var entity = Minecraft.getInstance().level.getEntity(playerId);
@@ -40,6 +42,10 @@ public class MeleePreAttackEvent extends Event {
 
     public MeleeAction getState() {
         return state;
+    }
+
+    public int getActionCount() {
+        return actionCount;
     }
 
     @Nullable

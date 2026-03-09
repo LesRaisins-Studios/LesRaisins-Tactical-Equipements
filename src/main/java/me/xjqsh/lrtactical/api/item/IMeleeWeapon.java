@@ -211,6 +211,12 @@ public interface IMeleeWeapon extends ICustomItem {
         playMeleeSound(entity, id, key, volume, pitch, false);
     }
 
+    static void playMeleeSoundToAttacker(Player entity, ResourceLocation id, String key, float volume, float pitch) {
+        if (entity instanceof ServerPlayer player) {
+            NetworkHandler.sendToClientPlayer(new SCustomSound(SCustomSound.SoundType.MELEE, id, key, entity.position(), volume, pitch), player);
+        }
+    }
+
     static void playMeleeSound(Player entity, ResourceLocation id, String key, float volume, float pitch, boolean exceptSelf) {
         var packet = new SCustomSound(SCustomSound.SoundType.MELEE, id, key, entity.position(), volume, pitch);
         ServerPlayer p;

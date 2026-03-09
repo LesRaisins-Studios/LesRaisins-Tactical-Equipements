@@ -12,8 +12,11 @@
   // 音效，在特定时机触发，为原版音效，需要在sounds.json注册
   // sounds.json 写法可参见本包或者mcwiki
   "sounds": {
-    // 造成暴击
+    // 造成暴击时播放，播放给除了攻击者外的所有人
     "crit": "minecraft:entity.player.attack.crit"
+    // 暴击反馈，仅播放给攻击者，如果没配此项尝试回退到crit，没配crit只配了crit_feedback的话只有攻击者可以听到
+    // _feedback后缀对kill和两个hit同样有效
+//    "crit_feedback": "minecraft:entity.player.attack.crit",
     // 击杀
 //    "kill": "minecraft:entity.player.attack.knockback",
     // 左键命中

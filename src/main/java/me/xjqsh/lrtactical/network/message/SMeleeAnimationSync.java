@@ -13,17 +13,20 @@ import java.util.function.Supplier;
 public class SMeleeAnimationSync {
     private final int playerId;
     private final MeleeAction state;
+    private final int actionCount;
     private final ResourceLocation animationId;
 
-    public SMeleeAnimationSync(int playerId, MeleeAction state, @Nullable ResourceLocation animationId) {
+    public SMeleeAnimationSync(int playerId, MeleeAction state, int actionCount, @Nullable ResourceLocation animationId) {
         this.playerId = playerId;
         this.state = state;
+        this.actionCount = actionCount;
         this.animationId = animationId;
     }
 
     public static void encode(SMeleeAnimationSync msg, FriendlyByteBuf buf) {
         buf.writeInt(msg.playerId);
         buf.writeEnum(msg.state);
+        buf.writeVarInt(msg.actionCount);
         buf.writeBoolean(msg.animationId != null);
         if (msg.animationId != null) buf.writeResourceLocation(msg.animationId);
     }
@@ -31,14 +34,17 @@ public class SMeleeAnimationSync {
     public static SMeleeAnimationSync decode(FriendlyByteBuf buf) {
         int playerId = buf.readInt();
         MeleeAction state = buf.readEnum(MeleeAction.class);
+        int actionCount = buf.readVarInt();
         ResourceLocation animationId = buf.readBoolean() ? buf.readResourceLocation() : null;
-        return new SMeleeAnimationSync(playerId, state, animationId);
+        return new SMeleeAnimationSync(playerId, state, actionCount, animationId);
     }
 
     public static void handle(SMeleeAnimationSync msg, Supplier<NetworkEvent.Context> ctx) {
         NetworkEvent.Context context = ctx.get();
         if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> MinecraftForge.EVENT_BUS.post(new MeleePreAttackEvent(msg.playerId, msg.state, msg.animationId)));
+            context.enqueueWork(() -> MinecraftForge.EVENT_BUS.post(
+                    new MeleePreAttackEvent(msg.playerId, msg.state, msg.actionCount, msg.animationId)
+            ));
         }
         context.setPacketHandled(true);
     }

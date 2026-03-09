@@ -3,7 +3,6 @@ package me.xjqsh.lrtactical.compat.player_animator;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.event.MeleePreAttackEvent;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
-import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -20,11 +19,12 @@ public class MeleeAnimationListener {
         if (mc.level == null) return;
 
         if (mc.level.getEntity(event.getPlayerId()) instanceof AbstractClientPlayer player) {
-            playStateAnimation(player, event.getState(), event.getAnimationId());
+            playStateAnimation(player, event.getState(), event.getActionCount(), event.getAnimationId());
         }
     }
 
-    private static void playStateAnimation(AbstractClientPlayer player, MeleeAction state, ResourceLocation itemId) {
+    private static void playStateAnimation(AbstractClientPlayer player, MeleeAction state, int actionCount,
+                                           ResourceLocation itemId) {
         LrTacticalAPI.getMeleeDisplay(itemId).ifPresent(display -> {
             ThirdPersonAnimationConfig config = display.getThirdPersonAnimation();
             if (config == null) return;
@@ -35,14 +35,11 @@ public class MeleeAnimationListener {
             String action = state.getId();
             var layer = PlayerAnimatorIntegration.AnimationLayer.UPPER;
             int fade = 4;
-            
-            player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
-                int index = cap.getActionCount(state);
-                String anim = config.getAnimation(layer, action, index);
-                if (anim != null) {
-                    PlayerAnimatorIntegration.playAttackAnimation(player, path, anim, layer, fade);
-                }
-            });
+
+            String anim = config.getAnimation(layer, action, actionCount);
+            if (anim != null) {
+                PlayerAnimatorIntegration.playAttackAnimation(player, path, anim, layer, fade);
+            }
         });
     }
 
