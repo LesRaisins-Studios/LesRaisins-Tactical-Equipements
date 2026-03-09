@@ -87,6 +87,12 @@ public class NetworkHandler {
                 SMeleeAnimationSync::decode,
                 SMeleeAnimationSync::handle
         );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                SResetMeleeSyncMessage.class,
+                SResetMeleeSyncMessage::encode,
+                SResetMeleeSyncMessage::decode,
+                SResetMeleeSyncMessage::handle
+        );
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

@@ -15,10 +15,11 @@ import java.util.function.Supplier;
 
 public record CMeleeAttackRequest(
         MeleeAction action,
+        int actionCount,
         int[] entityIds
 ) {
-    public CMeleeAttackRequest(MeleeAction action, List<Entity> entities) {
-        this(action, toList(entities));
+    public CMeleeAttackRequest(MeleeAction action, int actionCount, List<Entity> entities) {
+        this(action, actionCount, toList(entities));
     }
 
     private static int[] toList(List<Entity> entities) {
@@ -27,13 +28,15 @@ public record CMeleeAttackRequest(
 
     public static void encode(CMeleeAttackRequest message, FriendlyByteBuf buf) {
         buf.writeEnum(message.action);
+        buf.writeVarInt(message.actionCount);
         buf.writeVarIntArray(message.entityIds);
     }
 
     public static CMeleeAttackRequest decode(FriendlyByteBuf buf) {
         MeleeAction action = buf.readEnum(MeleeAction.class);
+        int actionCount = buf.readVarInt();
         int[] ids = buf.readVarIntArray();
-        return new CMeleeAttackRequest(action, ids);
+        return new CMeleeAttackRequest(action, actionCount, ids);
     }
 
     public static void handle(CMeleeAttackRequest message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -63,7 +66,7 @@ public record CMeleeAttackRequest(
                 }
 
                 player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
-                    cap.postAttack(message.action, entities);
+                    cap.postAttack(message.action, message.actionCount, entities);
                 });
             });
         }

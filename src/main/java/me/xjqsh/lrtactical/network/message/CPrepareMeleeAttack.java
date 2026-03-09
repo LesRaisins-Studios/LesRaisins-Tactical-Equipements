@@ -34,7 +34,6 @@ public record CPrepareMeleeAttack(
         );
     }
 
-    // 服务端接到指令后，开始冷却读条
     public static void handle(CPrepareMeleeAttack message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isServer()) {
@@ -44,17 +43,15 @@ public record CPrepareMeleeAttack(
                     return;
                 }
                 player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
-                    cap.preAttack(message.action, message.origin, message.direction);
+                    if (cap.preAttack(message.action, message.origin, message.direction)
+                            && player.getMainHandItem().getItem() instanceof IMeleeWeapon weapon) {
+                        var animationId = weapon.getId(player.getMainHandItem());
+                        NetworkHandler.sendToTrackingEntityAndSelf(
+                                player,
+                                new SMeleeAnimationSync(player.getId(), message.action, animationId)
+                        );
+                    }
                 });
-
-                // 通知其他客户端攻击动画开始（3p）
-                if (player.getMainHandItem().getItem() instanceof IMeleeWeapon weapon) {
-                    var animationId = weapon.getId(player.getMainHandItem());
-                    NetworkHandler.sendToTrackingEntityAndSelf(
-                            player,
-                            new SMeleeAnimationSync(player.getId(), message.action, animationId)
-                    );
-                }
             });
         }
         context.setPacketHandled(true);

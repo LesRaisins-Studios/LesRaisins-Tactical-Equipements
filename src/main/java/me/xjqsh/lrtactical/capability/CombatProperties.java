@@ -8,6 +8,7 @@ import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.CMeleeAttackRequest;
 import me.xjqsh.lrtactical.network.message.CPrepareMeleeAttack;
+import me.xjqsh.lrtactical.network.message.SResetMeleeSyncMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -22,7 +23,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-//todo 临时实现，太丑了，还得改
 @AutoRegisterCapability
 public class CombatProperties {
     public static final ResourceLocation ID = new ResourceLocation(EquipmentMod.MOD_ID, "combat_data");
@@ -36,6 +36,7 @@ public class CombatProperties {
     private int lastSelected = 0;
     private int drawingTick = 0;
     private boolean preparingAttack = false;
+    private int preparingAttackCnt = 0;
 
     private final Map<MeleeAction, Integer> actionCounts = new EnumMap<>(MeleeAction.class);
 
@@ -43,10 +44,6 @@ public class CombatProperties {
         this.entity = entity;
     }
 
-    /**
-     * 获取物品的攻击/使用冷却时间<br/>
-     * 此数值通过约定在服务端与客户端之间同步，可能不完全一致
-     */
     public int getCoolDownTick() {
         return coolDownTick;
     }
@@ -60,7 +57,7 @@ public class CombatProperties {
     }
 
     public void tick() {
-        if (entity.getMainHandItem().getItem() instanceof ICustomItem customItem){
+        if (entity.getMainHandItem().getItem() instanceof ICustomItem customItem) {
             if (lastSelected != entity.getInventory().selected) {
                 lastSelected = entity.getInventory().selected;
                 reset(customItem, lastItem);
@@ -77,11 +74,14 @@ public class CombatProperties {
                 entity.setSprinting(false);
             }
             if (coolDownTick <= 0) {
+                if (!entity.level().isClientSide() && preparingAttack) {
+                    forceResetMeleeSync("melee attack request timed out");
+                }
                 preparingAttack = false;
             }
         }
 
-        if (this.entity.level().isClientSide()) {
+        if (entity.level().isClientSide()) {
             for (DelayTask task : delayedActions) {
                 if (task.tick()) {
                     task.perform(entity);
@@ -109,78 +109,110 @@ public class CombatProperties {
         lastMaxTick = newCoolDown;
         drawingTick = newCoolDown;
         preparingAttack = false;
+        delayedActions.clear();
         actionCounts.clear();
+        preparingAttackCnt = 0;
     }
 
     public int getActionCount(MeleeAction meleeAction) {
         return actionCounts.getOrDefault(meleeAction, 0);
     }
 
-    public boolean preAttack(MeleeAction action, Vec3 origin, Vec3 direction) {
-        ItemStack stack = entity.getMainHandItem();
-        if (entity.getMainHandItem().getItem() instanceof IMeleeWeapon weapon && coolDownTick <= 0) {
-            if (!weapon.canAttack(entity, stack, action)) {
-                return false;
-            }
-
-            int cnt = actionCounts.getOrDefault(action, 0);
-            actionCounts.put(action, cnt + 1);
-
-            coolDownTick = weapon.getAttackCoolDown(stack, action, cnt);
-            lastMaxTick = coolDownTick;
-
-            if (!entity.level().isClientSide()) {
-                // 服务端，准备进行攻击
-                this.preparingAttack = true;
-                // 服务器宽限1tick以平衡延迟
-                this.coolDownTick = Math.max(0, coolDownTick - 1);
-            } else {
-                // 客户端，通知服务端进入cd
-                NetworkHandler.CHANNEL.sendToServer(new CPrepareMeleeAttack(action, origin, direction));
-
-                int delay = weapon.getAttackDelay(entity, stack, action);
-                var attack = new DelayAttack(delay, stack, action);
-                if (attack.getDelay() == 0) {
-                    attack.perform(entity);
-                } else {
-                    this.delayedActions.add(attack);
-                }
-
-                var moveInfo = weapon.getAttackMovement(entity, stack, action);
-                if (moveInfo != null) {
-                    var move = new DelayMove(moveInfo.getDelay(), moveInfo.getSpeed(), stack);
-                    if (move.getDelay() == 0) {
-                        move.perform(entity);
-                    } else {
-                        this.delayedActions.add(move);
-                    }
-                }
-
-                LrTacticalAPI.getMeleeDisplay(stack).ifPresent(display -> {
-                    if (display.getSounds().containsKey(action.getId())) {
-                        entity.level().playLocalSound(
-                                origin.x, origin.y, origin.z,
-                                SoundEvent.createVariableRangeEvent(display.getSounds().get(action.getId())),
-                                SoundSource.PLAYERS, 1.0F, 1.0F, false
-                        );
-                    }
-                });
-            }
-            return true;
-        }
-        return false;
+    public void resetMeleeSync() {
+        coolDownTick = 0;
+        lastMaxTick = 0;
+        preparingAttack = false;
+        actionCounts.clear();
+        delayedActions.clear();
+        preparingAttackCnt = 0;
     }
 
-    public void postAttack(MeleeAction action, List<Entity> entities) {
+    public boolean preAttack(MeleeAction action, Vec3 origin, Vec3 direction) {
         ItemStack stack = entity.getMainHandItem();
-        if (!this.preparingAttack) {
+        if (!(stack.getItem() instanceof IMeleeWeapon weapon)) {
+            return false;
+        }
+
+        if (!entity.level().isClientSide()) {
+            if (preparingAttack || coolDownTick > 0) {
+                return false;
+            }
+        } else if (coolDownTick > 0) {
+            return false;
+        }
+
+        if (!weapon.canAttack(entity, stack, action)) {
+            return false;
+        }
+
+        int cnt = actionCounts.getOrDefault(action, 0);
+        int nextCount = cnt + 1;
+        actionCounts.put(action, nextCount);
+
+        coolDownTick = weapon.getAttackCoolDown(stack, action, cnt);
+        lastMaxTick = coolDownTick;
+
+        if (!entity.level().isClientSide()) {
+            preparingAttack = true;
+            preparingAttackCnt = cnt;
+            coolDownTick = Math.max(0, coolDownTick - 1);
+        } else {
+            NetworkHandler.CHANNEL.sendToServer(new CPrepareMeleeAttack(action, origin, direction));
+
+            int delay = weapon.getAttackDelay(entity, stack, action, cnt);
+            var attack = new DelayAttack(delay, stack, action, cnt);
+            if (attack.getDelay() == 0) {
+                attack.perform(entity);
+            } else {
+                delayedActions.add(attack);
+            }
+
+            var moveInfo = weapon.getAttackMovement(entity, stack, action);
+            if (moveInfo != null) {
+                var move = new DelayMove(moveInfo.getDelay(), moveInfo.getSpeed(), stack);
+                if (move.getDelay() == 0) {
+                    move.perform(entity);
+                } else {
+                    delayedActions.add(move);
+                }
+            }
+
+            LrTacticalAPI.getMeleeDisplay(stack).ifPresent(display -> {
+                if (display.getSounds().containsKey(action.getId())) {
+                    entity.level().playLocalSound(
+                            origin.x, origin.y, origin.z,
+                            SoundEvent.createVariableRangeEvent(display.getSounds().get(action.getId())),
+                            SoundSource.PLAYERS, 1.0F, 1.0F, false
+                    );
+                }
+            });
+        }
+        return true;
+    }
+
+    public void postAttack(MeleeAction action, int actionCount, List<Entity> entities) {
+        if (!preparingAttack) {
             return;
         }
-        int cnt = this.getActionCount(action);
+
+        if (preparingAttackCnt != actionCount) {
+            forceResetMeleeSync("received a melee attack request with mismatched action count");
+            return;
+        }
+
+        ItemStack stack = entity.getMainHandItem();
         if (stack.getItem() instanceof IMeleeWeapon weapon) {
-            weapon.attack(entity, stack, action, entities, cnt);
+            weapon.attack(entity, stack, action, entities, preparingAttackCnt);
         }
         preparingAttack = false;
+    }
+
+    private void forceResetMeleeSync(String reason) {
+        resetMeleeSync();
+        if (!entity.level().isClientSide()) {
+            EquipmentMod.LOGGER.warn("Force resetting melee sync for player {}: {}", entity.getScoreboardName(), reason);
+            NetworkHandler.sendToClientPlayer(new SResetMeleeSyncMessage(), entity);
+        }
     }
 
     public static class DelayMove extends DelayTask {
@@ -206,10 +238,12 @@ public class CombatProperties {
     public static class DelayAttack extends DelayTask {
         private final ItemStack stack;
         private final MeleeAction action;
+        private final int actionCount;
 
-        DelayAttack(int delay, ItemStack stack, MeleeAction action) {
+        DelayAttack(int delay, ItemStack stack, MeleeAction action, int actionCount) {
             super(delay);
             this.action = action;
+            this.actionCount = actionCount;
             this.stack = stack;
         }
 
@@ -217,7 +251,7 @@ public class CombatProperties {
         public void perform(Player player) {
             if (stack.getItem() instanceof IMeleeWeapon weapon && weapon.isSame(stack, player.getMainHandItem())) {
                 List<Entity> entities = weapon.collectTargets(player, stack, action, player.getEyePosition(), player.getLookAngle());
-                NetworkHandler.CHANNEL.sendToServer(new CMeleeAttackRequest(action, entities));
+                NetworkHandler.CHANNEL.sendToServer(new CMeleeAttackRequest(action, actionCount, entities));
             }
         }
     }

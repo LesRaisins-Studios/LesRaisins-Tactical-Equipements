@@ -25,8 +25,8 @@ public class CombatData {
     @Nullable
     public MeleeAttackInfo getAttackInfo(MeleeAction action, int index) {
         List<MeleeAttackInfo> attackInfos = attackInfo.get(action);
-        if (attackInfos != null && index < attackInfos.size()) {
-            return attackInfos.get(index);
+        if (attackInfos != null && !attackInfos.isEmpty()) {
+            return attackInfos.get(index % attackInfos.size());
         }
         return null;
     }
