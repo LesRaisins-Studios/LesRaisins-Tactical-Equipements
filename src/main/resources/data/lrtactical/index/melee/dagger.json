@@ -20,29 +20,54 @@
     // 作为参考，原版的石/钻石/铁/木/下界合金/金 制工具的附魔能力为 5/10/14/15/15/22
     "enchantment_value": 14,
     "attack": {
-      "attack_left": {
-        // 伤害倍率
-        "factor": 1,
-        // 击退
-        "knockback": 0.05,
-        // 攻击冷却(tick)
-        "cooldown": 12,
-        // 延迟出伤(tick)
-        "delay": 0,
-        // 判定类型
-        "hitbox": {
-          // 圆锥区域
-          "type": "cone",
-          // 最大距离
-          "max_range": 3.5,
-          // 角度
-          "max_angle": 40,
-          // 排除自己
-          "exclude_self": true
+      "attack_left": [
+        {
+          // 伤害倍率
+          "factor": 1,
+          // 击退
+          "knockback": 0.05,
+          // 攻击冷却(tick)
+          "cooldown": 12,
+          // 延迟出伤(tick)
+          "delay": 0,
+          // 判定类型
+          "hitbox": {
+            // 圆锥区域
+            "type": "cone",
+            // 最大距离
+            "max_range": 3.5,
+            // 角度
+            "max_angle": 40,
+            // 排除自己
+            "exclude_self": true
+          },
+          // 如果攻击到实体的耐久度消耗
+          "durability_damage": 1
         },
-        // 如果攻击到实体的耐久度消耗
-        "durability_damage": 1
-      },
+        {
+          // 伤害倍率
+          "factor": 0.5,
+          // 击退
+          "knockback": 0.05,
+          // 攻击冷却(tick)
+          "cooldown": 4,
+          // 延迟出伤(tick)
+          "delay": 0,
+          // 判定类型
+          "hitbox": {
+            // 圆锥区域
+            "type": "cone",
+            // 最大距离
+            "max_range": 3.5,
+            // 角度
+            "max_angle": 40,
+            // 排除自己
+            "exclude_self": true
+          },
+          // 如果攻击到实体的耐久度消耗
+          "durability_damage": 1
+        }
+      ],
       "attack_right": {
         // 伤害倍率
         "factor": 1.5,

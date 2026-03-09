@@ -83,9 +83,8 @@ function main_track_states.idle.transition(this, context, input)
         context:runAnimation("inspect", context:getTrack(STATIC_TRACK_LINE, MAIN_TRACK), false, PLAY_ONCE_STOP, 0.2)
         return this.main_track_states.idle
     elseif input == "attack_left" then
-        local counter = this.main_track_states.attack_index
-        local animationName = "melee_" .. tostring(counter + 1)
-        this.main_track_states.attack_index = (counter + 1) % 2
+        local counter = context:getActionCount("attack_left")
+        local animationName = "melee_" .. tostring(counter % 2 + 1)
         context:runAnimation(animationName, context:getTrack(STATIC_TRACK_LINE, MAIN_TRACK), false, PLAY_ONCE_STOP, 0.2)
         return this.main_track_states.idle
     elseif input == "attack_right" then

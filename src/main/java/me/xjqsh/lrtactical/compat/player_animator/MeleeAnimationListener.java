@@ -35,17 +35,12 @@ public class MeleeAnimationListener {
             String action = state.getId();
             var layer = PlayerAnimatorIntegration.AnimationLayer.UPPER;
             int fade = 4;
-
-            String key = itemId + ":" + action + ":" + layer;
             
             player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
-                int index = cap.getAnimationIndex(key);
+                int index = cap.getActionCount(state);
                 String anim = config.getAnimation(layer, action, index);
                 if (anim != null) {
                     PlayerAnimatorIntegration.playAttackAnimation(player, path, anim, layer, fade);
-                    if (config.hasMultiple(layer, action)) {
-                        cap.setAnimationIndex(key, (index + 1) % config.getCount(layer, action));
-                    }
                 }
             });
         });

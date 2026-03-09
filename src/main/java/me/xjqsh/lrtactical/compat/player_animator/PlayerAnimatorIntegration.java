@@ -55,31 +55,11 @@ public class PlayerAnimatorIntegration {
                 player -> new ModifierLayer<>(null, AdjustmentYRotModifier.getModifier(player)));
 
         MinecraftForge.EVENT_BUS.register(MeleeAnimationListener.class);
-        MinecraftForge.EVENT_BUS.register(ThrowableAnimationListener.class);
         MinecraftForge.EVENT_BUS.register(IdleAnimationHandler.class);
     }
 
     public static KeyframeAnimation getAnimation(ResourceLocation location, String name) {
         return IPAAssetManager.getAnimations(location, name).orElse(null);
-    }
-
-    public static void playAnimation(AbstractClientPlayer player, ResourceLocation location, String name, AnimationLayer layer, int fadeInTicks) {
-        KeyframeAnimation animation = getAnimation(location, name);
-        if (animation == null) return;
-
-        ModifierLayer<IAnimation> modifierLayer = getLayer(player, layer);
-        if (modifierLayer != null) {
-            IAnimation current = modifierLayer.getAnimation();
-            if (current instanceof KeyframeAnimationPlayer kap && kap.isActive()) {
-                Object extraData = kap.getData().extraData.get("name");
-                if (extraData instanceof String currentName && name.equals(currentName)) {
-                    return;
-                }
-            }
-            KeyframeAnimationPlayer animPlayer = new KeyframeAnimationPlayer(animation, 0);
-            animPlayer.setFirstPersonMode(FirstPersonMode.DISABLED);
-            modifierLayer.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(fadeInTicks, Ease.INOUTSINE), animPlayer);
-        }
     }
 
     public static void playIdleAnimation(AbstractClientPlayer player, ResourceLocation location, String name, AnimationLayer layer, int fadeInTicks) {

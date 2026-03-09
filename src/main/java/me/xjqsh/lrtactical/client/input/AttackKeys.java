@@ -4,9 +4,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
-import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
-import me.xjqsh.lrtactical.network.NetworkHandler;
-import me.xjqsh.lrtactical.network.message.CPrepareMeleeAttack;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -57,7 +54,7 @@ public class AttackKeys {
 
                 if (combatProperties.preAttack(MeleeAction.LEFT, player.getEyePosition(), player.getLookAngle())) {
                     mc.gameMode.ensureHasSentCarriedItem();
-                    if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof AnimateGeoItemRenderer renderer) {
+                    if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
                         renderer.triggerAnimation(stack, "attack_left");
                         player.swing(InteractionHand.MAIN_HAND);
                     }
@@ -79,7 +76,7 @@ public class AttackKeys {
             player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(combatProperties -> {
                 if (combatProperties.preAttack(MeleeAction.LEFT, player.getEyePosition(), player.getLookAngle())) {
                     mc.gameMode.ensureHasSentCarriedItem();
-                    if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof AnimateGeoItemRenderer renderer) {
+                    if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
                         renderer.triggerAnimation(stack, "attack_left");
                         player.swing(InteractionHand.MAIN_HAND);
                     }
@@ -101,7 +98,7 @@ public class AttackKeys {
             player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(combatProperties -> {
                 if (combatProperties.preAttack(MeleeAction.RIGHT, player.getEyePosition(), player.getLookAngle())) {
                     mc.gameMode.ensureHasSentCarriedItem();
-                    if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof AnimateGeoItemRenderer renderer) {
+                    if (IClientItemExtensions.of(stack).getCustomRenderer() instanceof AnimateGeoItemRenderer<?, ?> renderer) {
                         renderer.triggerAnimation(stack, "attack_right");
                         player.swing(InteractionHand.MAIN_HAND);
                     }

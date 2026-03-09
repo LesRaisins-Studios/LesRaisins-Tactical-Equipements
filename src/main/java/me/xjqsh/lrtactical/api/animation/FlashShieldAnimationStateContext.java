@@ -1,12 +1,7 @@
 package me.xjqsh.lrtactical.api.animation;
 
 import me.xjqsh.lrtactical.item.FlashShieldItem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.Optional;
-import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class FlashShieldAnimationStateContext extends BaseAnimationStateContext {
@@ -21,14 +16,6 @@ public class FlashShieldAnimationStateContext extends BaseAnimationStateContext 
         if (currentItem.getItem() instanceof FlashShieldItem flashShieldItem) {
             this.prepareTime = flashShieldItem.getMaxUsingTick(currentItem);
         }
-    }
-
-    private <T> Optional<T> processCameraEntity(Function<Entity, T> processor) {
-        Entity entity = Minecraft.getInstance().cameraEntity;
-        if (entity != null) {
-            return Optional.ofNullable(processor.apply(entity));
-        }
-        return Optional.empty();
     }
 
     public int getUsingTick() {

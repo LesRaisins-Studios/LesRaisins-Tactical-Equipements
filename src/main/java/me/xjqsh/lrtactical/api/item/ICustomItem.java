@@ -80,6 +80,10 @@ public interface ICustomItem {
     }
 
     default int getAttackCoolDown(ItemStack stack, MeleeAction action) {
+        return this.getAttackCoolDown(stack, action, 0);
+    }
+
+    default int getAttackCoolDown(ItemStack stack, MeleeAction action, int cnt) {
         return 20;
     }
 

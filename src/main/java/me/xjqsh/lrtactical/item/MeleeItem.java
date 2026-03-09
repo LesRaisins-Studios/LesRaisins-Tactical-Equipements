@@ -94,10 +94,10 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
-    public int getAttackCoolDown(ItemStack stack, MeleeAction action) {
+    public int getAttackCoolDown(ItemStack stack, MeleeAction action, int cnt) {
         return this.getMeleeIndex(stack)
                 .map(index -> index.getData().getAttackInfo())
-                .map(attackInfos -> attackInfos.getAttackInfo(action))
+                .map(attackInfos -> attackInfos.getAttackInfo(action, cnt))
                 .map(CombatData.MeleeAttackInfo::getCooldown)
                 .orElse(0);
     }
@@ -123,10 +123,10 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
-    public int getAttackDelay(Player attacker, ItemStack stack, MeleeAction action) {
+    public int getAttackDelay(Player attacker, ItemStack stack, MeleeAction action, int cnt) {
         return getMeleeIndex(stack)
                 .map(index -> index.getData().getAttackInfo())
-                .map(attackInfos -> attackInfos.getAttackInfo(action))
+                .map(attackInfos -> attackInfos.getAttackInfo(action, cnt))
                 .map(CombatData.MeleeAttackInfo::getDelay)
                 .orElse(0);
     }
@@ -159,14 +159,14 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
-    public void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets) {
+    public void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets, int combo) {
         float base = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
         this.getMeleeIndex(stack).ifPresent(index -> {
             CombatData combatData = index.getData().getAttackInfo();
             if (combatData == null) {
                 return;
             }
-            var attackInfo = combatData.getAttackInfo(action);
+            var attackInfo = combatData.getAttackInfo(action, combo);
             if (attackInfo == null) {
                 return;
             }

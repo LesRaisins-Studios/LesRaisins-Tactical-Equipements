@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class CombatProperties {
     public static final ResourceLocation ID = new ResourceLocation(EquipmentMod.MOD_ID, "combat_data");
 
     private final List<DelayTask> delayedActions = new ArrayList<>();
-    private final Map<String, Integer> animationIndexMap = new HashMap<>();
+
     private ItemStack lastItem = ItemStack.EMPTY;
     private final Player entity;
     private int coolDownTick = 0;
@@ -36,6 +36,8 @@ public class CombatProperties {
     private int lastSelected = 0;
     private int drawingTick = 0;
     private boolean preparingAttack = false;
+
+    private final Map<MeleeAction, Integer> actionCounts = new EnumMap<>(MeleeAction.class);
 
     public CombatProperties(Player entity) {
         this.entity = entity;
@@ -107,14 +109,11 @@ public class CombatProperties {
         lastMaxTick = newCoolDown;
         drawingTick = newCoolDown;
         preparingAttack = false;
+        actionCounts.clear();
     }
 
-    public int getAnimationIndex(String key) {
-        return animationIndexMap.getOrDefault(key, 0);
-    }
-
-    public void setAnimationIndex(String key, int index) {
-        animationIndexMap.put(key, index);
+    public int getActionCount(MeleeAction meleeAction) {
+        return actionCounts.getOrDefault(meleeAction, 0);
     }
 
     public boolean preAttack(MeleeAction action, Vec3 origin, Vec3 direction) {
@@ -124,7 +123,10 @@ public class CombatProperties {
                 return false;
             }
 
-            coolDownTick = weapon.getAttackCoolDown(stack, action);
+            int cnt = actionCounts.getOrDefault(action, 0);
+            actionCounts.put(action, cnt + 1);
+
+            coolDownTick = weapon.getAttackCoolDown(stack, action, cnt);
             lastMaxTick = coolDownTick;
 
             if (!entity.level().isClientSide()) {
@@ -174,8 +176,9 @@ public class CombatProperties {
         if (!this.preparingAttack) {
             return;
         }
+        int cnt = this.getActionCount(action);
         if (stack.getItem() instanceof IMeleeWeapon weapon) {
-            weapon.attack(entity, stack, action, entities);
+            weapon.attack(entity, stack, action, entities, cnt);
         }
         preparingAttack = false;
     }

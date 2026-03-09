@@ -26,7 +26,7 @@ public class BaseAnimationStateContext extends ItemAnimationStateContext {
         }
     }
 
-    private <T> Optional<T> processCameraEntity(Function<Entity, T> processor) {
+    protected  <T> Optional<T> processCameraEntity(Function<Entity, T> processor) {
         Entity entity = Minecraft.getInstance().cameraEntity;
         if (entity != null) {
             return Optional.ofNullable(processor.apply(entity));

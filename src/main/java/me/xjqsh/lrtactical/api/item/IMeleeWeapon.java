@@ -79,6 +79,10 @@ public interface IMeleeWeapon extends ICustomItem {
     }
 
     default int getAttackDelay(Player attacker, ItemStack stack, MeleeAction action) {
+        return this.getAttackDelay(attacker, stack, action, 0);
+    }
+
+    default int getAttackDelay(Player attacker, ItemStack stack, MeleeAction action, int cnt) {
         return 0;
     }
 
@@ -117,7 +121,17 @@ public interface IMeleeWeapon extends ICustomItem {
      * @param stack 攻击使用的物品
      * @param action 攻击动作
      */
-    void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets);
+    default void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets) {
+        this.attack(attacker, stack, action, targets, 0);
+    }
+
+    /**
+     * 应在服务端进行。根据攻击信息和索敌结果执行攻击逻辑
+     * @param attacker 攻击者
+     * @param stack 攻击使用的物品
+     * @param action 攻击动作
+     */
+    void attack(Player attacker, ItemStack stack, MeleeAction action, List<Entity> targets, int combo);
 
     @Deprecated
     default void attack(Player attacker, ItemStack stack, MeleeAction action, Vec3 origin, Vec3 direction) {}
