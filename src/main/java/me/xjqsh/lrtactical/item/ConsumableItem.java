@@ -40,7 +40,7 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
 
     @Override
     public @Nullable FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
-        return super.getFoodProperties(stack, entity);
+        return this.getConsumableIndex(stack).map(ConsumableIndex::getFoodProperties).orElse(null);
     }
 
     @Override

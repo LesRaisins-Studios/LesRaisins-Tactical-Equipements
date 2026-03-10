@@ -6,6 +6,7 @@ import me.xjqsh.lrtactical.api.item.IConsumable;
 import me.xjqsh.lrtactical.item.consumable.ConsumableData;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -15,12 +16,27 @@ public class ConsumableIndex implements ICustomItemIndex {
     private final ConsumableData data;
     private final ResourceLocation id;
     private final String name;
+    private final FoodProperties foodProperties;
 
     private ConsumableIndex(ConsumableData data, String name, ResourceLocation id, Item baseItem) {
         this.baseItem = baseItem;
         this.data = data;
         this.id = id;
         this.name = name;
+        this.foodProperties = buildFoodProperties(data);
+    }
+
+    private static FoodProperties buildFoodProperties(ConsumableData data) {
+        if (data.getFood() <= 0 && data.getSaturation() <= 0f && data.getEffects().isEmpty()) {
+            return null;
+        }
+        FoodProperties.Builder builder = new FoodProperties.Builder()
+                .nutrition(data.getFood())
+                .saturationMod(data.getSaturation());
+        for (ConsumableData.EffectData effectData : data.getEffects()) {
+            builder.effect(effectData::createInstance, effectData.getChance());
+        }
+        return builder.build();
     }
 
     @Nullable
@@ -63,5 +79,9 @@ public class ConsumableIndex implements ICustomItemIndex {
     @Override
     public String getDescriptionId() {
         return name;
+    }
+
+    public FoodProperties getFoodProperties() {
+        return foodProperties;
     }
 }
