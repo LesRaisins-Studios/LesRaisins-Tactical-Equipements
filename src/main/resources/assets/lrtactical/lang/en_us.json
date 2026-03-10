@@ -1,7 +1,9 @@
 {
   "item_group.lrtactical.throwable": "LesRaisins - Throwable",
+  "item_group.lrtactical.consumable": "LesRaisins - Consumable",
   "item_group.lrtactical.melee": "LesRaisins - Melee Weapon",
 
+  "item.lrtactical.blood_pack": "Blood Pack",
   "item.lrtactical.m67": "M67 Grenade",
   "item.lrtactical.rgn": "RGN Grenade",
   "item.lrtactical.smoke_grenade": "Smoke Grenade",
@@ -18,8 +20,11 @@
   "lrtactical.block.smith_table.name": "Smithing Table(LRT)",
   "lrtactical.block.smith_table.desc": "A Classic Forging Table",
   "lrtactical.type.melee.name": "MELEE",
+  "lrtactical.type.consumable.name": "CONSUMABLE",
   "lrtactical.type.throwable.name": "THROWABLE",
   "lrtactical.type.misc.name": "MISC",
+  "tooltip.lrtactical.consumable.heal": "Heal: %s",
+  "tooltip.lrtactical.consumable.food": "Food: %s, Saturation: %s",
 
   "effect.lrtactical.blinded": "Blinded",
   "effect.lrtactical.deafened": "Deafened",

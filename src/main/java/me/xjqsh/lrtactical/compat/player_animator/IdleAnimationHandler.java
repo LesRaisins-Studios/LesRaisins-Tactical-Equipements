@@ -1,11 +1,9 @@
 package me.xjqsh.lrtactical.compat.player_animator;
 
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.client.resource.display.MeleeDisplayInstance;
-import me.xjqsh.lrtactical.client.resource.display.ThrowableDisplayInstance;
 import me.xjqsh.lrtactical.compat.player_animator.PlayerAnimatorIntegration.AnimationLayer;
-import me.xjqsh.lrtactical.item.MeleeItem;
-import me.xjqsh.lrtactical.item.ThrowableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -92,10 +90,8 @@ public class IdleAnimationHandler {
     }
 
     private static ThirdPersonAnimationConfig getConfig(ItemStack stack) {
-        if (stack.getItem() instanceof MeleeItem) {
+        if (stack.getItem() instanceof IMeleeWeapon) {
             return LrTacticalAPI.getMeleeDisplay(stack).map(MeleeDisplayInstance::getThirdPersonAnimation).orElse(null);
-        } else if (stack.getItem() instanceof ThrowableItem) {
-            return LrTacticalAPI.getThrowableDisplay(stack).map(ThrowableDisplayInstance::getThirdPersonAnimation).orElse(null);
         }
         return null;
     }

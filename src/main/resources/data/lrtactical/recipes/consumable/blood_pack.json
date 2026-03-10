@@ -1,0 +1,33 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:dusts/redstone"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "item": "minecraft:glass_bottle"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:cooked_beef"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:consumable",
+    "item": {
+      "item": "lrtactical:consumable",
+      "nbt": {
+        "ConsumableId": "lrtactical:blood_pack"
+      }
+    }
+  }
+}

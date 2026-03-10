@@ -14,6 +14,7 @@ public class LrJeiPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.CONSUMABLE.get(), LrSubType.getConsumableSubtype());
         registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.MELEE.get(), LrSubType.getMeleeSubtype());
         registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.THROWABLE.get(), LrSubType.getThrowableSubtype());
     }

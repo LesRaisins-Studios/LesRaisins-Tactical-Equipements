@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.xjqsh.lrtactical.api.collision.ITargetFilter;
+import me.xjqsh.lrtactical.item.index.ConsumableIndex;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.item.melee.AttributeData;
@@ -12,6 +13,7 @@ import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
 import me.xjqsh.lrtactical.network.DataType;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SPackSyncMessage;
+import me.xjqsh.lrtactical.resource.manager.ConsumableIndexManager;
 import me.xjqsh.lrtactical.resource.manager.MeleeIndexManager;
 import me.xjqsh.lrtactical.resource.manager.ThrowableIndexManager;
 import me.xjqsh.lrtactical.resource.serializer.ParticleOptionsDeserializer;
@@ -48,19 +50,33 @@ public class CommonAssetsManager implements ICommonResourceProvider {
 
     public ThrowableIndexManager throwableIndexManager;
     public MeleeIndexManager meleeIndexManager;
+    public ConsumableIndexManager consumableIndexManager;
 
     private void reloadAndRegister(Consumer<PreparableReloadListener> register) {
+        consumableIndexManager = new ConsumableIndexManager(GSON);
         throwableIndexManager = new ThrowableIndexManager(GSON);
         meleeIndexManager = new MeleeIndexManager(GSON);
+        register.accept(consumableIndexManager);
         register.accept(throwableIndexManager);
         register.accept(meleeIndexManager);
     }
 
     public Map<DataType, Map<ResourceLocation, String>> toNetwork() {
         ImmutableMap.Builder<DataType, Map<ResourceLocation, String>> builder = ImmutableMap.builder();
+        builder.put(DataType.CONSUMABLE_INDEX, consumableIndexManager.getCache());
         builder.put(DataType.THROWABLE_INDEX, throwableIndexManager.getCache());
         builder.put(DataType.MELEE_INDEX, meleeIndexManager.getCache());
         return builder.build();
+    }
+
+    @Override
+    public ConsumableIndex getConsumableIndex(ResourceLocation id) {
+        return consumableIndexManager.getData(id);
+    }
+
+    @Override
+    public Collection<ConsumableIndex> getConsumableIndexes() {
+        return consumableIndexManager.getAllData().values();
     }
 
     @Override

@@ -1,0 +1,29 @@
+{
+  "model": "lrtactical:consumable/blood_pack_geo",
+  "animation": "lrtactical:consumable/blood_pack",
+  "state_machine": "lrtactical:consumable_state_machine",
+  "texture": "lrtactical:consumable/blood_pack_uv",
+  "transforms": {
+    "thirdperson_righthand": {
+      "translation": [0, 4, 0]
+    },
+    "thirdperson_lefthand": {
+      "translation": [0, 4, 0]
+    },
+    "ground": {
+      "rotation": [0, 0, 90],
+      "translation": [0, 3.5, 0],
+      "scale": [1.2, 1.2, 1.2]
+    },
+    "gui": {
+      "rotation": [0, 135, 0],
+      "translation": [0, 6.5, 0],
+      "scale": [1.4, 1.4, 1.4]
+    },
+    "fixed": {
+      "rotation": [0, 90, 0],
+      "translation": [0, 6, 0],
+      "scale": [1.35, 1.35, 1.35]
+    }
+  }
+}

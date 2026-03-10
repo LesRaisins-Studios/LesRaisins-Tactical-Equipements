@@ -1,0 +1,35 @@
+{
+  "name": "item.lrtactical.blood_pack",
+  "base_item": "lrtactical:consumable",
+  "data": {
+    // 使用时长
+    "use_duration": 93,
+    // 冷却
+    "cooldown": 80,
+    // 冷却种类
+    "cooldown_category": "lrtactical:medical",
+    // 堆叠上限
+    "stack_size": 2,
+    // 切入时间（tick）
+    "draw_time": 5,
+    // 切出时间（tick）
+    "put_away_time": 8,
+    // 治疗量
+    "heal": 6.0,
+    // 饥饿恢复
+    "food": 4,
+    // 饱食度
+    "saturation": 0.6,
+    "effects": [
+      {
+        "id": "minecraft:regeneration",
+        "duration": 100,
+        "amplifier": 0,
+        "chance": 1.0
+      }
+    ],
+    "remove_effects": [
+      "minecraft:poison"
+    ]
+  }
+}

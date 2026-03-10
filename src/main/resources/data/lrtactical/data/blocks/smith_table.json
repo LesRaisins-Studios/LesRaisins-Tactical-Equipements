@@ -1,17 +1,9 @@
 {
-  // 配方过滤器，具体内容位于 data/<命名空间>/recipe_filters 下
-  // 如果没有指定，将使用默认过滤器 tacz:default
   "filter": "tacz:default",
-  // gui内包含的tab
-  // 如果没有填写此字段或者tabs为空，将使用内置的默认tab列表
-  // 你可以使用自定义的tab id来实现另外一种配方限制
   "tabs": [
     {
-      // tab的id，在配方的result中指定
       "id": "lrtactical:melee",
-      // tab的名称，将会显示在gui中
       "name": "lrtactical.type.melee.name",
-      // tab的图标，可以指定任意一个物品作为图标
       "icon": {
         "item": "lrtactical:melee",
         "nbt": {
@@ -20,11 +12,8 @@
       }
     },
     {
-      // tab的id，在配方的result中指定
       "id": "lrtactical:throwable",
-      // tab的名称，将会显示在gui中
       "name": "lrtactical.type.throwable.name",
-      // tab的图标，可以指定任意一个物品作为图标
       "icon": {
         "item": "lrtactical:throwable",
         "nbt": {
@@ -33,11 +22,18 @@
       }
     },
     {
-      // tab的id，在配方的result中指定
+      "id": "lrtactical:consumable",
+      "name": "lrtactical.type.consumable.name",
+      "icon": {
+        "item": "lrtactical:consumable",
+        "nbt": {
+          "ConsumableId": "lrtactical:blood_pack"
+        }
+      }
+    },
+    {
       "id": "lrtactical:misc",
-      // tab的名称，将会显示在gui中
       "name": "lrtactical.type.misc.name",
-      // tab的图标，可以指定任意一个物品作为图标
       "icon": {
         "item": "lrtactical:flash_shield"
       }
