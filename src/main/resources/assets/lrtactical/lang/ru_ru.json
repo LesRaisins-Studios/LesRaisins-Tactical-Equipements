@@ -1,0 +1,58 @@
+{
+  "item_group.lrtactical.throwable": "Метательное оружие",
+  "item_group.lrtactical.melee": "Оружие ближнего боя",
+
+  "item.lrtactical.m67": "Осколочная граната M67",
+  "item.lrtactical.rgn": "Осколочная граната РГН",
+  "item.lrtactical.smoke_grenade": "Дымовая граната",
+  "item.lrtactical.flash_grenade": "Светошумовая граната",
+  "item.lrtactical.molotov": "Коктейль Молотова",
+
+  "item.lrtactical.dagger": "Кинжал",
+  "item.lrtactical.baseball_bat": "Бейсбольная бита",
+  "item.lrtactical.karambit": "Керамбит",
+
+  "item.lrtactical.flash_shield": "Светошумовой щит",
+
+  "lrtactical.block.smith_table.name": "Оружейный стол LRT",
+  "lrtactical.block.smith_table.desc": "Где металл оживает",
+  "lrtactical.type.melee.name": "Ближний бой",
+  "lrtactical.type.throwable.name": "Метательное",
+  "lrtactical.type.misc.name": "Разное",
+
+  "effect.lrtactical.blinded": "Ослепление",
+  "effect.lrtactical.deafened": "Оглушение",
+  "effect.lrtactical.flammable": "Горение",
+
+  "enchantment.lrtactical.backstab": "Удар в спину",
+
+  "config.lrtactical.effect": "Эффекты",
+  "config.lrtactical.effect.blackflash": "Чёрная вспышка",
+  "config.lrtactical.effect.blackflash.desc": "Использовать чёрный экран вместо белого при ослеплении светошумовой гранатой",
+  "config.lrtactical.grenade": "Гранаты",
+  "config.lrtactical.grenade.explode": "Разрушение блоков гранатами",
+  "config.lrtactical.grenade.explode.desc": "Если включено, гранаты могут разрушать блоки при взрыве, если это возможно",
+  "config.lrtactical.grenade.screen_shake": "Тряска экрана при взрыве",
+  "config.lrtactical.grenade.screen_shake.desc": "Множитель эффекта тряски экрана [0 ~ 100]",
+  "config.lrtactical.melee": "Ближний бой",
+  "config.lrtactical.melee.durability": "Расходовать прочность",
+  "config.lrtactical.melee.durability.desc": "Если включено, оружие ближнего боя будет тратить прочность при использовании",
+  "config.lrtactical.melee.max_target": "Максимальное количество целей",
+  "config.lrtactical.melee.max_target.desc": "Максимальное число целей, которые могут быть поражены одной атакой",
+
+  "key.category.lrtactical": "LesRaisins Tactical",
+  "key.lrtactical.normal_attack.desc": "Атаковать",
+  "key.lrtactical.sp_attack.desc": "Спец. атака/Действие",
+
+  "pack.lrtactical.default_pack.name": "LesRaisins Tactical",
+  "pack.lrtactical.default_pack.desc": "Стандартный набор LesRaisins Tactical",
+
+  "subtitle.lrtactical.entity.grenade.bounce": "Отскок гранаты",
+  "subtitle.lrtactical.entity.grenade.flash.explode": "Флешка взорвалась",
+  "subtitle.lrtactical.entity.grenade.m67.explode": "Взрыв гранаты M67",
+  "subtitle.lrtactical.entity.grenade.rgn.explode": "Взрыв гранаты РГН",
+  "subtitle.lrtactical.entity.grenade.smoke.start": "Дымовая граната упала",
+  "subtitle.lrtactical.entity.grenade.smoke.loop": "Дымовая завеса",
+  "subtitle.lrtactical.entity.grenade.smoke.end": "Дым пропадает",
+  "subtitle.lrtactical.player.ring": "*Оглушение*"
+}
