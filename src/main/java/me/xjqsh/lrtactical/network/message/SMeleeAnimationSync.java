@@ -4,6 +4,8 @@ import me.xjqsh.lrtactical.api.event.MeleePreAttackEvent;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -42,11 +44,15 @@ public class SMeleeAnimationSync {
     public static void handle(SMeleeAnimationSync msg, Supplier<NetworkEvent.Context> ctx) {
         NetworkEvent.Context context = ctx.get();
         if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> MinecraftForge.EVENT_BUS.post(
-                    new MeleePreAttackEvent(msg.playerId, msg.state, msg.actionCount, msg.animationId)
-            ));
+            context.enqueueWork(() -> onClientReceive(msg));
         }
         context.setPacketHandled(true);
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static void onClientReceive(SMeleeAnimationSync msg) {
+        MinecraftForge.EVENT_BUS.post(
+                new MeleePreAttackEvent(msg.playerId, msg.state, msg.actionCount, msg.animationId)
+        );
+    }
 }
