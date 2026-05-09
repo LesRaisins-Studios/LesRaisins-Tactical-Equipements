@@ -93,6 +93,16 @@ public class NetworkHandler {
                 SResetMeleeSyncMessage::decode,
                 SResetMeleeSyncMessage::handle
         );
+        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
+                CCancelToggleConsumableUse.class,
+                CCancelToggleConsumableUse::encode,
+                CCancelToggleConsumableUse::new,
+                CCancelToggleConsumableUse::handle
+        );
+    }
+
+    public static void sendToServer(Object message) {
+        CHANNEL.sendToServer(message);
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

@@ -35,4 +35,5 @@ public class ConsumableAnimationStateContext extends ItemAnimationStateContext {
     public void setUsingTick(int usingTick) {
         this.usingTick = usingTick;
     }
+
 }

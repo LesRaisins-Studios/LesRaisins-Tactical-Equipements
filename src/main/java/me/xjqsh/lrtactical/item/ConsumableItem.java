@@ -9,6 +9,8 @@ import me.xjqsh.lrtactical.item.consumable.ConsumableData;
 import me.xjqsh.lrtactical.item.index.ConsumableIndex;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -50,13 +52,24 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return this.getConsumableIndex(stack).map(index -> index.getData().getUseDuration()).orElse(0);
+        return this.getConsumableIndex(stack).map(index -> {
+            if (index.getData().isToggleUse()) {
+                return 72000;
+            }
+            return index.getData().getUseDuration();
+        }).orElse(0);
     }
 
     @NotNull
     @Override
     public UseAnim getUseAnimation(@NotNull ItemStack stack) {
         return UseAnim.DRINK;
+    }
+
+    @NotNull
+    @Override
+    public SoundEvent getDrinkingSound() {
+        return SoundEvents.EMPTY;
     }
 
     @Override
@@ -114,6 +127,23 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
     @ParametersAreNonnullByDefault
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        return finishConsumableUse(stack, level, entity);
+    }
+
+    @ParametersAreNonnullByDefault
+    @Override
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        this.getConsumableIndex(stack).ifPresent(index -> {
+            if (index.getData().isToggleUse() && entity.getTicksUsingItem() >= index.getData().getUseDuration()) {
+                if (!level.isClientSide()) {
+                    finishConsumableUse(stack, level, entity);
+                    entity.stopUsingItem();
+                }
+            }
+        });
+    }
+
+    private ItemStack finishConsumableUse(ItemStack stack, Level level, LivingEntity entity) {
         this.getConsumableIndex(stack).ifPresent(index -> {
             if (!level.isClientSide()) {
                 applyEffects(entity, stack, index);

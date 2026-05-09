@@ -164,7 +164,14 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.106"))
 
-    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6654541-sources-6654543")
+    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:8055552-sources-8055584")
+    implementation fg.deobf("com.github.mcmodderanchor:simplebedrockmodel:2.2.2-forge+mc1.20.1")
+    compileOnly("com.maydaymemory:mae:1.1.2") {
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+        exclude group: 'it.unimi.dsi', module: 'fastutil'
+        exclude group: 'org.joml', module: 'joml'
+    }
+
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
     // LuaJ 库，将 lua 脚本语言引入用于控制枪械的逻辑和动画状态机
     compileOnly('com.github.FiguraMC.luaj:luaj-core:3.0.8-figura')
@@ -190,6 +197,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:curios-309927:6418456")
 
 //    runtimeOnly fg.deobf("curse.maven:epic-fight-mod-405076:6697125")
+
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.6"))
+    compileOnly("io.github.llamalad7:mixinextras-forge:0.3.6")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 

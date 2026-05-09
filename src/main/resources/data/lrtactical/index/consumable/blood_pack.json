@@ -20,6 +20,10 @@
     "food": 4,
     // 饱食度
     "saturation": 0.6,
+    // 是否需要长按
+    // hold（默认）和原版一样得一直按着
+    // toggle右键后会保持使用，直到读完条或者再次右键取消
+    "use_mode": "toggle",
     "effects": [
       {
         "id": "minecraft:regeneration",

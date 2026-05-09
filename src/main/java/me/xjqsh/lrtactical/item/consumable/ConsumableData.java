@@ -43,8 +43,19 @@ public class ConsumableData {
     @SerializedName("remove_effects")
     private List<ResourceLocation> removeEffects = Collections.emptyList();
 
+    @SerializedName("use_mode")
+    private UseMode useMode = UseMode.HOLD;
+
     public int getUseDuration() {
         return useDuration;
+    }
+
+    public UseMode getUseMode() {
+        return useMode;
+    }
+
+    public boolean isToggleUse() {
+        return useMode == UseMode.TOGGLE;
     }
 
     public int getCooldown() {
@@ -85,6 +96,13 @@ public class ConsumableData {
 
     public List<ResourceLocation> getRemoveEffects() {
         return removeEffects;
+    }
+
+    public enum UseMode {
+        @SerializedName("hold")
+        HOLD,
+        @SerializedName("toggle")
+        TOGGLE
     }
 
     public static class EffectData {

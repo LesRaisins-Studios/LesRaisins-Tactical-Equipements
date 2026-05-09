@@ -1,7 +1,5 @@
 package me.xjqsh.lrtactical.client.audio;
 
-import com.mojang.blaze3d.audio.SoundBuffer;
-import com.tacz.guns.GunMod;
 import com.tacz.guns.client.sound.GunSoundInstance;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.init.ModEffects;
@@ -17,10 +15,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
@@ -165,16 +161,16 @@ public class SoundHandler
         return volumeMin + (1 - percent) * (volumeBase - volumeMin);
     }
 
-    @SubscribeEvent
-    public void onPlaySoundSource(PlaySoundSourceEvent event) {
-        if (event.getSound() instanceof SoundMuted muted && muted.parent instanceof GunSoundInstance gunSoundInstance) {
-            SoundBuffer soundBuffer = gunSoundInstance.getSoundBuffer();
-            if (soundBuffer != null) {
-                event.getChannel().attachStaticBuffer(soundBuffer);
-                event.getChannel().play();
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public void onPlaySoundSource(PlaySoundSourceEvent event) {
+//        if (event.getSound() instanceof SoundMuted muted && muted.parent instanceof GunSoundInstance gunSoundInstance) {
+//            SoundBuffer soundBuffer = gunSoundInstance.getSoundBuffer();
+//            if (soundBuffer != null) {
+//                event.getChannel().attachStaticBuffer(soundBuffer);
+//                event.getChannel().play();
+//            }
+//        }
+//    }
 
     public static class SoundMuted implements SoundInstance {
         private SoundInstance parent;
