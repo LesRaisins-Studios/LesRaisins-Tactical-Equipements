@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.xjqsh.lrtactical.api.collision.ITargetFilter;
+import me.xjqsh.lrtactical.item.consumable.ConsumableData;
 import me.xjqsh.lrtactical.item.index.ConsumableIndex;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
@@ -35,6 +36,7 @@ public class CommonAssetsManager implements ICommonResourceProvider {
     public static CommonAssetsManager INSTANCE;
     public static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+            .registerTypeAdapter(ConsumableData.RemoveEffectSelector.class, new ConsumableData.RemoveEffectSelector.Deserializer())
             .registerTypeAdapter(CombatData.class, new CombatData.Deserializer())
             .registerTypeAdapter(ITargetFilter.class, new ITargetFilter.Deserializer())
             .registerTypeAdapter(AttributeData.class, new AttributeData.Deserializer())

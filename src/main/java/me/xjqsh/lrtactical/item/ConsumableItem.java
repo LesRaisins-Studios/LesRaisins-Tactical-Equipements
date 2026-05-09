@@ -15,7 +15,9 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -48,6 +50,18 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
     @Override
     public int getMaxStackSize(ItemStack stack) {
         return this.getConsumableIndex(stack).map(ConsumableIndex::getMaxStackSize).orElse(1);
+    }
+
+    @Override
+    public int getMaxDamage(ItemStack stack) {
+        return this.getConsumableIndex(stack)
+                .map(index -> index.getData().getMaxDurability())
+                .orElse(0);
+    }
+
+    @Override
+    public boolean isDamageable(ItemStack stack) {
+        return this.getMaxDamage(stack) > 0;
     }
 
     @Override
@@ -147,18 +161,51 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
         this.getConsumableIndex(stack).ifPresent(index -> {
             if (!level.isClientSide()) {
                 applyEffects(entity, stack, index);
+                if (entity instanceof Player player) {
+                    player.awardStat(Stats.ITEM_USED.get(this));
+                    if (!player.getAbilities().instabuild) {
+                        consumeAfterUse(stack, entity, index);
+                    }
+                } else {
+                    consumeAfterUse(stack, entity, index);
+                }
             }
         });
+        return stack;
+    }
 
-        if (entity instanceof Player player) {
-            player.awardStat(Stats.ITEM_USED.get(this));
-            if (!player.getAbilities().instabuild) {
-                stack.shrink(1);
-            }
+    private void consumeAfterUse(ItemStack stack, LivingEntity entity, ConsumableIndex index) {
+        ConsumableData data = index.getData();
+        if (data.hasDurability()) {
+            stack.hurtAndBreak(data.getDurabilityDamage(), entity, (living) -> {
+                living.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+            });
         } else {
             stack.shrink(1);
         }
-        return stack;
+    }
+
+    private void removeEffect(LivingEntity entity, ConsumableData.RemoveEffectSelector selector) {
+        if (selector.isCategory()) {
+            removeEffectsByCategory(entity, selector.getCategory());
+            return;
+        }
+
+        MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(selector.getEffect());
+        if (effect != null) {
+            entity.removeEffect(effect);
+        }
+    }
+
+    private void removeEffectsByCategory(LivingEntity entity, MobEffectCategory category) {
+        List<MobEffect> effects = entity.getActiveEffects().stream()
+                .map(MobEffectInstance::getEffect)
+                .filter(effect -> effect.getCategory() == category)
+                .toList();
+
+        for (MobEffect effect : effects) {
+            entity.removeEffect(effect);
+        }
     }
 
     private void applyEffects(LivingEntity entity, ItemStack stack, ConsumableIndex index) {
@@ -167,11 +214,8 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
             entity.heal(data.getHeal());
         }
 
-        for (ResourceLocation effectId : data.getRemoveEffects()) {
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
-            if (effect != null) {
-                entity.removeEffect(effect);
-            }
+        for (ConsumableData.RemoveEffectSelector selector : data.getRemoveEffects()) {
+            removeEffect(entity, selector);
         }
 
         for (ConsumableData.EffectData effectData : data.getEffects()) {

@@ -10,6 +10,10 @@
     "cooldown_category": "lrtactical:medical",
     // 堆叠上限
     "stack_size": 2,
+    // 最大耐久，填0表示使用后按数量消耗；大于0时堆叠上限固定为1
+    "max_durability": 0,
+    // 每次使用完成后的耐久消耗
+    "durability_damage": 1,
     // 切入时间（tick）
     "draw_time": 5,
     // 切出时间（tick）
@@ -32,8 +36,9 @@
         "chance": 1.0
       }
     ],
+    // 移除指定效果，或使用分类选择器：@beneficial / @harmful / @neutral
     "remove_effects": [
-      "minecraft:poison"
+      "@harmful"
     ]
   }
 }

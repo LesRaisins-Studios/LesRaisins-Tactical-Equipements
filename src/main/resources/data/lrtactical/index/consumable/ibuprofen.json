@@ -1,0 +1,32 @@
+{
+  "name": "item.lrtactical.ibuprofen",
+  "base_item": "lrtactical:consumable",
+  "data": {
+    // 使用时长
+    "use_duration": 50,
+    // 冷却
+    "cooldown": 60,
+    // 冷却种类
+    "cooldown_category": "lrtactical:medical",
+    // 有耐久时堆叠上限固定为1
+    "stack_size": 1,
+    // 最大耐久，即可使用次数
+    "max_durability": 4,
+    // 每次使用完成后的耐久消耗
+    "durability_damage": 1,
+    // 切入时间（tick）
+    "draw_time": 10,
+    // 切出时间（tick）
+    "put_away_time": 6,
+    // 治疗量
+    "heal": 2.0,
+    // 是否需要长按
+    // hold（默认）和原版一样得一直按着
+    // toggle右键后会保持使用，直到读完条或者再次右键取消
+    "use_mode": "toggle",
+    // 移除所有负面效果
+    "remove_effects": [
+      "@harmful"
+    ]
+  }
+}

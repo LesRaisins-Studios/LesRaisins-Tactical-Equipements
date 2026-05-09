@@ -63,6 +63,9 @@ public class ConsumableIndex implements ICustomItemIndex {
 
     @Override
     public int getMaxStackSize() {
+        if (data.hasDurability()) {
+            return 1;
+        }
         return data.getStackSize();
     }
 
