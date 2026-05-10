@@ -3,6 +3,7 @@ package me.xjqsh.lrtactical.item;
 import com.tacz.guns.api.item.IAnimationItem;
 import me.xjqsh.lrtactical.api.event.ConsumableUseEvent;
 import me.xjqsh.lrtactical.api.item.IConsumable;
+import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import me.xjqsh.lrtactical.client.renderer.item.ConsumableItemRenderer;
 import me.xjqsh.lrtactical.item.consumable.ConsumableData;
@@ -126,6 +127,13 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
         }
 
         ItemStack stack = player.getItemInHand(usedHand);
+        boolean drawing = player.getCapability(CombatPropertiesProvider.CAPABILITY)
+                .map(cap -> cap.getCoolDownTick() > 0)
+                .orElse(false);
+        if (drawing) {
+            return InteractionResultHolder.fail(stack);
+        }
+
         boolean onCooldown = getCoolDownId(stack)
                 .map(id -> player.getCapability(CustomItemCoolDownsProvider.CAPABILITY)
                         .map(cap -> cap.isOnCooldown(id))
