@@ -3,21 +3,27 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:dusts/redstone"
+        "item": "minecraft:sugar"
       },
       "count": 2
+    },
+    {
+      "item": {
+        "item": "minecraft:spider_eye"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:paper"
+      },
+      "count": 1
     },
     {
       "item": {
         "item": "minecraft:glass_bottle"
       },
       "count": 1
-    },
-    {
-      "item": {
-        "item": "minecraft:cooked_beef"
-      },
-      "count": 2
     }
   ],
   "result": {
@@ -26,7 +32,7 @@
     "item": {
       "item": "lrtactical:consumable",
       "nbt": {
-        "ConsumableId": "lrtactical:blood_pack"
+        "ConsumableId": "lrtactical:ibuprofen"
       }
     }
   }

@@ -17,7 +17,15 @@
     // 饥饿恢复
     "food": 6,
     // 饱食度
-    "saturation": 0.8,
+    "saturation": 1.6,
+    "effects": [
+      {
+        "id": "minecraft:saturation",
+        "duration": 40,
+        "amplifier": 0,
+        "chance": 1.0
+      }
+    ],
     // 是否需要长按
     // hold（默认）和原版一样得一直按着
     // toggle右键后会保持使用，直到读完条或者再次右键取消

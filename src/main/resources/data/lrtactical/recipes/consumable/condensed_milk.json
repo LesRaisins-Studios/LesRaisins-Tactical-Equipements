@@ -3,21 +3,21 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:dusts/redstone"
-      },
-      "count": 2
-    },
-    {
-      "item": {
-        "item": "minecraft:glass_bottle"
+        "item": "minecraft:milk_bucket"
       },
       "count": 1
     },
     {
       "item": {
-        "item": "minecraft:cooked_beef"
+        "item": "minecraft:sugar"
       },
-      "count": 2
+      "count": 3
+    },
+    {
+      "item": {
+        "item": "minecraft:honey_bottle"
+      },
+      "count": 1
     }
   ],
   "result": {
@@ -26,7 +26,7 @@
     "item": {
       "item": "lrtactical:consumable",
       "nbt": {
-        "ConsumableId": "lrtactical:blood_pack"
+        "ConsumableId": "lrtactical:condensed_milk"
       }
     }
   }
