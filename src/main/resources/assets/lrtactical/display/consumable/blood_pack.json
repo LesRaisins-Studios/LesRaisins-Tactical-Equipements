@@ -3,12 +3,17 @@
   "animation": "lrtactical:consumable/blood_pack",
   "state_machine": "lrtactical:consumable_state_machine",
   "texture": "lrtactical:consumable/blood_pack_uv",
+  "slot_texture": "lrtactical:consumable/slot/blood_pack",
   "transforms": {
     "thirdperson_righthand": {
-      "translation": [0, 4, 0]
-    },
+			"rotation": [90, 0, 0],
+			"translation": [0, -1.25, -0.25],
+			"scale": [0.8, 0.8, 0.8]
+		},
     "thirdperson_lefthand": {
-      "translation": [0, 4, 0]
+      "rotation": [90, 0, 0],
+			"translation": [0, -1.25, -0.25],
+			"scale": [0.8, 0.8, 0.8]
     },
     "ground": {
       "rotation": [0, 0, 90],

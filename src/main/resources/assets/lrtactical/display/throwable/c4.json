@@ -3,7 +3,7 @@
   "animation": "lrtactical:throwable/c4",
   "state_machine": "lrtactical:c4_state_machine",
   "texture": "lrtactical:throwable/c4_uv",
-  "slot_texture": "lrtactical:throwable/slot/m67_grenade",
+  "slot_texture": "lrtactical:throwable/slot/c4",
   "sounds": {
     "death": "lrtactical:entity.grenade.m67.explode"
   },

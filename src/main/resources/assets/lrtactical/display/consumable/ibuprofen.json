@@ -3,6 +3,7 @@
   "animation": "lrtactical:consumable/ibuprofen",
   "state_machine": "lrtactical:consumable_state_machine",
   "texture": "lrtactical:consumable/ibuprofen_uv",
+  "slot_texture": "lrtactical:consumable/slot/ibuprofen",
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 4, 0]

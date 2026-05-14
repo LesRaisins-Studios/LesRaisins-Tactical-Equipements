@@ -3,12 +3,15 @@
   "animation": "lrtactical:consumable/condensed_milk",
   "state_machine": "lrtactical:consumable_state_machine",
   "texture": "lrtactical:consumable/condensed_milk_uv",
+  "slot_texture": "lrtactical:consumable/slot/condensed_milk",
   "transforms": {
     "thirdperson_righthand": {
-      "translation": [0, 4, 0]
+      "translation": [0, 4, 0],
+			"scale": [0.8, 0.8, 0.8]
     },
     "thirdperson_lefthand": {
-      "translation": [0, 4, 0]
+      "translation": [0, 4, 0],
+			"scale": [0.8, 0.8, 0.8]
     },
     "ground": {
       "rotation": [0, 0, 90],
