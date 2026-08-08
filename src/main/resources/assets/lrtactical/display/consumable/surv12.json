@@ -3,6 +3,7 @@
   "animation": "lrtactical:consumable/surv12",
   "state_machine": "lrtactical:consumable_state_machine",
   "texture": "lrtactical:consumable/surv12_uv",
+  "slot_texture": "lrtactical:consumable/slot/surv12",
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 4, 0],

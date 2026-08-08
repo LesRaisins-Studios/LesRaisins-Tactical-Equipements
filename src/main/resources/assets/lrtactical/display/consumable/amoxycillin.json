@@ -3,6 +3,7 @@
   "animation": "lrtactical:consumable/amoxycillin",
   "state_machine": "lrtactical:consumable_state_machine",
   "texture": "lrtactical:consumable/amoxycillin_uv",
+  "slot_texture": "lrtactical:consumable/slot/amoxycillin",
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 4, 0],

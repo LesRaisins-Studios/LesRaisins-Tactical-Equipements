@@ -3,6 +3,7 @@
   "animation": "lrtactical:consumable/vaseline",
   "state_machine": "lrtactical:consumable_state_machine",
   "texture": "lrtactical:consumable/vaseline_uv",
+  "slot_texture": "lrtactical:consumable/slot/vaseline",
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 4, 0],
