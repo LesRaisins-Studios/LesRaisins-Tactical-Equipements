@@ -138,7 +138,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement3"
+					"effect": "lrtactical:consumable/movement3"
 				}
 			}
 		},
@@ -251,7 +251,7 @@
 			},
 			"sound_effects": {
 				"0.0333": {
-					"effect": "movement2"
+					"effect": "lrtactical:consumable/movement2"
 				}
 			}
 		},
@@ -1140,19 +1140,19 @@
 			},
 			"sound_effects": {
 				"0.65": {
-					"effect": "gs_cap_rotate_open"
+					"effect": "lrtactical:consumable/gs_cap_rotate_open"
 				},
 				"1.9833": {
-					"effect": "gs_use1"
+					"effect": "lrtactical:consumable/gs_use1"
 				},
 				"2.8667": {
-					"effect": "gs_use2"
+					"effect": "lrtactical:consumable/gs_use2"
 				},
 				"4.0": {
-					"effect": "gs_use1"
+					"effect": "lrtactical:consumable/gs_use1"
 				},
 				"4.7667": {
-					"effect": "gs_use3"
+					"effect": "lrtactical:consumable/gs_use3"
 				}
 			}
 		}

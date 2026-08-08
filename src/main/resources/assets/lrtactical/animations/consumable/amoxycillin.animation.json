@@ -106,7 +106,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement1"
+					"effect": "lrtactical:consumable/movement1"
 				}
 			}
 		},
@@ -197,7 +197,7 @@
 			},
 			"sound_effects": {
 				"0.0417": {
-					"effect": "movement2"
+					"effect": "lrtactical:consumable/movement2"
 				}
 			}
 		},
@@ -1362,19 +1362,19 @@
 			},
 			"sound_effects": {
 				"0.5167": {
-					"effect": "item_cloth_generic_pickup"
+					"effect": "lrtactical:consumable/item_cloth_generic_pickup"
 				},
 				"1.2667": {
-					"effect": "item_chemlight_shake"
+					"effect": "lrtactical:consumable/item_chemlight_shake"
 				},
 				"2.8167": {
-					"effect": "item_chemlight_on"
+					"effect": "lrtactical:consumable/item_chemlight_on"
 				},
 				"3.7833": {
-					"effect": "item_pillsbottle_03_use"
+					"effect": "lrtactical:consumable/item_pillsbottle_03_use"
 				},
 				"5.0333": {
-					"effect": "item_hemostatic_injection_off"
+					"effect": "lrtactical:consumable/item_hemostatic_injection_off"
 				}
 			}
 		}

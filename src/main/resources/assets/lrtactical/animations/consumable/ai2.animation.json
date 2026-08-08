@@ -145,7 +145,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "item_medkit_ai_00_draw"
+					"effect": "lrtactical:consumable/item_medkit_ai_00_draw"
 				}
 			}
 		},
@@ -614,16 +614,16 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement1"
+					"effect": "lrtactical:consumable/movement1"
 				},
 				"0.95": {
-					"effect": "movement2"
+					"effect": "lrtactical:consumable/movement2"
 				},
 				"3.9": {
-					"effect": "item_medkit_ai_01_open"
+					"effect": "lrtactical:consumable/item_medkit_ai_01_open"
 				},
 				"4.6667": {
-					"effect": "ai_close"
+					"effect": "lrtactical:consumable/ai_close"
 				}
 			}
 		},
@@ -748,7 +748,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement2"
+					"effect": "lrtactical:consumable/movement2"
 				}
 			}
 		},
@@ -1806,22 +1806,22 @@
 			},
 			"sound_effects": {
 				"0.4167": {
-					"effect": "item_medkit_ai_01_open"
+					"effect": "lrtactical:consumable/item_medkit_ai_01_open"
 				},
 				"0.9667": {
-					"effect": "item_injector_00_draw"
+					"effect": "lrtactical:consumable/item_injector_00_draw"
 				},
 				"1.4167": {
-					"effect": "item_injector_01_kolpachok"
+					"effect": "lrtactical:consumable/item_injector_01_kolpachok"
 				},
 				"2.5333": {
-					"effect": "item_injector_02_injection"
+					"effect": "lrtactical:consumable/item_injector_02_injection"
 				},
 				"3.6667": {
-					"effect": "item_injector_03_putaway"
+					"effect": "lrtactical:consumable/item_injector_03_putaway"
 				},
 				"4.15": {
-					"effect": "ai_close"
+					"effect": "lrtactical:consumable/ai_close"
 				}
 			}
 		}

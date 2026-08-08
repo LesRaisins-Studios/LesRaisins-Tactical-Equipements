@@ -133,7 +133,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement1"
+					"effect": "lrtactical:consumable/movement1"
 				}
 			}
 		},
@@ -341,7 +341,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement2"
+					"effect": "lrtactical:consumable/movement2"
 				}
 			}
 		},
@@ -2737,25 +2737,25 @@
 			},
 			"sound_effects": {
 				"0.3333": {
-					"effect": "item_rollupkit_01_fastex1"
+					"effect": "lrtactical:consumable/item_rollupkit_01_fastex1"
 				},
 				"0.6167": {
-					"effect": "item_rollupkit_02_fastex2"
+					"effect": "lrtactical:consumable/item_rollupkit_02_fastex2"
 				},
 				"2.0667": {
-					"effect": "scissor_use"
+					"effect": "lrtactical:consumable/scissor_use"
 				},
 				"3.35": {
-					"effect": "item_surgicalkit_03_scissors_putaway"
+					"effect": "lrtactical:consumable/item_surgicalkit_03_scissors_putaway"
 				},
 				"3.9833": {
-					"effect": "item_surgicalkit_05_picker_use"
+					"effect": "lrtactical:consumable/item_surgicalkit_05_picker_use"
 				},
 				"5.8833": {
-					"effect": "stapler_use"
+					"effect": "lrtactical:consumable/stapler_use"
 				},
 				"7.35": {
-					"effect": "item_rollupkit_04_close"
+					"effect": "lrtactical:consumable/item_rollupkit_04_close"
 				}
 			}
 		}

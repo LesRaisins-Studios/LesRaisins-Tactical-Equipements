@@ -99,7 +99,7 @@
 			},
 			"sound_effects": {
 				"0.0122": {
-					"effect": "movement3"
+					"effect": "lrtactical:consumable/movement3"
 				}
 			}
 		},
@@ -185,7 +185,7 @@
 			},
 			"sound_effects": {
 				"0.0249": {
-					"effect": "movement2"
+					"effect": "lrtactical:consumable/movement2"
 				}
 			}
 		},
@@ -659,16 +659,16 @@
 			},
 			"sound_effects": {
 				"0.2667": {
-					"effect": "item_vaseline_01_open"
+					"effect": "lrtactical:consumable/item_vaseline_01_open"
 				},
 				"0.9": {
-					"effect": "gs_use1"
+					"effect": "lrtactical:consumable/gs_use1"
 				},
 				"1.4333": {
-					"effect": "gs_use2"
+					"effect": "lrtactical:consumable/gs_use2"
 				},
 				"2.1833": {
-					"effect": "vaseline_close"
+					"effect": "lrtactical:consumable/vaseline_close"
 				}
 			}
 		}

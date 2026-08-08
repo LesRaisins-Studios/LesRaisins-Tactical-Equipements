@@ -104,7 +104,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement1"
+					"effect": "lrtactical:consumable/movement1"
 				}
 			}
 		},
@@ -203,7 +203,7 @@
 			},
 			"sound_effects": {
 				"0.0167": {
-					"effect": "movement2"
+					"effect": "lrtactical:consumable/movement2"
 				}
 			}
 		},
@@ -1889,43 +1889,43 @@
 			},
 			"sound_effects": {
 				"0.3423": {
-					"effect": "item_surgicalkit_12_close_button"
+					"effect": "lrtactical:consumable/item_surgicalkit_12_close_button"
 				},
 				"0.4167": {
-					"effect": "item_rollupkit_04_close"
+					"effect": "lrtactical:consumable/item_rollupkit_04_close"
 				},
 				"1.9196": {
-					"effect": "scissor_use"
+					"effect": "lrtactical:consumable/scissor_use"
 				},
 				"3.4524": {
-					"effect": "item_surgicalkit_03_scissors_putaway"
+					"effect": "lrtactical:consumable/item_surgicalkit_03_scissors_putaway"
 				},
 				"4.0625": {
-					"effect": "picker_draw"
+					"effect": "lrtactical:consumable/picker_draw"
 				},
 				"5.0744": {
-					"effect": "item_surgicalkit_05_picker_use"
+					"effect": "lrtactical:consumable/item_surgicalkit_05_picker_use"
 				},
 				"7.2619": {
-					"effect": "item_surgicalkit_06_picker_putaway"
+					"effect": "lrtactical:consumable/item_surgicalkit_06_picker_putaway"
 				},
 				"7.9018": {
-					"effect": "item_surgicalkit_07_stapler_draw"
+					"effect": "lrtactical:consumable/item_surgicalkit_07_stapler_draw"
 				},
 				"8.5863": {
-					"effect": "stapler_use"
+					"effect": "lrtactical:consumable/stapler_use"
 				},
 				"10.0298": {
-					"effect": "item_surgicalkit_09_stapler_putaway"
+					"effect": "lrtactical:consumable/item_surgicalkit_09_stapler_putaway"
 				},
 				"10.8185": {
-					"effect": "item_rollupkit_04_close"
+					"effect": "lrtactical:consumable/item_rollupkit_04_close"
 				},
 				"11.4583": {
-					"effect": "item_surgicalkit_12_close_button"
+					"effect": "lrtactical:consumable/item_surgicalkit_12_close_button"
 				},
 				"12.1577": {
-					"effect": "item_surgicalkit_12_close_button"
+					"effect": "lrtactical:consumable/item_surgicalkit_12_close_button"
 				}
 			}
 		}
