@@ -1,6 +1,5 @@
 package me.xjqsh.lrtactical.compat.player_animator;
 
-import com.tacz.guns.GunMod;
 import dev.kosmx.playerAnim.api.TransformType;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
@@ -22,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerAnimatorIntegration {
     public static final ResourceLocation UPPER_LAYER = new ResourceLocation(EquipmentMod.MOD_ID, "upper");
     public static final ResourceLocation LOWER_LAYER = new ResourceLocation(EquipmentMod.MOD_ID, "lower");
-    public static final ResourceLocation ROTATION_ANIMATION = new ResourceLocation(GunMod.MOD_ID, "rotation");
+    public static final ResourceLocation ROTATION_ANIMATION = new ResourceLocation(EquipmentMod.MOD_ID, "rotation");
     private static boolean initialized = false;
 
     public enum AnimationLayer {
@@ -195,12 +194,9 @@ public class PlayerAnimatorIntegration {
 
     @SuppressWarnings("unchecked")
     public static void enableRotationModifier(AbstractClientPlayer player, ResourceLocation location, int fadeInTicks) {
-        KeyframeAnimation animation = getAnimation(location, "empty");
-        if (animation == null) return;
-
         ModifierLayer<IAnimation> rotationLayer = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(ROTATION_ANIMATION);
         if (rotationLayer != null && rotationLayer.getAnimation() == null) {
-            rotationLayer.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(fadeInTicks, Ease.INOUTSINE), new KeyframeAnimationPlayer(animation));
+            rotationLayer.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(fadeInTicks, Ease.INOUTSINE), new EmptyActiveAnimation());
         }
     }
 

@@ -25,8 +25,8 @@ SimpleDateFormat FORMAT = new SimpleDateFormat("MMdd-HHmmss")
 FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"))
 
 group = mod_group_id
-//version = mod_version
-version = mod_version + '-' + FORMAT.format(new Date())
+version = mod_version
+//version = mod_version + '-' + FORMAT.format(new Date())
 
 base {
     archivesName = mod_id + '-' + minecraft_version
@@ -59,7 +59,8 @@ minecraft {
     runs {
         // applies to all the run configs below
         configureEach {
-            // jvmArgs "-XX:+AllowEnhancedClassRedefinition"
+            jvmArgs "-XX:+AllowEnhancedClassRedefinition"
+            jvmArgs "-Xmx4096M", "-Xms4096M"
             workingDirectory project.file('run')
 
             property 'forge.logging.markers', 'REGISTRIES'
