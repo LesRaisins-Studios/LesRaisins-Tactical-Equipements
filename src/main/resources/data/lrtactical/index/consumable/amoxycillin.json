@@ -1,0 +1,19 @@
+{
+  "name": "item.lrtactical.amoxycillin",
+  "base_item": "lrtactical:consumable",
+  "data": {
+    "use_duration": 145,
+    "cooldown": 60,
+    "cooldown_category": "lrtactical:medical",
+    "stack_size": 1,
+    "max_durability": 8,
+    "durability_damage": 1,
+    "draw_time": 20,
+    "put_away_time": 14,
+    "heal": 1.0,
+    "remove_effects": [
+      "minecraft:poison"
+    ],
+    "use_mode": "toggle"
+  }
+}

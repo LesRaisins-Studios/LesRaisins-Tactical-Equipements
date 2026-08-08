@@ -1,0 +1,17 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    { "item": { "item": "minecraft:iron_ingot" }, "count": 2 },
+    { "item": { "item": "minecraft:paper" }, "count": 3 },
+    { "item": { "item": "minecraft:string" }, "count": 2 },
+    { "item": { "item": "minecraft:shears" }, "count": 1 }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:consumable",
+    "item": {
+      "item": "lrtactical:consumable",
+      "nbt": { "ConsumableId": "lrtactical:cms" }
+    }
+  }
+}

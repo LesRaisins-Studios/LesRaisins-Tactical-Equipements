@@ -387,6 +387,15 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "views",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "idle_view",
+					"parent": "views",
+					"pivot": [0, 24, 0]
 				}
 			]
 		}

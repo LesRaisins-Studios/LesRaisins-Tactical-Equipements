@@ -1,0 +1,15 @@
+{
+  "name": "item.lrtactical.ai2",
+  "base_item": "lrtactical:consumable",
+  "data": {
+    "use_duration": 93,
+    "cooldown": 60,
+    "cooldown_category": "lrtactical:medical",
+    "stack_size": 2,
+    "max_durability": 0,
+    "draw_time": 14,
+    "put_away_time": 6,
+    "heal": 4.0,
+    "use_mode": "toggle"
+  }
+}

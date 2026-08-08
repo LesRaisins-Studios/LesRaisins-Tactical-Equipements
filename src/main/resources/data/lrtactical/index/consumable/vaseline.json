@@ -1,0 +1,30 @@
+{
+  "name": "item.lrtactical.vaseline",
+  "base_item": "lrtactical:consumable",
+  "data": {
+    "use_duration": 57,
+    "cooldown": 60,
+    "cooldown_category": "lrtactical:medical",
+    "stack_size": 1,
+    "max_durability": 6,
+    "durability_damage": 1,
+    "draw_time": 14,
+    "put_away_time": 13,
+    "heal": 1.0,
+    "effects": [
+      {
+        "id": "minecraft:regeneration",
+        "duration": 100,
+        "amplifier": 0,
+        "chance": 1.0
+      },
+      {
+        "id": "minecraft:resistance",
+        "duration": 100,
+        "amplifier": 0,
+        "chance": 1.0
+      }
+    ],
+    "use_mode": "toggle"
+  }
+}

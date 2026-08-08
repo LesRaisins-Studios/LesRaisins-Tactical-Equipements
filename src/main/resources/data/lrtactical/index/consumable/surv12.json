@@ -1,0 +1,19 @@
+{
+  "name": "item.lrtactical.surv12",
+  "base_item": "lrtactical:consumable",
+  "data": {
+    "use_duration": 160,
+    "cooldown": 120,
+    "cooldown_category": "lrtactical:medical",
+    "stack_size": 1,
+    "max_durability": 15,
+    "durability_damage": 1,
+    "draw_time": 12,
+    "put_away_time": 6,
+    "heal": 6.0,
+    "remove_effects": [
+      "@harmful"
+    ],
+    "use_mode": "toggle"
+  }
+}

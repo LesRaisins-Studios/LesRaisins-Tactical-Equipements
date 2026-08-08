@@ -1,0 +1,24 @@
+{
+  "name": "item.lrtactical.goldenstar",
+  "base_item": "lrtactical:consumable",
+  "data": {
+    "use_duration": 112,
+    "cooldown": 60,
+    "cooldown_category": "lrtactical:medical",
+    "stack_size": 1,
+    "max_durability": 8,
+    "durability_damage": 1,
+    "draw_time": 19,
+    "put_away_time": 17,
+    "heal": 1.0,
+    "effects": [
+      {
+        "id": "minecraft:regeneration",
+        "duration": 100,
+        "amplifier": 0,
+        "chance": 1.0
+      }
+    ],
+    "use_mode": "toggle"
+  }
+}

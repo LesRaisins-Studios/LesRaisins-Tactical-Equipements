@@ -137,7 +137,7 @@
 				}
 			}
 		},
-		"idle": {
+		"static_idle": {
 			"loop": true,
 			"bones": {
 				"mag_and_lefthand": {

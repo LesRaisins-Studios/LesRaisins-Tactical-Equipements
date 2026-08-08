@@ -2146,6 +2146,15 @@
 				{
 					"name": "camera",
 					"pivot": [2.75, 13.4875, 8.6]
+				},
+				{
+					"name": "views",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "idle_view",
+					"parent": "views",
+					"pivot": [2.75, 13.4875, 8.6]
 				}
 			]
 		}
