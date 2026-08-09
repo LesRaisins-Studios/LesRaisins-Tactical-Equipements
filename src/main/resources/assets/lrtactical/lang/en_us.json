@@ -34,6 +34,13 @@
   "lrtactical.type.misc.name": "MISC",
   "tooltip.lrtactical.consumable.heal": "Heal: %s",
   "tooltip.lrtactical.consumable.food": "Food: %s, Saturation: %s",
+  "tooltip.lrtactical.consumable.effect.with_duration_and_chance": "%s (%s, %s)",
+  "tooltip.lrtactical.consumable.effect.with_chance": "%s (%s)",
+  "tooltip.lrtactical.consumable.remove_effect": "Removes: %s",
+  "tooltip.lrtactical.consumable.remove_effects_by_category": "Removes all %s effects",
+  "tooltip.lrtactical.consumable.effect_category.beneficial": "beneficial",
+  "tooltip.lrtactical.consumable.effect_category.harmful": "harmful",
+  "tooltip.lrtactical.consumable.effect_category.neutral": "neutral",
   "overlay.lrtactical.consumable.toggle_hint": "Right-click to cancel",
 
   "effect.lrtactical.blinded": "Blinded",

@@ -34,6 +34,13 @@
   "lrtactical.type.misc.name": "杂项",
   "tooltip.lrtactical.consumable.heal": "回复生命: %s",
   "tooltip.lrtactical.consumable.food": "饥饿: %s, 饱和度: %s",
+  "tooltip.lrtactical.consumable.effect.with_duration_and_chance": "%s (%s, %s)",
+  "tooltip.lrtactical.consumable.effect.with_chance": "%s (%s)",
+  "tooltip.lrtactical.consumable.remove_effect": "解除：%s",
+  "tooltip.lrtactical.consumable.remove_effects_by_category": "解除所有%s效果",
+  "tooltip.lrtactical.consumable.effect_category.beneficial": "增益",
+  "tooltip.lrtactical.consumable.effect_category.harmful": "负面",
+  "tooltip.lrtactical.consumable.effect_category.neutral": "中性",
   "overlay.lrtactical.consumable.toggle_hint": "按右键取消",
 
   "effect.lrtactical.blinded": "致盲",

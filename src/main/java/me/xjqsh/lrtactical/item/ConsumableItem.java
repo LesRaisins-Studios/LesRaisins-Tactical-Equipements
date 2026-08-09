@@ -8,6 +8,8 @@ import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import me.xjqsh.lrtactical.client.renderer.item.ConsumableItemRenderer;
 import me.xjqsh.lrtactical.item.consumable.ConsumableData;
 import me.xjqsh.lrtactical.item.index.ConsumableIndex;
+import me.xjqsh.lrtactical.util.PotionTooltipUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -35,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -254,6 +257,29 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
         return IConsumable.super.isSame(stack1, stack2);
     }
 
+    private static void addRemoveEffectTooltip(ConsumableData.RemoveEffectSelector selector, List<Component> tooltip) {
+        if (selector.isCategory()) {
+            String categoryKey = switch (selector.getCategory()) {
+                case BENEFICIAL -> "tooltip.lrtactical.consumable.effect_category.beneficial";
+                case HARMFUL -> "tooltip.lrtactical.consumable.effect_category.harmful";
+                case NEUTRAL -> "tooltip.lrtactical.consumable.effect_category.neutral";
+            };
+            tooltip.add(Component.translatable(
+                    "tooltip.lrtactical.consumable.remove_effects_by_category",
+                    Component.translatable(categoryKey)
+            ).withStyle(ChatFormatting.GRAY));
+            return;
+        }
+
+        MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(selector.getEffect());
+        if (effect != null) {
+            tooltip.add(Component.translatable(
+                    "tooltip.lrtactical.consumable.remove_effect",
+                    effect.getDisplayName()
+            ).withStyle(ChatFormatting.GRAY));
+        }
+    }
+
     @ParametersAreNonnullByDefault
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
@@ -265,11 +291,18 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
             if (data.getFood() > 0 || data.getSaturation() > 0f) {
                 tooltip.add(Component.translatable("tooltip.lrtactical.consumable.food", data.getFood(), data.getSaturation()));
             }
+
+            List<PotionTooltipUtil.EffectWithChance> effects = new ArrayList<>();
             for (ConsumableData.EffectData effectData : data.getEffects()) {
-                MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectData.getId());
+                MobEffectInstance effect = effectData.createInstance();
                 if (effect != null) {
-                    tooltip.add(effect.getDisplayName());
+                    effects.add(new PotionTooltipUtil.EffectWithChance(effect, effectData.getChance()));
                 }
+            }
+            PotionTooltipUtil.addPotionTooltip(effects, tooltip, 1.0F);
+
+            for (ConsumableData.RemoveEffectSelector selector : data.getRemoveEffects()) {
+                addRemoveEffectTooltip(selector, tooltip);
             }
         });
     }

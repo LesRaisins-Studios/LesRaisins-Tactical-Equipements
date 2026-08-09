@@ -293,7 +293,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
 
         this.setPos(x, y, z);
 
-        if (this.tickCount >= life) {
+        if (this.tickCount >= life && life >= 0) {
             if (!this.level().isClientSide()) {
                 this.onDeath(null);
             }

@@ -74,4 +74,8 @@ public interface IConsumable extends ICustomItem {
     default Optional<ConsumableIndex> getConsumableIndex(ItemStack stack) {
         return LrTacticalAPI.getConsumableIndex(stack);
     }
+
+    default boolean spawnParticleOnBreak(ItemStack stack) {
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.mixin.common;
 
 import com.tacz.guns.init.ModDamageTypes;
+import me.xjqsh.lrtactical.api.item.IConsumable;
 import me.xjqsh.lrtactical.capability.CombatProperties;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
@@ -66,6 +68,13 @@ public abstract class LivingEntityMixin extends Entity implements ICapabilityPro
                     .map(cap -> cap.isOnCooldown(new ResourceLocation("shield_disabled")))
                     .orElse(false);
             cir.setReturnValue(!isDrawing && !isDisabled && stack.getDamageValue() < stack.getMaxDamage());
+        }
+    }
+
+    @Inject(method = "breakItem", at = @At("HEAD"), cancellable = true)
+    public void onItemBreak(ItemStack pStack, CallbackInfo ci) {
+        if (pStack != null && pStack.getItem() instanceof IConsumable consumable && !consumable.spawnParticleOnBreak(pStack)) {
+            ci.cancel();
         }
     }
 }
