@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.vaseline",
+  "tooltip": "item.lrtactical.vaseline.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     "use_duration": 57,

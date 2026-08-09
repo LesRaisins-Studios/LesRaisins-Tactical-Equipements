@@ -1,6 +1,7 @@
 {
   "type": "lrtactical:stun",
   "name": "item.lrtactical.flash_grenade",
+  "tooltip": "item.lrtactical.flash_grenade.desc",
   "data": {
     "prepare_time": 16,
     "initial_speed": 1.1,

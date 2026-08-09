@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.goldenstar",
+  "tooltip": "item.lrtactical.goldenstar.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     "use_duration": 112,

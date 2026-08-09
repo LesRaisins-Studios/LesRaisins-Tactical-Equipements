@@ -1,6 +1,7 @@
 {
   "type": "lrtactical:explode",
   "name": "item.lrtactical.rgn",
+  "tooltip": "item.lrtactical.rgn.desc",
   "data": {
     "prepare_time": 16,
     "initial_speed": 1.1,

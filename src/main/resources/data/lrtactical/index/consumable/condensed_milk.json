@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.condensed_milk",
+  "tooltip": "item.lrtactical.condensed_milk.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     // 使用时长

@@ -1,6 +1,7 @@
 {
   "type": "lrtactical:effect_cloud",
   "name": "item.lrtactical.molotov",
+  "tooltip": "item.lrtactical.molotov.desc",
   "data": {
     "prepare_time": 16,
     "initial_speed": 1.1,

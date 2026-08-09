@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.blood_pack",
+  "tooltip": "item.lrtactical.blood_pack.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     // 使用时长

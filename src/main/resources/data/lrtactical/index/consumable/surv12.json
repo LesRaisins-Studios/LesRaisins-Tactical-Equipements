@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.surv12",
+  "tooltip": "item.lrtactical.surv12.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     "use_duration": 160,

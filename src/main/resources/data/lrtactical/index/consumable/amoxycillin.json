@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.amoxycillin",
+  "tooltip": "item.lrtactical.amoxycillin.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     "use_duration": 145,

@@ -6,11 +6,9 @@ import me.xjqsh.lrtactical.api.item.IConsumable;
 import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import me.xjqsh.lrtactical.client.renderer.item.ConsumableItemRenderer;
+import me.xjqsh.lrtactical.inventory.tooltip.ConsumableTooltip;
 import me.xjqsh.lrtactical.item.consumable.ConsumableData;
 import me.xjqsh.lrtactical.item.index.ConsumableIndex;
-import me.xjqsh.lrtactical.util.PotionTooltipUtil;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -25,9 +23,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -37,8 +35,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class ConsumableItem extends Item implements IAnimationItem, IConsumable {
@@ -257,53 +255,11 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
         return IConsumable.super.isSame(stack1, stack2);
     }
 
-    private static void addRemoveEffectTooltip(ConsumableData.RemoveEffectSelector selector, List<Component> tooltip) {
-        if (selector.isCategory()) {
-            String categoryKey = switch (selector.getCategory()) {
-                case BENEFICIAL -> "tooltip.lrtactical.consumable.effect_category.beneficial";
-                case HARMFUL -> "tooltip.lrtactical.consumable.effect_category.harmful";
-                case NEUTRAL -> "tooltip.lrtactical.consumable.effect_category.neutral";
-            };
-            tooltip.add(Component.translatable(
-                    "tooltip.lrtactical.consumable.remove_effects_by_category",
-                    Component.translatable(categoryKey)
-            ).withStyle(ChatFormatting.GRAY));
-            return;
-        }
-
-        MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(selector.getEffect());
-        if (effect != null) {
-            tooltip.add(Component.translatable(
-                    "tooltip.lrtactical.consumable.remove_effect",
-                    effect.getDisplayName()
-            ).withStyle(ChatFormatting.GRAY));
-        }
-    }
-
-    @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
-        this.getConsumableIndex(stack).ifPresent(index -> {
-            ConsumableData data = index.getData();
-            if (data.getHeal() > 0f) {
-                tooltip.add(Component.translatable("tooltip.lrtactical.consumable.heal", data.getHeal()));
-            }
-            if (data.getFood() > 0 || data.getSaturation() > 0f) {
-                tooltip.add(Component.translatable("tooltip.lrtactical.consumable.food", data.getFood(), data.getSaturation()));
-            }
-
-            List<PotionTooltipUtil.EffectWithChance> effects = new ArrayList<>();
-            for (ConsumableData.EffectData effectData : data.getEffects()) {
-                MobEffectInstance effect = effectData.createInstance();
-                if (effect != null) {
-                    effects.add(new PotionTooltipUtil.EffectWithChance(effect, effectData.getChance()));
-                }
-            }
-            PotionTooltipUtil.addPotionTooltip(effects, tooltip, 1.0F);
-
-            for (ConsumableData.RemoveEffectSelector selector : data.getRemoveEffects()) {
-                addRemoveEffectTooltip(selector, tooltip);
-            }
-        });
+    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+        if (this.getConsumableIndex(stack).isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new ConsumableTooltip(stack));
     }
 }

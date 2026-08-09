@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.ai2",
+  "tooltip": "item.lrtactical.ai2.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     "use_duration": 93,

@@ -9,6 +9,7 @@ import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.client.audio.ICustomSoundSupplier;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
 import me.xjqsh.lrtactical.config.CommonConfig;
+import me.xjqsh.lrtactical.inventory.tooltip.MeleeTooltip;
 import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.melee.CombatData;
 import net.minecraft.world.entity.Entity;
@@ -87,7 +88,10 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
 
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack pStack) {
-        return super.getTooltipImage(pStack);
+        if (this.getMeleeIndex(pStack).isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new MeleeTooltip(pStack));
     }
 
     @Override

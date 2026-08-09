@@ -7,8 +7,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.annotations.SerializedName;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
+import me.xjqsh.lrtactical.util.PotionTooltipUtil;
+import me.xjqsh.lrtactical.util.TooltipLine;
+import me.xjqsh.lrtactical.util.TooltipUtil;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.effect.MobEffect;
@@ -17,6 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 // 区域云投掷物属性配置
@@ -27,6 +32,31 @@ public class EffectCloudThrowableData extends ThrowableData {
     @NotNull
     public CloudData getCloudData() {
         return explode;
+    }
+
+    @Override
+    public List<TooltipLine> getTooltipLines() {
+        List<TooltipLine> lines = super.getTooltipLines();
+        CloudData cloudData = getCloudData();
+        lines.add(TooltipLine.normal(Component.translatable("tooltip.lrtactical.throwable.cloud.line",
+                TooltipUtil.format(cloudData.getRadius()),
+                TooltipUtil.formatTicks(cloudData.getDuration()))));
+        if (cloudData.isIgnite()) {
+            lines.add(TooltipLine.normal(Component.translatable("tooltip.lrtactical.throwable.cloud.ignite",
+                    TooltipUtil.formatTicks(cloudData.getIgniteTime()))));
+        }
+        List<PotionTooltipUtil.EffectWithChance> effects = new ArrayList<>();
+        for (MobEffectInstance effect : cloudData.getEffectInstances()) {
+            if (effect != null) {
+                effects.add(new PotionTooltipUtil.EffectWithChance(effect, 1.0F));
+            }
+        }
+        List<Component> effectLines = new ArrayList<>();
+        PotionTooltipUtil.addPotionTooltip(effects, effectLines, 1.0F);
+        for (Component line : effectLines) {
+            lines.add(TooltipLine.collapsible(line));
+        }
+        return lines;
     }
 
     public static class CloudData {

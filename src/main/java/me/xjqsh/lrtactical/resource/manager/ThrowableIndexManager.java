@@ -56,6 +56,7 @@ public class ThrowableIndexManager extends JsonDataManager<ThrowableIndex<?, ?>>
 
     public static ThrowableIndex<?, ?> parse(JsonObject pJson, ResourceLocation id) throws JsonParseException {
         String name = GsonHelper.getAsString(pJson, "name", "unknown.lrtactical.name");
+        String tooltip = GsonHelper.getAsString(pJson, "tooltip", null);
 
         String type_name = GsonHelper.getAsString(pJson, "type");
         var type = ModRegistries.THROWABLE_TYPE_SUPPLIER.get().getValue(new ResourceLocation(type_name));
@@ -71,6 +72,6 @@ public class ThrowableIndexManager extends JsonDataManager<ThrowableIndex<?, ?>>
 
         JsonObject data = GsonHelper.getAsJsonObject(pJson, "data");
 
-        return ThrowableIndex.deserialize(type, data, name, id, item);
+        return ThrowableIndex.deserialize(type, data, name, tooltip, id, item);
     }
 }

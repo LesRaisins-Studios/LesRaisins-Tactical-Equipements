@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.karambit",
+  "tooltip": "item.lrtactical.karambit.desc",
   "type": "lrtactical:normal",
   "base_item": "lrtactical:melee",
   "data": {

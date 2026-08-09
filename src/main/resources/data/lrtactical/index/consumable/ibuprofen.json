@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.ibuprofen",
+  "tooltip": "item.lrtactical.ibuprofen.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     // 使用时长

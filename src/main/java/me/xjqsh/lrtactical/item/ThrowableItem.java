@@ -6,29 +6,26 @@ import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
 import me.xjqsh.lrtactical.client.renderer.item.ThrowableItemRendererWrapper;
 import me.xjqsh.lrtactical.init.ModItems;
+import me.xjqsh.lrtactical.inventory.tooltip.ThrowableTooltip;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
-import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
 import me.xjqsh.lrtactical.item.throwable.explode.ExplodeThrowableData;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
@@ -175,13 +172,11 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
         return IThrowable.super.isSame(stack1, stack2);
     }
 
-    @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        this.getThrowableIndex(stack).ifPresent(index -> {
-            if (index.getData() instanceof EffectCloudThrowableData data) {
-                PotionUtils.addPotionTooltip(data.getCloudData().getEffectInstances(), pTooltipComponents, 1.0F);
-            }
-        });
+    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+        if (this.getThrowableIndex(stack).isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new ThrowableTooltip(stack));
     }
 }

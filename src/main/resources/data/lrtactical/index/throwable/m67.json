@@ -1,6 +1,7 @@
 {
   "type": "lrtactical:explode",
   "name": "item.lrtactical.m67",
+  "tooltip": "item.lrtactical.m67.desc",
   "data": {
     // 投掷物物品通用参数
     // 准备时间（tick）

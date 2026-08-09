@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.baseball_bat",
+  "tooltip": "item.lrtactical.baseball_bat.desc",
   "type": "lrtactical:normal",
   "base_item": "lrtactical:melee",
   // 数据配置

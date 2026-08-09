@@ -1,6 +1,6 @@
 package me.xjqsh.lrtactical.item.index;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
 import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.entity.ThrowableItemEntity;
@@ -19,29 +19,39 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
     private final T data;
     private final ResourceLocation id;
     private final String name;
+    private final String tooltip;
 
     private ThrowableIndex(@NotNull ThrowableType<T, E> type, T data,
-                          String name, ResourceLocation id, Item baseItem) {
+                          String name, String tooltip, ResourceLocation id, Item baseItem) {
         this.type = type;
         this.data = data;
         this.id = id;
         this.baseItem = baseItem;
         this.name = name;
+        this.tooltip = tooltip;
     }
 
     @Nullable
     public static <T extends ThrowableData, E extends ThrowableItemEntity> ThrowableIndex<T, E> deserialize(
-            @NotNull ThrowableType<T, E> type, JsonElement data, String name, ResourceLocation id, Item baseItem
+            @NotNull ThrowableType<T, E> type, JsonElement data, String name, String tooltip, ResourceLocation id, Item baseItem
     ) {
         T throwableData = type.serializer().parse(data);
         if (throwableData == null) {
             return null;
         }
-        return new ThrowableIndex<>(type, throwableData, name, id, baseItem);
+        return new ThrowableIndex<>(type, throwableData, name, tooltip, id, baseItem);
     }
 
     public T getData() {
         return data;
+    }
+
+    /**
+     * 获取 tooltip 描述翻译键，可为 null
+     */
+    @Nullable
+    public String getTooltip() {
+        return tooltip;
     }
 
     @Override

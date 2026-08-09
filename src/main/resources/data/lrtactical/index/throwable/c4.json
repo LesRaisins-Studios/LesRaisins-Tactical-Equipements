@@ -2,6 +2,7 @@
   // 粘性炸弹，此类型未完全完成
   "type": "lrtactical:sticky",
   "name": "item.lrtactical.c4",
+  "tooltip": "item.lrtactical.c4.desc",
   "data": {
     // 投掷物物品通用参数
     // 准备时间（tick）

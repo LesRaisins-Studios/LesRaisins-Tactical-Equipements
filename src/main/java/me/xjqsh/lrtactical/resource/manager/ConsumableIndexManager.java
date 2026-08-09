@@ -55,6 +55,7 @@ public class ConsumableIndexManager extends JsonDataManager<ConsumableIndex> {
 
     public static ConsumableIndex parse(JsonObject pJson, ResourceLocation id) throws JsonParseException {
         String name = GsonHelper.getAsString(pJson, "name", "unknown.lrtactical.name");
+        String tooltip = GsonHelper.getAsString(pJson, "tooltip", null);
 
         String baseItem = GsonHelper.getAsString(pJson, "base_item", "lrtactical:consumable");
         var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(baseItem));
@@ -64,6 +65,6 @@ public class ConsumableIndexManager extends JsonDataManager<ConsumableIndex> {
 
         JsonObject data = GsonHelper.getAsJsonObject(pJson, "data");
 
-        return ConsumableIndex.deserialize(data, name, id, item);
+        return ConsumableIndex.deserialize(data, name, tooltip, id, item);
     }
 }

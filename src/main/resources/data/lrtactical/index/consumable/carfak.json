@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.carfak",
+  "tooltip": "item.lrtactical.carfak.desc",
   "base_item": "lrtactical:consumable",
   "data": {
     "use_duration": 121,

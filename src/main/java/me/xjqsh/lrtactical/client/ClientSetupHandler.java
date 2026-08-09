@@ -8,10 +8,16 @@ import me.xjqsh.lrtactical.client.overlay.UsingProgressOverlay;
 import me.xjqsh.lrtactical.client.particle.SmokeCloudParticle;
 import me.xjqsh.lrtactical.client.renderer.CoolDownDecorations;
 import me.xjqsh.lrtactical.client.renderer.entity.ThrowableEntityRenderer;
+import me.xjqsh.lrtactical.client.tooltip.ClientConsumableTooltip;
+import me.xjqsh.lrtactical.client.tooltip.ClientMeleeTooltip;
+import me.xjqsh.lrtactical.client.tooltip.ClientThrowableTooltip;
 import me.xjqsh.lrtactical.entity.*;
 import me.xjqsh.lrtactical.entity.sp.SpEffectCloudEntity;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModParticleTypes;
+import me.xjqsh.lrtactical.inventory.tooltip.ConsumableTooltip;
+import me.xjqsh.lrtactical.inventory.tooltip.MeleeTooltip;
+import me.xjqsh.lrtactical.inventory.tooltip.ThrowableTooltip;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -44,6 +50,13 @@ public class ClientSetupHandler {
     public static void registerItemDecorations(RegisterItemDecorationsEvent event) {
         event.register(ModItems.CONSUMABLE.get(), new CoolDownDecorations());
         event.register(ModItems.THROWABLE.get(), new CoolDownDecorations());
+    }
+
+    @SubscribeEvent
+    public static void onRegisterTooltipComponentFactories(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(ConsumableTooltip.class, ClientConsumableTooltip::new);
+        event.register(ThrowableTooltip.class, ClientThrowableTooltip::new);
+        event.register(MeleeTooltip.class, ClientMeleeTooltip::new);
     }
 
     @SubscribeEvent

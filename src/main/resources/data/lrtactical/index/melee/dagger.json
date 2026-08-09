@@ -1,5 +1,6 @@
 {
   "name": "item.lrtactical.dagger",
+  "tooltip": "item.lrtactical.dagger.desc",
   "type": "lrtactical:normal",
   "base_item": "lrtactical:melee",
   "data": {

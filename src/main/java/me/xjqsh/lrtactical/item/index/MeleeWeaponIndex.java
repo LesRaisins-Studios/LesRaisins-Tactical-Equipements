@@ -10,7 +10,6 @@ import me.xjqsh.lrtactical.item.melee.MeleeWeaponData;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponType;
 import me.xjqsh.lrtactical.util.DefaultAttrUUIDUtil;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
@@ -18,8 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemIndex {
     private final MeleeWeaponType<T> type;
@@ -29,8 +26,6 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
     private final String name;
     private final String tooltip;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
-    private List<FormattedCharSequence> desc;
-
 
     private MeleeWeaponIndex(MeleeWeaponType<T> type, T data, String name, String tooltip,
                              ResourceLocation id, Item baseItem) {
