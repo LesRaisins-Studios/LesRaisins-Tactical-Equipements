@@ -29,6 +29,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,6 +42,7 @@ import static net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_LEFT_HAND
 public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnimatedModel, FlashShieldAnimationStateContext> {
     private static final SlotModel SLOT_MODEL = new SlotModel();
     private ItemTransforms transforms = ItemTransforms.NO_TRANSFORMS;
+    private Vector3f displayOffset = new Vector3f();
     private ResourceLocation slotTexture = null;
 
     @Override
@@ -92,6 +94,11 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
                 poseStack.translate(-0.5F, -0.5F, -0.5F);
             }
 
+            // 非第一人称展示变换的额外基准位置偏移（方块单位），仅整体平移，不影响 transforms 的旋转/缩放中心
+            if (displayOffset != null) {
+                poseStack.translate(displayOffset.x(), displayOffset.y(), displayOffset.z());
+            }
+
             // 从渲染原点 (0, 24, 0) 移动到模型原点 (0, 0, 0)
             poseStack.translate(0.5, 1.5f, 0.5);
             // 基岩版模型是上下颠倒的，需要翻转过来。
@@ -124,6 +131,7 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
         }
 
         this.transforms = display.transforms == null ? ItemTransforms.NO_TRANSFORMS : display.transforms;
+        this.displayOffset = display.displayOffset == null ? new Vector3f() : display.displayOffset;
 
         var animation = ClientAssetsManager.INSTANCE.getBedrockAnimations(display.animationLocation);
         AnimationController controller = null;
@@ -163,6 +171,8 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
             @SerializedName("slot_texture")
             ResourceLocation slotTextureLocation,
             @SerializedName("transforms")
-            ItemTransforms transforms
+            ItemTransforms transforms,
+            @SerializedName("display_offset")
+            Vector3f displayOffset
     ) {}
 }

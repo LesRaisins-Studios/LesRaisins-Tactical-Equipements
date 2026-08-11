@@ -10,6 +10,7 @@ import me.xjqsh.lrtactical.client.resource.manager.ConsumableDisplayManager;
 import me.xjqsh.lrtactical.client.resource.manager.MeleeDisplayManager;
 import me.xjqsh.lrtactical.client.resource.manager.ThrowableDisplayManager;
 import me.xjqsh.lrtactical.init.ModItems;
+import me.xjqsh.lrtactical.resource.serializer.Vector3fDeserializer;
 import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +22,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Vector3f;
 
 import java.util.function.Consumer;
 
@@ -32,6 +34,7 @@ public enum LrClientAssetsManager {
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
             .registerTypeAdapter(ItemTransforms.class, new ItemTransforms.Deserializer())
             .registerTypeAdapter(ItemTransform.class, new ItemTransform.Deserializer())
+            .registerTypeAdapter(Vector3f.class, new Vector3fDeserializer())
             .create();
 
     private ThrowableDisplayManager throwableDisplay;

@@ -4,6 +4,7 @@
   "state_machine": "lrtactical:consumable_state_machine",
   "texture": "lrtactical:consumable/blood_pack_uv",
   "slot_texture": "lrtactical:consumable/slot/blood_pack",
+  "display_offset": [0, 0.5, 0],
   "transforms": {
     "thirdperson_righthand": {
       "translation": [

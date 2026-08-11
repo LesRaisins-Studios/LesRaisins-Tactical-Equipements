@@ -10,6 +10,7 @@ import com.tacz.guns.client.model.SlotModel;
 import com.tacz.guns.client.model.bedrock.BedrockPart;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.api.animation.ThrowableAnimationStateContext;
 import me.xjqsh.lrtactical.client.renderer.JumpSwayUtil;
 import me.xjqsh.lrtactical.client.resource.display.ThrowableDisplayInstance;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
@@ -27,8 +28,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import me.xjqsh.lrtactical.api.animation.ThrowableAnimationStateContext;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import static net.minecraft.world.item.ItemDisplayContext.GUI;
 
@@ -157,6 +158,12 @@ public class ThrowableItemRendererWrapper extends AnimateGeoItemRenderer<Bedrock
                     ItemTransform transform = transforms.getTransform(ctx);
                     transform.apply(false, poseStack);
                     poseStack.translate(-0.5F, -0.5F, -0.5F);
+                }
+
+                // 非第一人称展示变换的额外基准位置偏移（方块单位），仅整体平移，不影响 transforms 的旋转/缩放中心
+                Vector3f displayOffset = display.getDisplayOffset();
+                if (displayOffset != null) {
+                    poseStack.translate(displayOffset.x(), displayOffset.y(), displayOffset.z());
                 }
 
                 // 从渲染原点 (0, 24, 0) 移动到模型原点 (0, 0, 0)

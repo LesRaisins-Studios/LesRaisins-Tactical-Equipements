@@ -17,6 +17,7 @@ import me.xjqsh.lrtactical.compat.player_animator.ThirdPersonAnimationConfig;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,7 @@ public class MeleeDisplayInstance implements ICustomSoundSupplier {
     private ResourceLocation texture;
     private ResourceLocation slotTexture;
     private ItemTransforms transforms;
+    private Vector3f displayOffset;
     private Map<String, ResourceLocation> sounds;
     private ThirdPersonAnimationConfig thirdPersonAnimation;
 
@@ -55,6 +57,10 @@ public class MeleeDisplayInstance implements ICustomSoundSupplier {
 
     public ItemTransforms getTransforms() {
         return transforms;
+    }
+
+    public Vector3f getDisplayOffset() {
+        return displayOffset;
     }
 
     public ThirdPersonAnimationConfig getThirdPersonAnimation() {
@@ -102,6 +108,7 @@ public class MeleeDisplayInstance implements ICustomSoundSupplier {
         }
 
         display.transforms = Objects.requireNonNullElse(pojo.transforms, ItemTransforms.NO_TRANSFORMS);
+        display.displayOffset = Objects.requireNonNullElse(pojo.displayOffset, new Vector3f());
         display.sounds = Objects.requireNonNullElseGet(pojo.sounds, Maps::newHashMap);
         display.thirdPersonAnimation = pojo.thirdPersonAnimation;
 
@@ -121,6 +128,8 @@ public class MeleeDisplayInstance implements ICustomSoundSupplier {
             ResourceLocation slotTextureLocation,
             @SerializedName("transforms")
             ItemTransforms transforms,
+            @SerializedName("display_offset")
+            Vector3f displayOffset,
             @SerializedName("sounds")
             Map<String, ResourceLocation> sounds,
             @SerializedName("third_person_animation")

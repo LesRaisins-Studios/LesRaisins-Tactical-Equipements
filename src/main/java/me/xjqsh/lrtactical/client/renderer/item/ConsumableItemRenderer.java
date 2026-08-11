@@ -28,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import static net.minecraft.world.item.ItemDisplayContext.GUI;
 
@@ -148,6 +149,12 @@ public class ConsumableItemRenderer extends AnimateGeoItemRenderer<BedrockAnimat
                     ItemTransform transform = transforms.getTransform(ctx);
                     transform.apply(false, poseStack);
                     poseStack.translate(-0.5F, -0.5F, -0.5F);
+                }
+
+                // 非第一人称展示变换的额外基准位置偏移（方块单位），仅整体平移，不影响 transforms 的旋转/缩放中心
+                Vector3f displayOffset = display.getDisplayOffset();
+                if (displayOffset != null) {
+                    poseStack.translate(displayOffset.x(), displayOffset.y(), displayOffset.z());
                 }
 
                 poseStack.translate(0.5, 1.5f, 0.5);
