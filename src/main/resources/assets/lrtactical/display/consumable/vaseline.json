@@ -5,28 +5,60 @@
   "texture": "lrtactical:consumable/vaseline_uv",
   "slot_texture": "lrtactical:consumable/slot/vaseline",
   "transforms": {
+    "fixed": {
+      "translation": [
+        0,
+        -15.5,
+        -5
+      ],
+      "rotation": [
+        0,
+        90,
+        0
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
+    },
     "thirdperson_righthand": {
-      "translation": [0, 4, 0],
-      "scale": [0.8, 0.8, 0.8]
+      "translation": [
+        1.5,
+        -7.5,
+        0
+      ]
     },
     "thirdperson_lefthand": {
-      "translation": [0, 4, 0],
-      "scale": [0.8, 0.8, 0.8]
+      "translation": [
+        -2.5,
+        -7.5,
+        0
+      ]
+    },
+    "head": {
+      "translation": [
+        3,
+        -3.25,
+        0
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ]
     },
     "ground": {
-      "rotation": [0, 0, 90],
-      "translation": [0, 3.5, 0],
-      "scale": [1.2, 1.2, 1.2]
-    },
-    "gui": {
-      "rotation": [0, 135, 0],
-      "translation": [0, 6.5, 0],
-      "scale": [1.4, 1.4, 1.4]
-    },
-    "fixed": {
-      "rotation": [0, 90, 0],
-      "translation": [0, 6, 0],
-      "scale": [1.35, 1.35, 1.35]
+      "translation": [
+        3,
+        -10,
+        0
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ]
     }
   }
 }

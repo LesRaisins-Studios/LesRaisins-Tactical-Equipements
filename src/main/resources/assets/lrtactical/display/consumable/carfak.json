@@ -6,27 +6,44 @@
   "slot_texture": "lrtactical:consumable/slot/carfak",
   "transforms": {
     "thirdperson_righthand": {
-      "translation": [0, 4, 0],
-      "scale": [0.8, 0.8, 0.8]
+      "translation": [
+        0,
+        -3,
+        -1
+      ]
     },
     "thirdperson_lefthand": {
-      "translation": [0, 4, 0],
-      "scale": [0.8, 0.8, 0.8]
+      "translation": [
+        0,
+        -3,
+        -1
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        6.25,
+        0
+      ]
     },
     "ground": {
-      "rotation": [0, 0, 90],
-      "translation": [0, 3.5, 0],
-      "scale": [1.2, 1.2, 1.2]
-    },
-    "gui": {
-      "rotation": [0, 135, 0],
-      "translation": [0, 6.5, 0],
-      "scale": [1.4, 1.4, 1.4]
+      "translation": [
+        0,
+        -1.5,
+        0
+      ]
     },
     "fixed": {
-      "rotation": [0, 90, 0],
-      "translation": [0, 6, 0],
-      "scale": [1.35, 1.35, 1.35]
+      "translation": [
+        0,
+        -4.5,
+        0
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
     }
   }
 }

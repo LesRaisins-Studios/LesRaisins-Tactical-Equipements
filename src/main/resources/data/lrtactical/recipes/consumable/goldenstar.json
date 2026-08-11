@@ -1,17 +1,39 @@
 {
   "type": "tacz:gun_smith_table_crafting",
   "materials": [
-    { "item": { "item": "minecraft:gold_nugget" }, "count": 2 },
-    { "item": { "item": "minecraft:honey_bottle" }, "count": 1 },
-    { "item": { "item": "minecraft:slime_ball" }, "count": 1 },
-    { "item": { "item": "minecraft:sugar" }, "count": 1 }
+    {
+      "item": {
+        "item": "minecraft:gold_nugget"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "item": "minecraft:cocoa_beans"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "item": "minecraft:honeycomb"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:glass_bottle"
+      },
+      "count": 1
+    }
   ],
   "result": {
     "type": "custom",
     "group": "lrtactical:consumable",
     "item": {
       "item": "lrtactical:consumable",
-      "nbt": { "ConsumableId": "lrtactical:goldenstar" }
+      "nbt": {
+        "ConsumableId": "lrtactical:goldenstar"
+      }
     }
   }
 }

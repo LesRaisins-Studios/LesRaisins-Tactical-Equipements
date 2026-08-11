@@ -11,9 +11,12 @@
     "durability_damage": 1,
     "draw_time": 20,
     "put_away_time": 14,
-    "heal": 1.0,
+    "heal": 2.0,
     "remove_effects": [
-      "minecraft:poison"
+      "minecraft:poison",
+      "minecraft:wither",
+      "minecraft:nausea",
+      "minecraft:weakness"
     ],
     "use_mode": "toggle"
   }

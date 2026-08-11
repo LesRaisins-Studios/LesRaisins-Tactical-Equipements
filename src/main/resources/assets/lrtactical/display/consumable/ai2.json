@@ -6,27 +6,79 @@
   "slot_texture": "lrtactical:consumable/slot/ai2",
   "transforms": {
     "thirdperson_righthand": {
-      "translation": [0, 4, 0],
-      "scale": [0.8, 0.8, 0.8]
-    },
-    "thirdperson_lefthand": {
-      "translation": [0, 4, 0],
-      "scale": [0.8, 0.8, 0.8]
+      "translation": [
+        0,
+        -1.75,
+        0
+      ],
+      "rotation": [
+        -90,
+        0,
+        90
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ]
     },
     "ground": {
-      "rotation": [0, 0, 90],
-      "translation": [0, 3.5, 0],
-      "scale": [1.2, 1.2, 1.2]
+      "translation": [
+        0,
+        -6,
+        0
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
     },
-    "gui": {
-      "rotation": [0, 135, 0],
-      "translation": [0, 6.5, 0],
-      "scale": [1.4, 1.4, 1.4]
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -1.75,
+        0
+      ],
+      "rotation": [
+        -90,
+        0,
+        90
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        6.5,
+        0
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
     },
     "fixed": {
-      "rotation": [0, 90, 0],
-      "translation": [0, 6, 0],
-      "scale": [1.35, 1.35, 1.35]
+      "translation": [
+        0,
+        1,
+        1
+      ],
+      "rotation": [
+        -90,
+        0,
+        0
+      ],
+      "scale": [
+        4,
+        4,
+        4
+      ]
     }
   }
 }

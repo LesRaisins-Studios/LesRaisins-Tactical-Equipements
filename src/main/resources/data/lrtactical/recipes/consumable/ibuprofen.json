@@ -3,21 +3,21 @@
   "materials": [
     {
       "item": {
-        "item": "minecraft:sugar"
+        "item": "minecraft:nether_wart"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:blaze_powder"
       },
       "count": 2
     },
     {
       "item": {
-        "item": "minecraft:spider_eye"
+        "item": "minecraft:sugar"
       },
-      "count": 1
-    },
-    {
-      "item": {
-        "item": "minecraft:paper"
-      },
-      "count": 1
+      "count": 2
     },
     {
       "item": {

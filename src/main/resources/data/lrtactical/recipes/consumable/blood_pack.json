@@ -3,21 +3,21 @@
   "materials": [
     {
       "item": {
-        "tag": "forge:dusts/redstone"
+        "item": "minecraft:nether_wart"
       },
       "count": 2
+    },
+    {
+      "item": {
+        "item": "minecraft:sugar"
+      },
+      "count": 1
     },
     {
       "item": {
         "item": "minecraft:glass_bottle"
       },
       "count": 1
-    },
-    {
-      "item": {
-        "item": "minecraft:cooked_beef"
-      },
-      "count": 2
     }
   ],
   "result": {

@@ -14,14 +14,8 @@
     "heal": 1.0,
     "effects": [
       {
-        "id": "minecraft:regeneration",
-        "duration": 100,
-        "amplifier": 0,
-        "chance": 1.0
-      },
-      {
-        "id": "minecraft:resistance",
-        "duration": 100,
+        "id": "minecraft:absorption",
+        "duration": 400,
         "amplifier": 0,
         "chance": 1.0
       }

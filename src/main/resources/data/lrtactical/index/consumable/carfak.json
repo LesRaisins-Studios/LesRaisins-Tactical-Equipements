@@ -10,7 +10,7 @@
     "max_durability": 0,
     "draw_time": 12,
     "put_away_time": 6,
-    "heal": 8.0,
+    "heal": 12.0,
     "remove_effects": [
       "@harmful"
     ],

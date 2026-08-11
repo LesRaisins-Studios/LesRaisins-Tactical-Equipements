@@ -6,29 +6,64 @@
   "slot_texture": "lrtactical:consumable/slot/blood_pack",
   "transforms": {
     "thirdperson_righthand": {
-			"rotation": [90, 0, 0],
-			"translation": [0, -1.25, -0.25],
-			"scale": [0.8, 0.8, 0.8]
-		},
+      "translation": [
+        -1,
+        -9,
+        -1
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
     "thirdperson_lefthand": {
-      "rotation": [90, 0, 0],
-			"translation": [0, -1.25, -0.25],
-			"scale": [0.8, 0.8, 0.8]
+      "translation": [
+        -1,
+        -9,
+        -1
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
     },
     "ground": {
-      "rotation": [0, 0, 90],
-      "translation": [0, 3.5, 0],
-      "scale": [1.2, 1.2, 1.2]
-    },
-    "gui": {
-      "rotation": [0, 135, 0],
-      "translation": [0, 6.5, 0],
-      "scale": [1.4, 1.4, 1.4]
+      "translation": [
+        0,
+        -8,
+        0
+      ]
     },
     "fixed": {
-      "rotation": [0, 90, 0],
-      "translation": [0, 6, 0],
-      "scale": [1.35, 1.35, 1.35]
+      "translation": [
+        -9,
+        -9.75,
+        0
+      ],
+      "rotation": [
+        -90,
+        -45,
+        -90
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
+      ]
+    },
+    "head": {
+      "translation": [
+        9,
+        -7,
+        -9.75
+      ],
+      "rotation": [
+        -45,
+        0,
+        90
+      ]
     }
   }
 }
