@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,12 +46,16 @@ public class SmokeCloudParticle extends TextureSheetParticle {
 
     @Override
     public int getLightColor(float partialTick) {
-        return 15728880;
+        BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
+        return LightTexture.pack(
+                this.level.getBrightness(LightLayer.BLOCK, blockPos),
+                this.level.getBrightness(LightLayer.SKY, blockPos)
+        );
     }
 
     @Override
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_LIT;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @Override
