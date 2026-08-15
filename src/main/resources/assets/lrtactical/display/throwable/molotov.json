@@ -7,6 +7,10 @@
   "sounds": {
     "death": "minecraft:block.glass.break"
   },
+  "entity_transform": {
+    "rotation": [0, 0, 0],
+    "translation": [0, 5, 0]
+  },
   "transforms": {
     "thirdperson_righthand": {
       "translation": [0, 5, 0]

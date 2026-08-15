@@ -15,6 +15,7 @@ import me.xjqsh.lrtactical.api.animation.ThrowableAnimationStateContext;
 import me.xjqsh.lrtactical.client.audio.ICustomSoundSupplier;
 import me.xjqsh.lrtactical.client.renderer.model.CustomBedrockModel;
 import me.xjqsh.lrtactical.compat.player_animator.ThirdPersonAnimationConfig;
+import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,12 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ThrowableDisplayInstance implements ICustomSoundSupplier {
+    /**
+     * 实体渲染时的额外变换默认值：绕 Z 轴旋转 90 度
+     */
+    public static final ItemTransform DEFAULT_ENTITY_TRANSFORM =
+            new ItemTransform(new Vector3f(0, 0, 90), new Vector3f(-0.3f, 0.15f, 0), new Vector3f(1, 1, 1));
+
     private ResourceLocation id;
     private BedrockAnimatedModel model;
     private LuaAnimationStateMachine<ThrowableAnimationStateContext> stateMachine;
@@ -32,6 +39,7 @@ public class ThrowableDisplayInstance implements ICustomSoundSupplier {
     private ResourceLocation slotTexture;
     private ItemTransforms transforms;
     private Vector3f displayOffset;
+    private ItemTransform entityTransform;
     private Map<String, ResourceLocation> sounds;
     private ThirdPersonAnimationConfig thirdPersonAnimation;
 
@@ -63,6 +71,10 @@ public class ThrowableDisplayInstance implements ICustomSoundSupplier {
 
     public Vector3f getDisplayOffset() {
         return displayOffset;
+    }
+
+    public ItemTransform getEntityTransform() {
+        return entityTransform;
     }
 
     @Override
@@ -111,6 +123,7 @@ public class ThrowableDisplayInstance implements ICustomSoundSupplier {
 
         display.transforms = Objects.requireNonNullElse(pojo.transforms, ItemTransforms.NO_TRANSFORMS);
         display.displayOffset = Objects.requireNonNullElse(pojo.displayOffset, new Vector3f());
+        display.entityTransform = Objects.requireNonNullElse(pojo.entityTransform, DEFAULT_ENTITY_TRANSFORM);
         display.sounds = Objects.requireNonNullElseGet(pojo.sounds, Maps::newHashMap);
         display.thirdPersonAnimation = pojo.thridPersonAnimation;
 
@@ -132,6 +145,8 @@ public class ThrowableDisplayInstance implements ICustomSoundSupplier {
             ItemTransforms transforms,
             @SerializedName("display_offset")
             Vector3f displayOffset,
+            @SerializedName("entity_transform")
+            ItemTransform entityTransform,
             @SerializedName("sounds")
             Map<String, ResourceLocation> sounds,
             @SerializedName("thrid_person_animation")
