@@ -4,9 +4,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LightLayer;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,11 +46,23 @@ public class SmokeCloudParticle extends TextureSheetParticle {
 
     @Override
     public int getLightColor(float partialTick) {
-        BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
-        return LightTexture.pack(
-                this.level.getBrightness(LightLayer.BLOCK, blockPos),
-                this.level.getBrightness(LightLayer.SKY, blockPos)
-        );
+        BlockPos pos = BlockPos.containing(this.x, this.y, this.z);
+        if (!this.level.hasChunkAt(pos)) {
+            return 0;
+        }
+        int light = LevelRenderer.getLightColor(this.level, pos);
+        int sky = Math.max(light >> 20 & 15, 2);
+        int block = Math.max(light >> 4 & 15, 2);
+        // 粒子中心陷入实心方块时该格光照为 0，会直接渲染成黑色。
+        // 如果低于下限，尝试采样周围方块取最大值
+        if (sky <= 2 && block <= 2) {
+            for (Direction direction : Direction.values()) {
+                int neighbor = LevelRenderer.getLightColor(this.level, pos.relative(direction));
+                sky = Math.max(sky, neighbor >> 20 & 15);
+                block = Math.max(block, neighbor >> 4 & 15);
+            }
+        }
+        return sky << 20 | block << 4;
     }
 
     @Override
