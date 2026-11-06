@@ -5,12 +5,12 @@ import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
 import me.xjqsh.lrtactical.api.item.IConsumable;
 import me.xjqsh.lrtactical.item.consumable.ConsumableData;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
+import me.xjqsh.lrtactical.item.CustomItemComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.component.DataComponents;
 import org.jetbrains.annotations.Nullable;
 
 public class ConsumableIndex implements ICustomItemIndex {
@@ -77,11 +77,7 @@ public class ConsumableIndex implements ICustomItemIndex {
         if (stack.getItem() instanceof IConsumable consumable) {
             consumable.setId(stack, this.getId());
         }
-        stack.set(DataComponents.MAX_STACK_SIZE, getMaxStackSize());
-        if (data.hasDurability()) {
-            stack.set(DataComponents.MAX_DAMAGE, data.getMaxDurability());
-            stack.set(DataComponents.DAMAGE, 0);
-        }
+        CustomItemComponents.apply(stack, getMaxStackSize(), data.getMaxDurability());
         return stack;
     }
 

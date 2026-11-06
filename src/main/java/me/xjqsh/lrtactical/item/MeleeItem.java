@@ -36,6 +36,14 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        this.getMeleeIndex(stack).ifPresent(index ->
+                CustomItemComponents.apply(stack, index.getMaxStackSize(), index.getMaxDurability())
+        );
+    }
+
+    @Override
     public boolean isSame(ItemStack stack1, ItemStack stack2) {
         return IMeleeWeapon.super.isSame(stack1, stack2);
     }

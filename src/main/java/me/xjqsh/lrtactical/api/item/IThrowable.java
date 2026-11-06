@@ -56,6 +56,7 @@ public interface IThrowable extends ICustomItem {
     @Override
     default void setId(ItemStack stack, ResourceLocation id) {
         CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> nbt.putString(ID_TAG, id.toString()));
+        stack.getItem().verifyComponentsAfterLoad(stack);
     }
 
     @Override

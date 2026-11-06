@@ -34,6 +34,14 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
     }
 
     @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        this.getThrowableIndex(stack).ifPresent(index ->
+                CustomItemComponents.apply(stack, index.getMaxStackSize(), 0)
+        );
+    }
+
+    @Override
     public int getMaxStackSize(ItemStack stack) {
         return this.getThrowableIndex(stack).map(ThrowableIndex::getMaxStackSize).orElse(1);
     }

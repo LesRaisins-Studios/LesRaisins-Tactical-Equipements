@@ -7,6 +7,7 @@ import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponData;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponType;
 import me.xjqsh.lrtactical.util.DefaultAttrUUIDUtil;
+import me.xjqsh.lrtactical.item.CustomItemComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.NotNull;
@@ -99,10 +99,7 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
         if (stack.getItem() instanceof IMeleeWeapon iMeleeWeapon) {
             iMeleeWeapon.setId(stack, this.getId());
         }
-        if (data.getMaxDurability() > 0) {
-            stack.set(DataComponents.MAX_DAMAGE, data.getMaxDurability());
-            stack.set(DataComponents.DAMAGE, 0);
-        }
+        CustomItemComponents.apply(stack, getMaxStackSize(), data.getMaxDurability());
         return stack;
     }
 

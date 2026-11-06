@@ -6,12 +6,12 @@ import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.entity.ThrowableItemEntity;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
+import me.xjqsh.lrtactical.item.CustomItemComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.component.DataComponents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,7 +101,7 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
         if (stack.getItem() instanceof IThrowable iThrowable) {
             iThrowable.setId(stack, this.getId());
         }
-        stack.set(DataComponents.MAX_STACK_SIZE, getMaxStackSize());
+        CustomItemComponents.apply(stack, getMaxStackSize(), 0);
         return stack;
     }
 }

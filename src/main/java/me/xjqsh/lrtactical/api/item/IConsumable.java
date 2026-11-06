@@ -52,6 +52,7 @@ public interface IConsumable extends ICustomItem {
             tag.putString(ID_TAG, id.toString());
             return CustomData.of(tag);
         });
+        stack.getItem().verifyComponentsAfterLoad(stack);
     }
 
     @Override

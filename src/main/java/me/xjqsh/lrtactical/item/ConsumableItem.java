@@ -46,6 +46,14 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
     }
 
     @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        this.getConsumableIndex(stack).ifPresent(index ->
+                CustomItemComponents.apply(stack, index.getMaxStackSize(), index.getData().getMaxDurability())
+        );
+    }
+
+    @Override
     public @Nullable FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
         return this.getConsumableIndex(stack).map(ConsumableIndex::getFoodProperties).orElse(null);
     }
