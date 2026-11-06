@@ -109,7 +109,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<CustomBedrockModel
             doExtraTransforms(poseStack, model, stack);
 
             model.setEffectVisible(true);
-            model.render(poseStack, ctx, getRenderType(stack), light, OverlayTexture.NO_OVERLAY);
+            model.render(poseStack, ctx, getRenderType(stack), light, OverlayTexture.NO_OVERLAY, bufferSource);
             model.setEffectVisible(false);
 
             // 渲染结束后清除动画变换
@@ -170,7 +170,7 @@ public class MeleeItemRenderer extends AnimateGeoItemRenderer<CustomBedrockModel
                 if (model != null) {
                     model.render(poseStack, ctx, RenderType.entityCutout(
                             getTextureLocation(stack)
-                    ), light, overlay);
+                    ), light, overlay, bufferSource);
                 } else {
                     VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
                     SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);

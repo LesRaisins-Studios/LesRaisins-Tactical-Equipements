@@ -1,4 +1,5 @@
 {
+  "sort": 1,
   "name": "item.lrtactical.baseball_bat",
   "tooltip": "item.lrtactical.baseball_bat.desc",
   "type": "lrtactical:normal",

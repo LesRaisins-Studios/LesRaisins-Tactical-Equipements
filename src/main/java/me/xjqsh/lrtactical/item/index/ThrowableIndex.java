@@ -7,6 +7,7 @@ import me.xjqsh.lrtactical.entity.ThrowableItemEntity;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,26 +21,35 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
     private final ResourceLocation id;
     private final String name;
     private final String tooltip;
+    private final int sort;
 
     private ThrowableIndex(@NotNull ThrowableType<T, E> type, T data,
-                          String name, String tooltip, ResourceLocation id, Item baseItem) {
+                          String name, String tooltip, ResourceLocation id, Item baseItem, int sort) {
         this.type = type;
         this.data = data;
         this.id = id;
         this.baseItem = baseItem;
         this.name = name;
         this.tooltip = tooltip;
+        this.sort = Mth.clamp(sort, 0, 65536);
     }
 
     @Nullable
     public static <T extends ThrowableData, E extends ThrowableItemEntity> ThrowableIndex<T, E> deserialize(
             @NotNull ThrowableType<T, E> type, JsonElement data, String name, String tooltip, ResourceLocation id, Item baseItem
     ) {
+        return deserialize(type, data, name, tooltip, id, baseItem, 0);
+    }
+
+    @Nullable
+    public static <T extends ThrowableData, E extends ThrowableItemEntity> ThrowableIndex<T, E> deserialize(
+            @NotNull ThrowableType<T, E> type, JsonElement data, String name, String tooltip, ResourceLocation id, Item baseItem, int sort
+    ) {
         T throwableData = type.serializer().parse(data);
         if (throwableData == null) {
             return null;
         }
-        return new ThrowableIndex<>(type, throwableData, name, tooltip, id, baseItem);
+        return new ThrowableIndex<>(type, throwableData, name, tooltip, id, baseItem, sort);
     }
 
     public T getData() {
@@ -73,6 +83,11 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
 
     public ResourceLocation getId() {
         return id;
+    }
+
+    @Override
+    public int getSort() {
+        return sort;
     }
 
     public Item getBaseItem() {

@@ -1,5 +1,6 @@
 package me.xjqsh.lrtactical.client.input;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.tacz.guns.client.input.InteractKey;
 import com.tacz.guns.config.util.InteractKeyConfigRead;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
@@ -25,14 +26,16 @@ import static com.tacz.guns.util.InputExtraCheck.isInGame;
 public class LrInteractKey {
     @SubscribeEvent
     public static void onInteractKeyPress(InputEvent.Key event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && InteractKey.INTERACT_KEY.matches(event.getKey(), event.getScanCode())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS
+                && InteractKey.INTERACT_KEY.isActiveAndMatches(InputConstants.getKey(event.getKey(), event.getScanCode()))) {
             doInteractLogic();
         }
     }
 
     @SubscribeEvent
     public static void onInteractMousePress(InputEvent.MouseButton.Post event) {
-        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS && InteractKey.INTERACT_KEY.matchesMouse(event.getButton())) {
+        if (isInGame() && event.getAction() == GLFW.GLFW_PRESS
+                && InteractKey.INTERACT_KEY.isActiveAndMatches(InputConstants.Type.MOUSE.getOrCreate(event.getButton()))) {
             doInteractLogic();
         }
     }

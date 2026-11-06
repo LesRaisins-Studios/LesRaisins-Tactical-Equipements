@@ -1,4 +1,5 @@
 {
+  "sort": 6,
   "name": "item.lrtactical.goldenstar",
   "tooltip": "item.lrtactical.goldenstar.desc",
   "base_item": "lrtactical:consumable",

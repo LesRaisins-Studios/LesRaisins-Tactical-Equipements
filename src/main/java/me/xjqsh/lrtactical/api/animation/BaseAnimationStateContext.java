@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.api.animation;
 
 import com.tacz.guns.client.animation.statemachine.ItemAnimationStateContext;
+import com.tacz.guns.util.time.GunTime;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -35,10 +36,15 @@ public class BaseAnimationStateContext extends ItemAnimationStateContext {
     }
 
     /**
-     * 获取当前系统时间，单位毫秒。
-     * @return 当前系统时间
+     * 获取随游戏暂停的动画时间，单位毫秒。
+     * @return 当前动画时间
      */
     public long getCurrentTimestamp() {
+        return GunTime.nowMillis();
+    }
+
+    /** 获取真实系统时间（Unix 毫秒时间戳），不受游戏暂停影响。 */
+    public long getRealSystemTimestamp() {
         return System.currentTimeMillis();
     }
 

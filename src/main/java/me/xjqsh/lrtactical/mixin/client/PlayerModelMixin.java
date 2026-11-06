@@ -1,6 +1,7 @@
 package me.xjqsh.lrtactical.mixin.client;
 
 import com.tacz.guns.api.client.other.KeepingItemRenderer;
+import com.tacz.guns.client.animation.third.AnimationRenderContext;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -31,14 +32,13 @@ public class PlayerModelMixin<T extends LivingEntity> extends HumanoidModel<T> {
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
     private void setRotationAnglesTail(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
-        if (!(entityIn instanceof Player player)) {
+        if (!(entityIn instanceof Player) || !AnimationRenderContext.isFirstPersonHand(entityIn)) {
             return;
         }
 
-        // 用于清除默认的手臂旋转
-        // 当第一人称渲染是，ageInTicks 正好是 0
+        // 仅在实际渲染第一人称手臂时清除默认旋转。
         ItemStack currentItem = KeepingItemRenderer.getRenderer().getCurrentItem();
-        if (ageInTicks == 0F && currentItem != null && currentItem.getItem() instanceof ICustomItem) {
+        if (currentItem != null && currentItem.getItem() instanceof ICustomItem) {
             tacz$resetAll(this.rightArm);
             tacz$resetAll(this.leftArm);
             this.rightSleeve.copyFrom(this.rightArm);

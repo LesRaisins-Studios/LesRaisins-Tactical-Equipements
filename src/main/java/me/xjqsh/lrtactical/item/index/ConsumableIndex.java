@@ -6,6 +6,7 @@ import me.xjqsh.lrtactical.api.item.IConsumable;
 import me.xjqsh.lrtactical.item.consumable.ConsumableData;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,14 +18,16 @@ public class ConsumableIndex implements ICustomItemIndex {
     private final ResourceLocation id;
     private final String name;
     private final String tooltip;
+    private final int sort;
     private final FoodProperties foodProperties;
 
-    private ConsumableIndex(ConsumableData data, String name, String tooltip, ResourceLocation id, Item baseItem) {
+    private ConsumableIndex(ConsumableData data, String name, String tooltip, ResourceLocation id, Item baseItem, int sort) {
         this.baseItem = baseItem;
         this.data = data;
         this.id = id;
         this.name = name;
         this.tooltip = tooltip;
+        this.sort = Mth.clamp(sort, 0, 65536);
         this.foodProperties = buildFoodProperties(data);
     }
 
@@ -43,11 +46,16 @@ public class ConsumableIndex implements ICustomItemIndex {
 
     @Nullable
     public static ConsumableIndex deserialize(JsonElement data, String name, String tooltip, ResourceLocation id, Item baseItem) {
+        return deserialize(data, name, tooltip, id, baseItem, 0);
+    }
+
+    @Nullable
+    public static ConsumableIndex deserialize(JsonElement data, String name, String tooltip, ResourceLocation id, Item baseItem, int sort) {
         ConsumableData consumableData = CommonAssetsManager.GSON.fromJson(data, ConsumableData.class);
         if (consumableData == null) {
             return null;
         }
-        return new ConsumableIndex(consumableData, name, tooltip, id, baseItem);
+        return new ConsumableIndex(consumableData, name, tooltip, id, baseItem, sort);
     }
 
     public ConsumableData getData() {
@@ -82,6 +90,11 @@ public class ConsumableIndex implements ICustomItemIndex {
     @Override
     public ResourceLocation getId() {
         return id;
+    }
+
+    @Override
+    public int getSort() {
+        return sort;
     }
 
     @Override

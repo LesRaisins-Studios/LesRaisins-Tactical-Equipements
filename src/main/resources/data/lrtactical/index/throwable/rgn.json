@@ -1,4 +1,5 @@
 {
+  "sort": 4,
   "type": "lrtactical:explode",
   "name": "item.lrtactical.rgn",
   "tooltip": "item.lrtactical.rgn.desc",

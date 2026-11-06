@@ -1,4 +1,5 @@
 {
+  "sort": 2,
   "type": "lrtactical:stun",
   "name": "item.lrtactical.flash_grenade",
   "tooltip": "item.lrtactical.flash_grenade.desc",

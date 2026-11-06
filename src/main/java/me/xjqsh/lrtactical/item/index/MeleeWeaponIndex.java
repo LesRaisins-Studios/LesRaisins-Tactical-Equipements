@@ -10,6 +10,7 @@ import me.xjqsh.lrtactical.item.melee.MeleeWeaponData;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponType;
 import me.xjqsh.lrtactical.util.DefaultAttrUUIDUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
@@ -25,16 +26,18 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
     private final ResourceLocation id;
     private final String name;
     private final String tooltip;
+    private final int sort;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     private MeleeWeaponIndex(MeleeWeaponType<T> type, T data, String name, String tooltip,
-                             ResourceLocation id, Item baseItem) {
+                             ResourceLocation id, Item baseItem, int sort) {
         this.type = type;
         this.baseItem = baseItem;
         this.data = data;
         this.id = id;
         this.name = name;
         this.tooltip = tooltip;
+        this.sort = Mth.clamp(sort, 0, 65536);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         for (var entry : data.getRawAttributes().getAttributes()) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(entry.id());
@@ -56,11 +59,18 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
     public static <T extends MeleeWeaponData> MeleeWeaponIndex<T> deserialize(
             @NotNull MeleeWeaponType<T> type, JsonElement data, String name, String tooltip, ResourceLocation id, Item baseItem
     ) {
+        return deserialize(type, data, name, tooltip, id, baseItem, 0);
+    }
+
+    @Nullable
+    public static <T extends MeleeWeaponData> MeleeWeaponIndex<T> deserialize(
+            @NotNull MeleeWeaponType<T> type, JsonElement data, String name, String tooltip, ResourceLocation id, Item baseItem, int sort
+    ) {
         T meleeData = type.serializer().parse(data);
         if (meleeData == null) {
             return null;
         }
-        return new MeleeWeaponIndex<>(type, meleeData, name, tooltip, id, baseItem);
+        return new MeleeWeaponIndex<>(type, meleeData, name, tooltip, id, baseItem, sort);
     }
 
     public Multimap<Attribute, AttributeModifier> getDefaultModifiers() {
@@ -104,6 +114,11 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
     @Override
     public ResourceLocation getId() {
         return id;
+    }
+
+    @Override
+    public int getSort() {
+        return sort;
     }
 
     @Override

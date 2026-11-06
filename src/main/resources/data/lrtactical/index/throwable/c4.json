@@ -1,4 +1,5 @@
 {
+  "sort": 1,
   // 粘性炸弹，此类型未完全完成
   "type": "lrtactical:sticky",
   "name": "item.lrtactical.c4",

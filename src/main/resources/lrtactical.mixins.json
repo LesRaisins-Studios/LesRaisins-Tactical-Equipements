@@ -10,6 +10,7 @@
     "common.PlayerMixin"
   ],
   "client": [
+    "client.CreativePackFiltersMixin",
     "client.GameRendererMixin", "client.GunSmithTableScreenMixin", "client.MinecraftMixin",
     "client.PlayerAnimatorAssetManagerMixin", "client.PlayerModelMixin"
   ],

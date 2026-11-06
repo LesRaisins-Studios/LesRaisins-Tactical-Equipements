@@ -1,4 +1,5 @@
 {
+  "sort": 3,
   "type": "lrtactical:effect_cloud",
   "name": "item.lrtactical.molotov",
   "tooltip": "item.lrtactical.molotov.desc",

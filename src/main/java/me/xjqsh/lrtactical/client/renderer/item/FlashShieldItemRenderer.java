@@ -106,7 +106,7 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
             if (model != null) {
                 model.render(poseStack, ctx, RenderType.entityCutout(
                         getTextureLocation(stack)
-                ), light, overlay);
+                ), light, overlay, bufferSource);
             } else {
                 VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
                 SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);

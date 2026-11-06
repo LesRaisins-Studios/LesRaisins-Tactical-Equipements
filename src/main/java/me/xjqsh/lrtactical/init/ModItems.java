@@ -3,13 +3,11 @@ package me.xjqsh.lrtactical.init;
 
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
+import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
 import me.xjqsh.lrtactical.api.item.IConsumable;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.item.*;
-import me.xjqsh.lrtactical.item.index.ConsumableIndex;
-import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
-import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,8 +19,21 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collection;
+import java.util.Comparator;
+
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
+    private static final ResourceLocation THROWABLE_ICON_ID = new ResourceLocation(EquipmentMod.MOD_ID, "m67");
+    private static final ResourceLocation CONSUMABLE_ICON_ID = new ResourceLocation(EquipmentMod.MOD_ID, "blood_pack");
+    private static final ResourceLocation MELEE_ICON_ID = new ResourceLocation(EquipmentMod.MOD_ID, "karambit");
+
+    private static final Comparator<ICustomItemIndex> CREATIVE_ITEM_ORDER = Comparator
+            .comparingInt((ICustomItemIndex index) -> EquipmentMod.MOD_ID.equals(index.getId().getNamespace()) ? 0 : 1)
+            .thenComparing(index -> index.getId().getNamespace())
+            .thenComparingInt(ICustomItemIndex::getSort)
+            .thenComparing(index -> index.getId().getPath());
+
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, EquipmentMod.MOD_ID);
     public static final RegistryObject<CreativeModeTab> THROWABLE_TAB = TABS.register("throwable",
             () -> CreativeModeTab.builder()
@@ -59,7 +70,7 @@ public class ModItems {
         ItemStack stack = new ItemStack(THROWABLE.get());
         IThrowable iThrowable = IThrowable.of(stack);
         if (iThrowable != null) {
-            iThrowable.setId(stack, new ResourceLocation(EquipmentMod.MOD_ID, "m67"));
+            iThrowable.setId(stack, THROWABLE_ICON_ID);
         }
         return stack;
     }
@@ -68,7 +79,7 @@ public class ModItems {
         ItemStack stack = new ItemStack(CONSUMABLE.get());
         IConsumable consumable = IConsumable.of(stack);
         if (consumable != null) {
-            consumable.setId(stack, new ResourceLocation(EquipmentMod.MOD_ID, "blood_pack"));
+            consumable.setId(stack, CONSUMABLE_ICON_ID);
         }
         return stack;
     }
@@ -77,31 +88,26 @@ public class ModItems {
         ItemStack stack = new ItemStack(MELEE.get());
         IMeleeWeapon iMeleeWeapon = IMeleeWeapon.of(stack);
         if (iMeleeWeapon != null) {
-            iMeleeWeapon.setId(stack, new ResourceLocation(EquipmentMod.MOD_ID, "karambit"));
+            iMeleeWeapon.setId(stack, MELEE_ICON_ID);
         }
         return stack;
     }
 
     public static void fillConsumables(CreativeModeTab.ItemDisplayParameters pParameters, CreativeModeTab.Output pOutput) {
-        for (ConsumableIndex index : LrTacticalAPI.getConsumableIndexes()) {
-            ItemStack stack = index.createItemStack();
-            pOutput.accept(stack);
-        }
+        fillItems(LrTacticalAPI.getConsumableIndexes(), pOutput);
     }
 
     public static void fillThrowables(CreativeModeTab.ItemDisplayParameters pParameters, CreativeModeTab.Output pOutput) {
-        for (ThrowableIndex<?, ?> index : LrTacticalAPI.getThrowableIndexes()) {
-            ItemStack stack = index.createItemStack();
-            pOutput.accept(stack);
-        }
+        fillItems(LrTacticalAPI.getThrowableIndexes(), pOutput);
         pOutput.accept(new ItemStack(DETONATOR.get()));
     }
 
     public static void fillMeleeWeapons(CreativeModeTab.ItemDisplayParameters pParameters, CreativeModeTab.Output pOutput) {
-        for (MeleeWeaponIndex<?> index : LrTacticalAPI.getMeleeIndexes()) {
-            ItemStack stack = index.createItemStack();
-            pOutput.accept(stack);
-        }
+        fillItems(LrTacticalAPI.getMeleeIndexes(), pOutput);
         pOutput.accept(new ItemStack(FLASH_SHIELD.get()));
+    }
+
+    private static void fillItems(Collection<? extends ICustomItemIndex> indexes, CreativeModeTab.Output output) {
+        indexes.stream().sorted(CREATIVE_ITEM_ORDER).map(ICustomItemIndex::createItemStack).forEach(output::accept);
     }
 }

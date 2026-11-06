@@ -3,6 +3,7 @@ package me.xjqsh.lrtactical.client.renderer;
 import com.tacz.guns.client.model.BedrockAnimatedModel;
 import com.tacz.guns.client.model.bedrock.BedrockPart;
 import com.tacz.guns.util.math.SecondOrderDynamics;
+import com.tacz.guns.util.time.GunTime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
@@ -11,6 +12,7 @@ public class JumpSwayUtil {
     private static float jumpingSwayProgress = 0;
     private static boolean lastOnGround = false;
     private static long jumpingTimeStamp = -1;
+    private static long clockEpoch = -1;
 
     private static final SecondOrderDynamics JUMPING_DYNAMICS = new SecondOrderDynamics(0.28f, 1f, 0.65f, 0);
     private static final float JUMPING_Y_SWAY = -2f;
@@ -18,8 +20,13 @@ public class JumpSwayUtil {
     private static final float LANDING_SWAY_TIME = 0.15f;
 
     public static void applyJumpingSway(BedrockAnimatedModel model, float partialTicks) {
-        if (jumpingTimeStamp == -1) {
-            jumpingTimeStamp = System.currentTimeMillis();
+        long now = GunTime.nowMillis();
+        long epoch = GunTime.epoch();
+        if (clockEpoch != epoch || jumpingTimeStamp == -1) {
+            clockEpoch = epoch;
+            jumpingTimeStamp = now;
+            jumpingSwayProgress = 0;
+            lastOnGround = false;
         }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
@@ -33,7 +40,7 @@ public class JumpSwayUtil {
                     }
                     lastOnGround = true;
                 } else {
-                    jumpingSwayProgress -= (System.currentTimeMillis() - jumpingTimeStamp) / (LANDING_SWAY_TIME * 1000);
+                    jumpingSwayProgress -= (now - jumpingTimeStamp) / (LANDING_SWAY_TIME * 1000);
                     if (jumpingSwayProgress < 0) {
                         jumpingSwayProgress = 0;
                     }
@@ -47,14 +54,14 @@ public class JumpSwayUtil {
                     }
                     lastOnGround = false;
                 } else {
-                    jumpingSwayProgress -= (System.currentTimeMillis() - jumpingTimeStamp) / (JUMPING_SWAY_TIME * 1000);
+                    jumpingSwayProgress -= (now - jumpingTimeStamp) / (JUMPING_SWAY_TIME * 1000);
                     if (jumpingSwayProgress < 0) {
                         jumpingSwayProgress = 0;
                     }
                 }
             }
         }
-        jumpingTimeStamp = System.currentTimeMillis();
+        jumpingTimeStamp = now;
         float ySway = JUMPING_DYNAMICS.update(JUMPING_Y_SWAY * jumpingSwayProgress);
         BedrockPart rootNode = model.getRootNode();
         if (rootNode != null) {

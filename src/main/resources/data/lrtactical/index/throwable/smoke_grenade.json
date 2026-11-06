@@ -1,4 +1,5 @@
 {
+  "sort": 5,
   "type": "lrtactical:smoke",
   "name": "item.lrtactical.smoke_grenade",
   "tooltip": "item.lrtactical.smoke_grenade.desc",

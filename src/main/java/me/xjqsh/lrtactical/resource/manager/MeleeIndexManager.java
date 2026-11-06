@@ -57,6 +57,7 @@ public class MeleeIndexManager extends JsonDataManager<MeleeWeaponIndex<?>> {
     public static MeleeWeaponIndex<?> parse(JsonObject pJson, ResourceLocation id) throws JsonParseException {
         String name = GsonHelper.getAsString(pJson, "name", "unknown.lrtactical.name");
         String tooltip = GsonHelper.getAsString(pJson, "tooltip", null);
+        int sort = GsonHelper.getAsInt(pJson, "sort", 0);
 
         String type_name = GsonHelper.getAsString(pJson, "type", "lrtactical:normal");
         var type = ModRegistries.MELEE_WEAPON_TYPE_SUPPLIER.get().getValue(new ResourceLocation(type_name));
@@ -72,6 +73,6 @@ public class MeleeIndexManager extends JsonDataManager<MeleeWeaponIndex<?>> {
 
         JsonObject data = GsonHelper.getAsJsonObject(pJson, "data");
 
-        return MeleeWeaponIndex.deserialize(type, data, name, tooltip, id, item);
+        return MeleeWeaponIndex.deserialize(type, data, name, tooltip, id, item, sort);
     }
 }

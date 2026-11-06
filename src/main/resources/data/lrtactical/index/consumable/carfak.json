@@ -1,4 +1,5 @@
 {
+  "sort": 3,
   "name": "item.lrtactical.carfak",
   "tooltip": "item.lrtactical.carfak.desc",
   "base_item": "lrtactical:consumable",
