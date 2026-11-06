@@ -12,6 +12,7 @@ import me.xjqsh.lrtactical.api.collision.OBB;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.client.renderer.item.FlashShieldItemRenderer;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
+import me.xjqsh.lrtactical.client.renderer.item.ThrowableItemRendererWrapper;
 import me.xjqsh.lrtactical.config.ClientConfig;
 import me.xjqsh.lrtactical.init.ModEffects;
 import net.minecraft.client.Minecraft;
@@ -40,6 +41,7 @@ import org.joml.Vector3f;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EquipmentMod.MOD_ID)
 public class ClientEventsHandler {
+    private static final String INPUT_MOVEMENT_IDLE = "movement_idle";
     public static double shakeTime = 0;
     public static double shakeRadius = 0;
     public static double shakeAmplitude = 0;
@@ -119,20 +121,25 @@ public class ClientEventsHandler {
         if (renderer instanceof MeleeItemRenderer renderer1) {
             var animationStateMachine = renderer1.getStateMachine(mainHandItem);
             if (animationStateMachine != null) {
-                tickMove(player, animationStateMachine);
+                tickMove(player, animationStateMachine, GunAnimationConstant.INPUT_IDLE);
             }
         } else if (renderer instanceof FlashShieldItemRenderer renderer2) {
             var animationStateMachine = renderer2.getStateMachine(mainHandItem);
             if (animationStateMachine != null) {
-                tickMove(player, animationStateMachine);
+                tickMove(player, animationStateMachine, GunAnimationConstant.INPUT_IDLE);
+            }
+        } else if (renderer instanceof ThrowableItemRendererWrapper renderer2) {
+            var animationStateMachine = renderer2.getStateMachine(mainHandItem);
+            if (animationStateMachine != null) {
+                tickMove(player, animationStateMachine, INPUT_MOVEMENT_IDLE);
             }
         }
     }
 
-    private static boolean tickMove(LocalPlayer player, LuaAnimationStateMachine<?> animationStateMachine) {
+    private static boolean tickMove(LocalPlayer player, LuaAnimationStateMachine<?> animationStateMachine, String idleInput) {
         // 群组服切世界导致的特殊 BUG 处理，正常情况不会遇到此问题
         if (player.input == null) {
-            animationStateMachine.trigger(GunAnimationConstant.INPUT_IDLE);
+            animationStateMachine.trigger(idleInput);
             return true;
         }
 
@@ -142,7 +149,7 @@ public class ClientEventsHandler {
         } else if (!player.isMovingSlowly() && player.input.getMoveVector().length() > 0.01) {
             animationStateMachine.trigger(GunAnimationConstant.INPUT_WALK);
         } else {
-            animationStateMachine.trigger(GunAnimationConstant.INPUT_IDLE);
+            animationStateMachine.trigger(idleInput);
         }
         return false;
     }

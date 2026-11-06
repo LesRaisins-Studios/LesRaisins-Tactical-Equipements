@@ -1,10 +1,9 @@
 package me.xjqsh.lrtactical.api.animation;
 
-import com.tacz.guns.client.animation.statemachine.ItemAnimationStateContext;
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import net.minecraft.world.item.ItemStack;
 
-public class ThrowableAnimationStateContext extends ItemAnimationStateContext {
+public class ThrowableAnimationStateContext extends BaseAnimationStateContext {
     private ItemStack currentItem = ItemStack.EMPTY;
     private int usingTick = 0;
     private boolean using = false;
