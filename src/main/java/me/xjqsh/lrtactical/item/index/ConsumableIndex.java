@@ -10,6 +10,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
 import org.jetbrains.annotations.Nullable;
 
 public class ConsumableIndex implements ICustomItemIndex {
@@ -37,7 +38,7 @@ public class ConsumableIndex implements ICustomItemIndex {
         }
         FoodProperties.Builder builder = new FoodProperties.Builder()
                 .nutrition(data.getFood())
-                .saturationMod(data.getSaturation());
+                .saturationModifier(data.getSaturation());
         for (ConsumableData.EffectData effectData : data.getEffects()) {
             builder.effect(effectData::createInstance, effectData.getChance());
         }
@@ -75,6 +76,11 @@ public class ConsumableIndex implements ICustomItemIndex {
         ItemStack stack = new ItemStack(baseItem);
         if (stack.getItem() instanceof IConsumable consumable) {
             consumable.setId(stack, this.getId());
+        }
+        stack.set(DataComponents.MAX_STACK_SIZE, getMaxStackSize());
+        if (data.hasDurability()) {
+            stack.set(DataComponents.MAX_DAMAGE, data.getMaxDurability());
+            stack.set(DataComponents.DAMAGE, 0);
         }
         return stack;
     }

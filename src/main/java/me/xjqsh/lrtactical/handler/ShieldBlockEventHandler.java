@@ -7,17 +7,17 @@ import me.xjqsh.lrtactical.network.message.SShieldShake;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.ShieldBlockEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.minecraft.world.entity.EquipmentSlot;
 
-@Mod.EventBusSubscriber(modid = EquipmentMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = EquipmentMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ShieldBlockEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onShieldBlock(ShieldBlockEvent event) {
+    public static void onShieldBlock(LivingShieldBlockEvent event) {
         LivingEntity livingEntity = event.getEntity();
         ItemStack stack = livingEntity.getMainHandItem();
         if (stack.getItem() instanceof FlashShieldItem flashShieldItem) {
@@ -26,15 +26,12 @@ public class ShieldBlockEventHandler {
 
             float blockedDamage = Math.min(event.getBlockedDamage(), restDurability);
             event.setBlockedDamage(blockedDamage);
-            stack.hurtAndBreak((int) blockedDamage, livingEntity, (e)->{});
+            stack.hurtAndBreak((int) blockedDamage, livingEntity, EquipmentSlot.MAINHAND);
 
             if (blockedDamage >= 1) {
                 if (livingEntity instanceof ServerPlayer serverPlayer) {
                     // 发送消息到客户端，触发动画
-                    NetworkHandler.CHANNEL.send(
-                            PacketDistributor.PLAYER.with(() -> serverPlayer),
-                            new SShieldShake()
-                    );
+                    NetworkHandler.sendToClientPlayer(new SShieldShake(), serverPlayer);
                 }
             }
         }

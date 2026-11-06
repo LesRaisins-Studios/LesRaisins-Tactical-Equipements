@@ -1,7 +1,7 @@
 package me.xjqsh.lrtactical.api.animation;
 
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
-import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
+import me.xjqsh.lrtactical.capability.CombatProperties;
 
 public class MeleeAnimationStateContext extends BaseAnimationStateContext {
     /**
@@ -18,7 +18,7 @@ public class MeleeAnimationStateContext extends BaseAnimationStateContext {
         if (action1 == null) {
             return 0;
         }
-        return this.processCameraEntity(entity -> entity.getCapability(CombatPropertiesProvider.CAPABILITY)
+        return this.processCameraEntity(entity -> CombatProperties.get(entity)
                 .map(cap -> cap.getActionCount(action1))
                 .orElse(0)).orElse(0);
     }

@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
+
 import org.jetbrains.annotations.Nullable;
 
 public class StunGrenadeEntity extends ThrowableItemEntity {
@@ -17,7 +17,6 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
             .setShouldReceiveVelocityUpdates(true)
             .setTrackingRange(64)
             .setUpdateInterval(1)
-            .setCustomClientFactory(StunGrenadeEntity::new)
             .sized(0.3f, 0.3f)
             .noSave()
             .noSummon()
@@ -30,14 +29,9 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
         super(TYPE, entity, level, lifeTime);
     }
 
-    public StunGrenadeEntity(PlayMessages.SpawnEntity spawnEntity, Level level) {
-        super(TYPE, level);
-    }
-
     public StunGrenadeEntity(EntityType<StunGrenadeEntity> type, Level level) {
         super(type, level);
     }
-
 
     public StunThrowableData.StunData getData() {
         return data;
@@ -87,14 +81,14 @@ public class StunGrenadeEntity extends ThrowableItemEntity {
                 // Duration attenuated by distance
                 int durationBlinded = data.calcBlindDuration(distance, a1);
                 if (durationBlinded > 0){
-                    target.addEffect(new MobEffectInstance(ModEffects.BLIND.get(), durationBlinded, 0, false, false));
+                    target.addEffect(new MobEffectInstance(ModEffects.BLIND, durationBlinded, 0, false, false));
                 }
             }
         }
 
         int durationDeafened = data.calcDeafenedDuration(distance);
         if (durationDeafened > 0){
-            target.addEffect(new MobEffectInstance(ModEffects.DEAFENED.get(), durationDeafened, 0, false, false));
+            target.addEffect(new MobEffectInstance(ModEffects.DEAFENED, durationDeafened, 0, false, false));
         }
     }
 }

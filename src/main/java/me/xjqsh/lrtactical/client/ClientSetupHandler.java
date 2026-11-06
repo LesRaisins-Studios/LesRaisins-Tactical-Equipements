@@ -18,17 +18,22 @@ import me.xjqsh.lrtactical.init.ModParticleTypes;
 import me.xjqsh.lrtactical.inventory.tooltip.ConsumableTooltip;
 import me.xjqsh.lrtactical.inventory.tooltip.MeleeTooltip;
 import me.xjqsh.lrtactical.inventory.tooltip.ThrowableTooltip;
+import me.xjqsh.lrtactical.client.gui.ClothConfigScreen;
+import me.xjqsh.lrtactical.compat.cloth.MenuIntegration;
+import me.xjqsh.lrtactical.compat.player_animator.PlayerAnimatorHelper;
+import me.xjqsh.lrtactical.init.CompatRegistry;
 import net.minecraft.client.renderer.entity.NoopRenderer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
-import static net.minecraftforge.client.gui.overlay.VanillaGuiOverlay.CROSSHAIR;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = EquipmentMod.MOD_ID)
+@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD, modid = EquipmentMod.MOD_ID)
 public class ClientSetupHandler {
     @SubscribeEvent
     public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -60,13 +65,22 @@ public class ClientSetupHandler {
     }
 
     @SubscribeEvent
-    public static void registerOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("lr_using_progress", new UsingProgressOverlay());
+    public static void registerOverlay(RegisterGuiLayersEvent event) {
+        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "lr_using_progress"), new UsingProgressOverlay());
     }
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(SoundHandler.get());
+        NeoForge.EVENT_BUS.register(SoundHandler.get());
+        event.enqueueWork(() -> {
+            CompatRegistry.checkModLoad(
+                    CompatRegistry.CLOTH_CONFIG,
+                    MenuIntegration::registerModsPage);
+            ClothConfigScreen.registerNoClothConfigPage();
+            CompatRegistry.checkModLoad(
+                    CompatRegistry.PLAYER_ANIMATOR,
+                    PlayerAnimatorHelper::initIntegration);
+        });
     }
 
     @SubscribeEvent
@@ -76,9 +90,9 @@ public class ClientSetupHandler {
     }
 
     @SubscribeEvent
-    public static void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
+    public static void onRegisterGuiOverlays(RegisterGuiLayersEvent event) {
         // 注册 HUD
-        event.registerAbove(CROSSHAIR.id(), "lrt_interact_key_overlay", new InteractKeyTextOverlay());
+        event.registerAbove(VanillaGuiLayers.CROSSHAIR, ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "lrt_interact_key_overlay"), new InteractKeyTextOverlay());
     }
 }
 

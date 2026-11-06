@@ -1,0 +1,44 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "c:ingots/iron"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "tag": "c:leather"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "tag": "minecraft:planks"
+      },
+      "count": 6
+    },
+    {
+      "item": {
+        "tag": "c:gems/quartz"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:melee",
+    "item": {
+      "id": "lrtactical:melee",
+      "components": {
+        "minecraft:custom_data": {
+          "MeleeWeaponId": "lrtactical:baseball_bat"
+        },
+        "minecraft:max_stack_size": 1,
+        "minecraft:max_damage": 240,
+        "minecraft:damage": 0
+      }
+    }
+  }
+}

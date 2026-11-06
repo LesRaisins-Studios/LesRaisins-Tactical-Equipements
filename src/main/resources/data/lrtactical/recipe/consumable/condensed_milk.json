@@ -1,0 +1,30 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "item": "minecraft:milk_bucket"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:sugar"
+      },
+      "count": 2
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:consumable",
+    "item": {
+      "id": "lrtactical:consumable",
+      "components": {
+        "minecraft:custom_data": {
+          "ConsumableId": "lrtactical:condensed_milk"
+        },
+        "minecraft:max_stack_size": 4
+      }
+    }
+  }
+}

@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
@@ -163,7 +163,7 @@ public class EffectCloudThrowableData extends ThrowableData {
         boolean showIcon
     ) {
         public MobEffectInstance toInstance() {
-            return new MobEffectInstance(type, duration, amplifier, false, visible, showIcon);
+            return new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(type), duration, amplifier, false, visible, showIcon);
         }
     }
 
@@ -173,7 +173,7 @@ public class EffectCloudThrowableData extends ThrowableData {
             if (ele.isJsonObject()) {
                 var obj = ele.getAsJsonObject();
                 ResourceLocation id = ctx.deserialize(obj.get("type"), ResourceLocation.class);
-                MobEffect type1 = ForgeRegistries.MOB_EFFECTS.getValue(id);
+                MobEffect type1 = BuiltInRegistries.MOB_EFFECT.get(id);
                 if (type1 == null) {
                     throw new JsonParseException("Unknown effect type: " + id);
                 }

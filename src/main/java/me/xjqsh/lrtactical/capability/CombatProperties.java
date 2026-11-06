@@ -9,6 +9,7 @@ import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.CMeleeAttackRequest;
 import me.xjqsh.lrtactical.network.message.CPrepareMeleeAttack;
 import me.xjqsh.lrtactical.network.message.SResetMeleeSyncMessage;
+import me.xjqsh.lrtactical.init.ModAttachments;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -16,16 +17,23 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-@AutoRegisterCapability
 public class CombatProperties {
-    public static final ResourceLocation ID = new ResourceLocation(EquipmentMod.MOD_ID, "combat_data");
+    public static Optional<CombatProperties> get(Entity entity) {
+        return entity instanceof Player player
+                ? Optional.of(player.getData(ModAttachments.COMBAT))
+                : Optional.empty();
+    }
+
+    public static final ResourceLocation ID =
+
+            ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "combat_data");
 
     private final List<DelayTask> delayedActions = new ArrayList<>();
 
@@ -157,7 +165,7 @@ public class CombatProperties {
             preparingAttackCnt = cnt;
             coolDownTick = Math.max(0, coolDownTick - 1);
         } else {
-            NetworkHandler.CHANNEL.sendToServer(new CPrepareMeleeAttack(action, origin, direction));
+            NetworkHandler.sendToServer(new CPrepareMeleeAttack(action, origin, direction));
 
             int delay = weapon.getAttackDelay(entity, stack, action, cnt);
             var attack = new DelayAttack(delay, stack, action, cnt);
@@ -251,7 +259,7 @@ public class CombatProperties {
         public void perform(Player player) {
             if (stack.getItem() instanceof IMeleeWeapon weapon && weapon.isSame(stack, player.getMainHandItem())) {
                 List<Entity> entities = weapon.collectTargets(player, stack, action, player.getEyePosition(), player.getLookAngle());
-                NetworkHandler.CHANNEL.sendToServer(new CMeleeAttackRequest(action, actionCount, entities));
+                NetworkHandler.sendToServer(new CMeleeAttackRequest(action, actionCount, entities));
             }
         }
     }

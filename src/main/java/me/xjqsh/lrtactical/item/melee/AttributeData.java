@@ -46,7 +46,7 @@ public class AttributeData {
                     JsonPrimitive primitive = entry.getValue().getAsJsonPrimitive();
                     if (primitive.isNumber()) {
                         float amount = primitive.getAsFloat();
-                        attributeData.attributes.add(new AttributeInfo(id, amount, AttributeModifier.Operation.ADDITION));
+                        attributeData.attributes.add(new AttributeInfo(id, amount, AttributeModifier.Operation.ADD_VALUE));
                     }
                 } else if (entry.getValue().isJsonObject()) {
                     JsonObject attributeObject = entry.getValue().getAsJsonObject();
@@ -54,10 +54,10 @@ public class AttributeData {
                     String operationId = GsonHelper.getAsString(attributeObject, "operation", "addition");
 
                     var operation = switch (operationId) {
-                        case "addition" -> AttributeModifier.Operation.ADDITION;
-                        case "percent" -> AttributeModifier.Operation.MULTIPLY_BASE;
-                        case "multiply" -> AttributeModifier.Operation.MULTIPLY_TOTAL;
-                        default -> AttributeModifier.Operation.ADDITION;
+                        case "addition" -> AttributeModifier.Operation.ADD_VALUE;
+                        case "percent" -> AttributeModifier.Operation.ADD_MULTIPLIED_BASE;
+                        case "multiply" -> AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
+                        default -> AttributeModifier.Operation.ADD_VALUE;
                     };
 
                     attributeData.attributes.add(new AttributeInfo(id, amount, operation));

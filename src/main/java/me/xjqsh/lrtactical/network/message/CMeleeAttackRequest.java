@@ -2,22 +2,33 @@ package me.xjqsh.lrtactical.network.message;
 
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.melee.MeleeAction;
-import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
+import me.xjqsh.lrtactical.capability.CombatProperties;
 import me.xjqsh.lrtactical.config.ServerConfig;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public record CMeleeAttackRequest(
         MeleeAction action,
         int actionCount,
         int[] entityIds
-) {
+) implements CustomPacketPayload {
+    public static final Type<CMeleeAttackRequest> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath("lrtactical", "c_melee_attack_request"));
+    public static final StreamCodec<FriendlyByteBuf, CMeleeAttackRequest> STREAM_CODEC =
+            StreamCodec.of((buf, message) -> encode(message, buf), CMeleeAttackRequest::decode);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     public CMeleeAttackRequest(MeleeAction action, int actionCount, List<Entity> entities) {
         this(action, actionCount, toList(entities));
     }
@@ -39,37 +50,33 @@ public record CMeleeAttackRequest(
         return new CMeleeAttackRequest(action, actionCount, ids);
     }
 
-    public static void handle(CMeleeAttackRequest message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getReceptionSide().isServer()) {
-            context.enqueueWork(() -> {
-                ServerPlayer player = context.getSender();
-                if (player == null) {
-                    return;
-                }
+    public static void handle(CMeleeAttackRequest message, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            ServerPlayer player = (ServerPlayer) context.player();
+            if (player == null) {
+                return;
+            }
 
-                if (message.entityIds.length > ServerConfig.MELEE_MAX_TARGET_PER_PACKET.get()) {
-                    EquipmentMod.LOGGER.info(
-                            "Player {} tried to attack too many entities at once: {}! Ignoring.",
-                            player.getName().getString(),
-                            message.entityIds.length
-                    );
-                    return;
-                }
+            if (message.entityIds.length > ServerConfig.MELEE_MAX_TARGET_PER_PACKET.get()) {
+                EquipmentMod.LOGGER.info(
+                        "Player {} tried to attack too many entities at once: {}! Ignoring.",
+                        player.getName().getString(),
+                        message.entityIds.length
+                );
+                return;
+            }
 
-                List<Entity> entities = new ArrayList<>();
-                for (int entityId : message.entityIds()) {
-                    Entity entity = player.level().getEntity(entityId);
-                    if (entity != null) {
-                        entities.add(entity);
-                    }
+            List<Entity> entities = new ArrayList<>();
+            for (int entityId : message.entityIds()) {
+                Entity entity = player.level().getEntity(entityId);
+                if (entity != null) {
+                    entities.add(entity);
                 }
+            }
 
-                player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
-                    cap.postAttack(message.action, message.actionCount, entities);
-                });
+            CombatProperties.get(player).ifPresent(cap -> {
+                cap.postAttack(message.action, message.actionCount, entities);
             });
-        }
-        context.setPacketHandled(true);
+        });
     }
 }

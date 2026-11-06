@@ -20,7 +20,7 @@ public class ThirdPersonAnimationConfig {
 
     @Nullable
     public ResourceLocation getAnimationPath() {
-        return animationPath == null ? null : new ResourceLocation(animationPath);
+        return animationPath == null ? null : ResourceLocation.parse(animationPath);
     }
 
     @Nullable

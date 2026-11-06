@@ -4,19 +4,18 @@ import me.xjqsh.lrtactical.entity.sp.SpEffectCloudEntity;
 import me.xjqsh.lrtactical.item.throwable.area.EffectCloudThrowableData;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SSplashParticle;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -26,7 +25,6 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
             .setShouldReceiveVelocityUpdates(true)
             .setTrackingRange(64)
             .setUpdateInterval(1)
-            .setCustomClientFactory(EffectCloudGrenadeEntity::new)
             .sized(0.3f, 0.3f)
             .noSave()
             .noSummon()
@@ -39,14 +37,9 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
         super(TYPE, entity, level, lifeTime);
     }
 
-    public EffectCloudGrenadeEntity(PlayMessages.SpawnEntity spawnEntity, Level level) {
-        super(TYPE, level);
-    }
-
     public EffectCloudGrenadeEntity(EntityType<EffectCloudGrenadeEntity> type, Level level) {
         super(type, level);
     }
-
 
     @Override
     public void onDeath(@Nullable HitResult hitResult) {
@@ -59,7 +52,7 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
             } else {
                 List<MobEffectInstance> effects = cloudData.getEffectInstances();
                 Entity target = hitResult instanceof EntityHitResult entityHitResult ? entityHitResult.getEntity() : null;
-                int color = PotionUtils.getColor(effects);
+                int color = PotionContents.getColor(effects);
 
                 applySplash(effects, cloudData.isIgnite(), cloudData.getIgniteTime(), target, cloudData.getRadius());
                 NetworkHandler.sendToNearbyPlayers(
@@ -115,10 +108,10 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
     public void applyAllEffects(List<MobEffectInstance> effectInstances, LivingEntity entity,
                                 double d, Entity source, boolean ignite, int igniteTime) {
         for (MobEffectInstance effect : effectInstances) {
-            MobEffect mobEffect = effect.getEffect();
+            var mobEffect = effect.getEffect();
 
-            if (mobEffect.isInstantenous()) {
-                mobEffect.applyInstantenousEffect(this, this.getOwner(), entity, effect.getAmplifier(), d);
+            if (mobEffect.value().isInstantenous()) {
+                mobEffect.value().applyInstantenousEffect(this, this.getOwner(), entity, effect.getAmplifier(), d);
             } else {
                 int adjustedDuration = effect.mapDuration(duration -> (int) (d * duration + 0.5D));
                 MobEffectInstance adjustedEffect = new MobEffectInstance(
@@ -135,7 +128,7 @@ public class EffectCloudGrenadeEntity extends ThrowableItemEntity {
             }
         }
         if (ignite && !entity.fireImmune()) {
-            entity.setSecondsOnFire(igniteTime);
+            entity.igniteForSeconds(igniteTime);
         }
     }
 

@@ -5,15 +5,25 @@ import me.xjqsh.lrtactical.item.FlashShieldItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.codec.StreamCodec;
 
-import java.util.function.Supplier;
+public record SShieldDisable() implements CustomPacketPayload {
+    public static final Type<SShieldDisable> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath("lrtactical", "s_shield_disable"));
+    public static final StreamCodec<FriendlyByteBuf, SShieldDisable> STREAM_CODEC =
+            StreamCodec.of((buf, message) -> encode(message, buf), SShieldDisable::decode);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
-public record SShieldDisable() {
     public static void encode(SShieldDisable message, FriendlyByteBuf buf) {
     }
 
@@ -21,12 +31,8 @@ public record SShieldDisable() {
         return new SShieldDisable();
     }
 
-    public static void handle(SShieldDisable message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> handle(message));
-        }
-        context.setPacketHandled(true);
+    public static void handle(SShieldDisable message, IPayloadContext context) {
+        context.enqueueWork(() -> handle(message));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -1,17 +1,26 @@
 package me.xjqsh.lrtactical.network.message;
 
 import me.xjqsh.lrtactical.capability.CombatProperties;
-import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.codec.StreamCodec;
 
-import java.util.function.Supplier;
+public record SResetMeleeSyncMessage() implements CustomPacketPayload {
+    public static final Type<SResetMeleeSyncMessage> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath("lrtactical", "s_reset_melee_sync_message"));
+    public static final StreamCodec<FriendlyByteBuf, SResetMeleeSyncMessage> STREAM_CODEC =
+            StreamCodec.of((buf, message) -> encode(message, buf), SResetMeleeSyncMessage::decode);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
-public record SResetMeleeSyncMessage() {
     public static void encode(SResetMeleeSyncMessage message, FriendlyByteBuf buf) {
     }
 
@@ -19,12 +28,8 @@ public record SResetMeleeSyncMessage() {
         return new SResetMeleeSyncMessage();
     }
 
-    public static void handle(SResetMeleeSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(SResetMeleeSyncMessage::handleClient);
-        }
-        context.setPacketHandled(true);
+    public static void handle(SResetMeleeSyncMessage message, IPayloadContext context) {
+        context.enqueueWork(SResetMeleeSyncMessage::handleClient);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -33,6 +38,6 @@ public record SResetMeleeSyncMessage() {
         if (player == null) {
             return;
         }
-        player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(CombatProperties::resetMeleeSync);
+        CombatProperties.get(player).ifPresent(CombatProperties::resetMeleeSync);
     }
 }

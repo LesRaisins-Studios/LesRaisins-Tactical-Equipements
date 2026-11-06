@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 @JeiPlugin
 public class LrJeiPlugin implements IModPlugin {
-    private static final ResourceLocation UID = new ResourceLocation(EquipmentMod.MOD_ID, "jei");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "jei");
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {

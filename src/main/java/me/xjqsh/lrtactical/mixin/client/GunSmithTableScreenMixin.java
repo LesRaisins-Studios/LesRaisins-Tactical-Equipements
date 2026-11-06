@@ -16,6 +16,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,14 +28,13 @@ import java.util.List;
 @Mixin(GunSmithTableScreen.class)
 public abstract class GunSmithTableScreenMixin extends AbstractContainerScreen<GunSmithTableMenu> {
 
-
     public GunSmithTableScreenMixin(GunSmithTableMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
     @Inject(method = "renderPackInfo", at = @At("HEAD"), remap = false, cancellable = true)
-    private void renderPackInfo(GuiGraphics gui, GunSmithTableRecipe recipe, CallbackInfo ci) {
-        ItemStack output = recipe.getOutput();
+    private void renderPackInfo(GuiGraphics gui, RecipeHolder<GunSmithTableRecipe> holder, CallbackInfo ci) {
+        ItemStack output = holder.value().getOutput();
         Item item = output.getItem();
         ResourceLocation id;
         if (item instanceof ICustomItem customItem) {
@@ -92,7 +92,7 @@ public abstract class GunSmithTableScreenMixin extends AbstractContainerScreen<G
 
             poseStack.popPose();
         } else {
-            ResourceLocation recipeId = recipe.getId();
+            ResourceLocation recipeId = holder.id();
             gui.drawString(font, Component.translatable("gui.tacz.gun_smith_table.error").withStyle(ChatFormatting.DARK_RED), leftPos + 6, topPos + 122, 0xAF0000, false);
             gui.drawString(font, Component.translatable("gui.tacz.gun_smith_table.error.id", recipeId.toString()).withStyle(ChatFormatting.DARK_RED), leftPos + 6, topPos + 134, 0xFFFFFF, false);
             PackInfo errorPackInfo = ClientAssetsManager.INSTANCE.getPackInfo(id);

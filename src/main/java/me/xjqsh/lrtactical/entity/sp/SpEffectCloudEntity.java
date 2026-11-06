@@ -45,7 +45,7 @@ public class SpEffectCloudEntity extends AreaEffectCloud {
 
                 if (this.isIgnite() && !entity.fireImmune() && entity instanceof LivingEntity
                         && this.getBoundingBox().intersects(entity.getBoundingBox())) {
-                    entity.setSecondsOnFire(this.getIgniteTime());
+                    entity.igniteForSeconds(this.getIgniteTime());
                 }
             }
         }

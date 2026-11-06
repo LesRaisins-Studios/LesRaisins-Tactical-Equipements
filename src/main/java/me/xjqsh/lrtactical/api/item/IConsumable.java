@@ -4,6 +4,8 @@ import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.item.index.ConsumableIndex;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +16,7 @@ import java.util.Optional;
 public interface IConsumable extends ICustomItem {
     String ID_TAG = "ConsumableId";
     String OVERRIDE_DISPLAY_ID = "DisplayId";
-    ResourceLocation EMPTY = new ResourceLocation(EquipmentMod.MOD_ID, "empty");
+    ResourceLocation EMPTY = ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "empty");
 
     static IConsumable of(ItemStack stack) {
         if (stack.getItem() instanceof IConsumable item) {
@@ -25,7 +27,7 @@ public interface IConsumable extends ICustomItem {
 
     @Override
     default ResourceLocation getId(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
+        CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (nbt.contains(ID_TAG, Tag.TAG_STRING)) {
             ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(ID_TAG));
             return Objects.requireNonNullElse(rl, EMPTY);
@@ -35,7 +37,7 @@ public interface IConsumable extends ICustomItem {
 
     @Override
     default ResourceLocation getDisplayId(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
+        CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (nbt.contains(OVERRIDE_DISPLAY_ID, Tag.TAG_STRING)) {
             ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(OVERRIDE_DISPLAY_ID));
             return Objects.requireNonNullElse(rl, EMPTY);
@@ -45,7 +47,11 @@ public interface IConsumable extends ICustomItem {
 
     @Override
     default void setId(ItemStack stack, ResourceLocation id) {
-        stack.getOrCreateTag().putString(ID_TAG, id.toString());
+        stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> {
+            CompoundTag tag = data.copyTag();
+            tag.putString(ID_TAG, id.toString());
+            return CustomData.of(tag);
+        });
     }
 
     @Override

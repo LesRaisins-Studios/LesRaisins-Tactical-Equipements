@@ -3,10 +3,10 @@ package me.xjqsh.lrtactical.effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.neoforged.neoforge.common.EffectCure;
+import java.util.Set;
 
-import java.util.Collections;
-import java.util.List;
 
 public class BurnedEffect extends MobEffect {
 
@@ -16,12 +16,12 @@ public class BurnedEffect extends MobEffect {
     }
 
     @Override
-    public List<ItemStack> getCurativeItems() {
-        return Collections.emptyList();
+    public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance instance) {
+        cures.clear();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
+    public boolean applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
         // 延长着火时间
         if (pLivingEntity.isOnFire()) {
             int r = pLivingEntity.getRemainingFireTicks();
@@ -29,10 +29,11 @@ public class BurnedEffect extends MobEffect {
                 pLivingEntity.setRemainingFireTicks(r + 40);
             }
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier){
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier){
         return duration % 20 == 0;
     }
 

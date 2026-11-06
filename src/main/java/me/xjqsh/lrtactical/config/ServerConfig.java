@@ -1,17 +1,17 @@
 package me.xjqsh.lrtactical.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ServerConfig {
-    public static ForgeConfigSpec.IntValue FLASH_SHIELD_MAX_DURABILITY;
-    public static ForgeConfigSpec.IntValue FLASH_SHIELD_COOLDOWN;
+    public static ModConfigSpec.IntValue FLASH_SHIELD_MAX_DURABILITY;
+    public static ModConfigSpec.IntValue FLASH_SHIELD_COOLDOWN;
 
-    public static ForgeConfigSpec.DoubleValue CROUCHING_INIT_SPEED_PERCENT;
+    public static ModConfigSpec.DoubleValue CROUCHING_INIT_SPEED_PERCENT;
 
-    public static ForgeConfigSpec.IntValue MELEE_MAX_TARGET_PER_PACKET;
+    public static ModConfigSpec.IntValue MELEE_MAX_TARGET_PER_PACKET;
 
-    public static ForgeConfigSpec init() {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+    public static ModConfigSpec init() {
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.push("flash shield");
         FLASH_SHIELD_MAX_DURABILITY = builder

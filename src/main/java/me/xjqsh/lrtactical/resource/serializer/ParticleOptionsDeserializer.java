@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.RegistryAccess;
 
 import java.lang.reflect.Type;
 
@@ -18,7 +19,7 @@ public class ParticleOptionsDeserializer implements JsonDeserializer<ParticleOpt
         if (ele.isJsonPrimitive() && ele.getAsJsonPrimitive().isString()) {
             String particle = ele.getAsString();
             try {
-                return ParticleArgument.readParticle(new StringReader(particle), BuiltInRegistries.PARTICLE_TYPE.asLookup());
+                return ParticleArgument.readParticle(new StringReader(particle), RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY));
             } catch (CommandSyntaxException e) {
                 throw new JsonParseException("Can't parse particle type: " + particle, e);
             }

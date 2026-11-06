@@ -10,6 +10,8 @@ import me.xjqsh.lrtactical.item.melee.CombatData;
 import me.xjqsh.lrtactical.network.NetworkHandler;
 import me.xjqsh.lrtactical.network.message.SCustomSound;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,14 +19,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -34,7 +38,7 @@ import java.util.Optional;
 public interface IMeleeWeapon extends ICustomItem {
     String ID_TAG = "MeleeWeaponId";
     String OVERRIDE_DISPLAY_ID = "DisplayId";
-    ResourceLocation EMPTY = new ResourceLocation(EquipmentMod.MOD_ID, "empty");
+    ResourceLocation EMPTY = ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "empty");
 
     static IMeleeWeapon of(ItemStack stack) {
         if (stack.getItem() instanceof IMeleeWeapon item) {
@@ -45,27 +49,33 @@ public interface IMeleeWeapon extends ICustomItem {
 
     @Override
     default ResourceLocation getId(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        if (nbt.contains(ID_TAG, Tag.TAG_STRING)) {
-            ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(ID_TAG));
-            return Objects.requireNonNullElse(rl, EMPTY);
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null) {
+            CompoundTag nbt = customData.copyTag();
+            if (nbt.contains(ID_TAG, Tag.TAG_STRING)) {
+                ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(ID_TAG));
+                return Objects.requireNonNullElse(rl, EMPTY);
+            }
         }
         return EMPTY;
     }
 
     @Override
     default ResourceLocation getDisplayId(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        if (nbt.contains(OVERRIDE_DISPLAY_ID, Tag.TAG_STRING)) {
-            ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(OVERRIDE_DISPLAY_ID));
-            return Objects.requireNonNullElse(rl, EMPTY);
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null) {
+            CompoundTag nbt = customData.copyTag();
+            if (nbt.contains(OVERRIDE_DISPLAY_ID, Tag.TAG_STRING)) {
+                ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(OVERRIDE_DISPLAY_ID));
+                return Objects.requireNonNullElse(rl, EMPTY);
+            }
         }
         return getId(stack);
     }
 
     @Override
     default void setId(ItemStack stack, ResourceLocation id) {
-        stack.getOrCreateTag().putString(ID_TAG, id.toString());
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> nbt.putString(ID_TAG, id.toString()));
     }
 
     @Override
@@ -147,32 +157,35 @@ public interface IMeleeWeapon extends ICustomItem {
      */
     default AttackResult performAttack(Player attacker, Entity target, ItemStack stack, float base, float knockback) {
         // forge事件
-        if (!ForgeHooks.onPlayerAttackTarget(attacker, target)) return AttackResult.MISS;
+        if (!CommonHooks.onPlayerAttackTarget(attacker, target)) {
+            return AttackResult.MISS;
+        }
         if (!target.isAttackable()) return AttackResult.MISS;
         if (target.skipAttackInteraction(attacker)) return AttackResult.MISS;
 
-        float modifier;
-        if (target instanceof LivingEntity living) {
-            modifier = EnchantmentHelper.getDamageBonus(stack, living.getMobType());
-        } else {
-            modifier = EnchantmentHelper.getDamageBonus(stack, MobType.UNDEFINED);
-        }
-
+        var source = attacker.damageSources().playerAttack(attacker);
+        float modifier = attacker.level() instanceof ServerLevel serverLevel
+                ? EnchantmentHelper.modifyDamage(serverLevel, stack, target, source, base) - base : 0;
 
         boolean flag2 = attacker.fallDistance > 0.0F && !attacker.onGround() && !attacker.onClimbable() && !attacker.isInWater()
                 && !attacker.hasEffect(MobEffects.BLINDNESS) && !attacker.isPassenger() && target instanceof LivingEntity;
 
         // 原版跳劈暴击
-        CriticalHitEvent hitResult = ForgeHooks.getCriticalHit(attacker, target, flag2, flag2 ? 1.5F : 1.0F);
-        if (hitResult != null) {
-            base *= hitResult.getDamageModifier();
+        CriticalHitEvent hitResult = CommonHooks.fireCriticalHit(attacker, target, flag2, flag2 ? 1.5F : 1.0F);
+        if (hitResult.isCriticalHit()) {
+            base *= hitResult.getDamageMultiplier();
             flag2 = true;
         }
 
-        int j = EnchantmentHelper.getFireAspect(attacker);
+        int j = EnchantmentHelper.getEnchantmentLevel(
+                attacker.registryAccess()
+                        .lookupOrThrow(Registries.ENCHANTMENT)
+                        .getOrThrow(Enchantments.FIRE_ASPECT),
+                attacker
+        );
         if (target instanceof LivingEntity living) {
             if (j > 0) {
-                living.setSecondsOnFire(j * 4);
+                living.igniteForSeconds(j * 4);
             }
         }
 
@@ -188,10 +201,12 @@ public interface IMeleeWeapon extends ICustomItem {
 
         if (target instanceof LivingEntity living) {
             living.knockback(knockback, Mth.sin(attacker.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(attacker.getYRot() * ((float)Math.PI / 180F)));
-            EnchantmentHelper.doPostHurtEffects(living, attacker);
+
         }
 
-        EnchantmentHelper.doPostDamageEffects(attacker, target);
+        if (attacker.level() instanceof ServerLevel serverLevel) {
+            EnchantmentHelper.doPostAttackEffects(serverLevel, target, source);
+        }
 
         if (flag2) {
             attacker.crit(target);
@@ -225,9 +240,7 @@ public interface IMeleeWeapon extends ICustomItem {
         } else {
             p = null;
         }
-        NetworkHandler.CHANNEL.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
-                p, entity.getX(), entity.getY(), entity.getZ(), 64, entity.level().dimension()
-        )), packet);
+        NetworkHandler.sendToNearbyPlayers(packet, entity.level(), entity.position(), 64, p);
     }
 
     default boolean canSprintingAttack() {

@@ -15,13 +15,16 @@ import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.util.IPAAssetManager;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerAnimatorIntegration {
-    public static final ResourceLocation UPPER_LAYER = new ResourceLocation(EquipmentMod.MOD_ID, "upper");
-    public static final ResourceLocation LOWER_LAYER = new ResourceLocation(EquipmentMod.MOD_ID, "lower");
-    public static final ResourceLocation ROTATION_ANIMATION = new ResourceLocation(EquipmentMod.MOD_ID, "rotation");
+    public static final ResourceLocation UPPER_LAYER =
+            ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "upper");
+    public static final ResourceLocation LOWER_LAYER =
+            ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "lower");
+    public static final ResourceLocation ROTATION_ANIMATION =
+            ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "rotation");
     private static boolean initialized = false;
 
     public enum AnimationLayer {
@@ -38,7 +41,6 @@ public class PlayerAnimatorIntegration {
         }
     }
 
-
     public static void init() {
         if (initialized) return;
         initialized = true;
@@ -53,8 +55,8 @@ public class PlayerAnimatorIntegration {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ROTATION_ANIMATION, 42,
                 player -> new ModifierLayer<>(null, AdjustmentYRotModifier.getModifier(player)));
 
-        MinecraftForge.EVENT_BUS.register(MeleeAnimationListener.class);
-        MinecraftForge.EVENT_BUS.register(IdleAnimationHandler.class);
+        NeoForge.EVENT_BUS.register(MeleeAnimationListener.class);
+        NeoForge.EVENT_BUS.register(IdleAnimationHandler.class);
     }
 
     public static KeyframeAnimation getAnimation(ResourceLocation location, String name) {
@@ -124,29 +126,29 @@ public class PlayerAnimatorIntegration {
 
     private static class ForcedFadeModifier extends AbstractFadeModifier {
         private final Ease ease;
-        
+
         protected ForcedFadeModifier(int length, Ease ease) {
             super(length);
             this.ease = ease;
         }
-        
+
         @Override
         protected float getAlpha(String modelName, TransformType type, float progress) {
             return ease.invoke(progress);
         }
-        
+
         @Override
         public @NotNull Vec3f get3DTransform(@NotNull String modelName, @NotNull TransformType type, float tickDelta, @NotNull Vec3f value0) {
             if (calculateProgress(tickDelta) > 1) {
                 return super.get3DTransform(modelName, type, tickDelta, value0);
             }
-            
+
             Vec3f animatedVec = super.get3DTransform(modelName, type, tickDelta, value0);
             float a = getAlpha(modelName, type, calculateProgress(tickDelta));
 
-            Vec3f source = beginAnimation != null ? 
+            Vec3f source = beginAnimation != null ?
                 beginAnimation.get3DTransform(modelName, type, tickDelta, value0) : value0;
-            
+
             return animatedVec.scale(a).add(source.scale(1 - a));
         }
     }

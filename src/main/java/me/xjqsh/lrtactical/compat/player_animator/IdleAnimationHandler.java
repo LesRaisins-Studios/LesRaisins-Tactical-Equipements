@@ -9,18 +9,17 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class IdleAnimationHandler {
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.RenderTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onClientTick(RenderFrameEvent.Post event) {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;

@@ -1,137 +1,118 @@
 package me.xjqsh.lrtactical.network;
 
-import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.network.message.*;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class NetworkHandler {
-    private static final String VERSION = "0.3.0";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(EquipmentMod.MOD_ID, "network"),
-            () -> VERSION, it -> it.equals(VERSION), it -> it.equals(VERSION));
+    private static final String VERSION = "0.4.4";
 
-    private static final AtomicInteger ID_COUNT = new AtomicInteger(1);
+    @SubscribeEvent
+    public static void register(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar(VERSION);
 
-    public static void init() {
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SPackSyncMessage.class,
-                SPackSyncMessage::encode,
-                SPackSyncMessage::decode,
-                SPackSyncMessage::handle
-        );
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SCustomCoolDownMessage.class,
-                SCustomCoolDownMessage::encode,
-                SCustomCoolDownMessage::decode,
-                SCustomCoolDownMessage::handle
-        );
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SCustomSound.class,
-                SCustomSound::encode,
-                SCustomSound::decode,
-                SCustomSound::handle
-        );
+        // Client -> Server
+        registrar.playToServer(
+                CMeleeAttackRequest.TYPE,
+                CMeleeAttackRequest.STREAM_CODEC,
+                CMeleeAttackRequest::handle);
+        registrar.playToServer(
+                CPrepareMeleeAttack.TYPE,
+                CPrepareMeleeAttack.STREAM_CODEC,
+                CPrepareMeleeAttack::handle);
 
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                CMeleeAttackRequest.class,
-                CMeleeAttackRequest::encode,
-                CMeleeAttackRequest::decode,
-                CMeleeAttackRequest::handle
-        );
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                CPrepareMeleeAttack.class,
-                CPrepareMeleeAttack::encode,
-                CPrepareMeleeAttack::decode,
-                CPrepareMeleeAttack::handle
-        );
-
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SShieldShake.class,
-                SShieldShake::encode,
-                SShieldShake::decode,
-                SShieldShake::handle
-        );
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SShieldDisable.class,
-                SShieldDisable::encode,
-                SShieldDisable::decode,
-                SShieldDisable::handle
-        );
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SShakeScreenMessage.class,
-                SShakeScreenMessage::encode,
-                SShakeScreenMessage::decode,
-                SShakeScreenMessage::handle
-        );
-
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SSplashParticle.class,
-                SSplashParticle::encode,
-                SSplashParticle::decode,
-                SSplashParticle::handle
-        );
-
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SMeleeAnimationSync.class,
-                SMeleeAnimationSync::encode,
-                SMeleeAnimationSync::decode,
-                SMeleeAnimationSync::handle
-        );
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                SResetMeleeSyncMessage.class,
-                SResetMeleeSyncMessage::encode,
-                SResetMeleeSyncMessage::decode,
-                SResetMeleeSyncMessage::handle
-        );
-        CHANNEL.registerMessage(ID_COUNT.getAndIncrement(),
-                CCancelToggleConsumableUse.class,
-                CCancelToggleConsumableUse::encode,
-                CCancelToggleConsumableUse::new,
-                CCancelToggleConsumableUse::handle
-        );
+        // Server -> Client
+        registrar.playToClient(
+                SPackSyncMessage.TYPE, SPackSyncMessage.STREAM_CODEC, SPackSyncMessage::handle);
+        registrar.playToClient(
+                SCustomCoolDownMessage.TYPE,
+                SCustomCoolDownMessage.STREAM_CODEC,
+                SCustomCoolDownMessage::handle);
+        registrar.playToClient(SCustomSound.TYPE, SCustomSound.STREAM_CODEC, SCustomSound::handle);
+        registrar.playToClient(SShieldShake.TYPE, SShieldShake.STREAM_CODEC, SShieldShake::handle);
+        registrar.playToClient(
+                SShieldDisable.TYPE, SShieldDisable.STREAM_CODEC, SShieldDisable::handle);
+        registrar.playToClient(
+                SShakeScreenMessage.TYPE,
+                SShakeScreenMessage.STREAM_CODEC,
+                SShakeScreenMessage::handle);
+        registrar.playToClient(
+                SSplashParticle.TYPE, SSplashParticle.STREAM_CODEC, SSplashParticle::handle);
+        registrar.playToClient(
+                SResetMeleeSyncMessage.TYPE,
+                SResetMeleeSyncMessage.STREAM_CODEC,
+                SResetMeleeSyncMessage::handle);
+        registrar.playToClient(
+                SMeleeAnimationSync.TYPE,
+                SMeleeAnimationSync.STREAM_CODEC,
+                SMeleeAnimationSync::handle);
+        // Client -> Server
+        registrar.playToServer(
+                CCancelToggleConsumableUse.TYPE,
+                CCancelToggleConsumableUse.STREAM_CODEC,
+                CCancelToggleConsumableUse::handle);
     }
 
-    public static void sendToServer(Object message) {
-        CHANNEL.sendToServer(message);
+    public static void sendToServer(CustomPacketPayload message) {
+        PacketDistributor.sendToServer(message);
     }
 
-    public static void sendToClientPlayer(Object message, Player player) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), message);
+    public static void sendToClientPlayer(CustomPacketPayload message, Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.sendToPlayer(serverPlayer, message);
+        }
     }
 
     /**
      * 发送给所有监听此实体的玩家
      */
-    public static void sendToTrackingEntityAndSelf(Entity centerEntity, Object message) {
-        CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> centerEntity), message);
+    public static void sendToTrackingEntityAndSelf(
+            Entity centerEntity, CustomPacketPayload message) {
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(centerEntity, message);
     }
 
-    public static void sendToAllPlayers(Object message) {
-        CHANNEL.send(PacketDistributor.ALL.noArg(), message);
+    public static void sendToAllPlayers(CustomPacketPayload message) {
+        PacketDistributor.sendToAllPlayers(message);
     }
 
-    public static void sendToTrackingEntity(Object message, final Entity centerEntity) {
-        CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> centerEntity), message);
+    public static void sendToTrackingEntity(
+            CustomPacketPayload message, final Entity centerEntity) {
+        PacketDistributor.sendToPlayersTrackingEntity(centerEntity, message);
     }
 
-    public static void sendToDimension(Object message, final Entity centerEntity) {
-        ResourceKey<Level> dimension = centerEntity.level().dimension();
-        CHANNEL.send(PacketDistributor.DIMENSION.with(() -> dimension), message);
+    public static void sendToDimension(CustomPacketPayload message, final Entity centerEntity) {
+        Level level = centerEntity.level();
+        if (level instanceof ServerLevel serverLevel) {
+            PacketDistributor.sendToPlayersInDimension(serverLevel, message);
+        }
     }
 
-    public static void sendToNearbyPlayers(Object message, Level level, Vec3 position, double radius) {
-        CHANNEL.send(PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(
-                position.x, position.y, position.z, radius, level.dimension()
-        )), message);
+    public static void sendToNearbyPlayers(
+            CustomPacketPayload message, Level level, Vec3 pos, double radius) {
+        sendToNearbyPlayers(message, level, pos, radius, null);
+    }
+
+    public static void sendToNearbyPlayers(
+            CustomPacketPayload message,
+            Level level,
+            Vec3 pos,
+            double radius,
+            ServerPlayer excluded) {
+        if (level instanceof ServerLevel serverLevel) {
+            PacketDistributor.sendToPlayersNear(
+                    serverLevel, excluded, pos.x, pos.y, pos.z, radius, message);
+        }
     }
 }

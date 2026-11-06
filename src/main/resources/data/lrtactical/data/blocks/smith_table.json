@@ -5,9 +5,11 @@
       "id": "lrtactical:melee",
       "name": "lrtactical.type.melee.name",
       "icon": {
-        "item": "lrtactical:melee",
-        "nbt": {
-          "MeleeWeaponId": "lrtactical:karambit"
+        "id": "lrtactical:melee",
+        "components": {
+          "minecraft:custom_data": {
+            "MeleeWeaponId": "lrtactical:karambit"
+          }
         }
       }
     },
@@ -15,9 +17,11 @@
       "id": "lrtactical:throwable",
       "name": "lrtactical.type.throwable.name",
       "icon": {
-        "item": "lrtactical:throwable",
-        "nbt": {
-          "ThrowableId": "lrtactical:flash_grenade"
+        "id": "lrtactical:throwable",
+        "components": {
+          "minecraft:custom_data": {
+            "ThrowableId": "lrtactical:flash_grenade"
+          }
         }
       }
     },
@@ -25,9 +29,11 @@
       "id": "lrtactical:consumable",
       "name": "lrtactical.type.consumable.name",
       "icon": {
-        "item": "lrtactical:consumable",
-        "nbt": {
-          "ConsumableId": "lrtactical:blood_pack"
+        "id": "lrtactical:consumable",
+        "components": {
+          "minecraft:custom_data": {
+            "ConsumableId": "lrtactical:blood_pack"
+          }
         }
       }
     },
@@ -35,7 +41,7 @@
       "id": "lrtactical:misc",
       "name": "lrtactical.type.misc.name",
       "icon": {
-        "item": "lrtactical:flash_shield"
+        "id": "lrtactical:flash_shield"
       }
     }
   ]

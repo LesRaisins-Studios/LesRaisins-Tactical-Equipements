@@ -7,18 +7,28 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.codec.StreamCodec;
 
 public record SSplashParticle(
         BlockPos blockPos,
         int color
-) {
+) implements CustomPacketPayload {
+    public static final Type<SSplashParticle> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath("lrtactical", "s_splash_particle"));
+    public static final StreamCodec<FriendlyByteBuf, SSplashParticle> STREAM_CODEC =
+            StreamCodec.of((buf, message) -> encode(message, buf), SSplashParticle::decode);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     public static void encode(SSplashParticle message, FriendlyByteBuf buf) {
         buf.writeBlockPos(message.blockPos);
         buf.writeInt(message.color);
@@ -31,12 +41,8 @@ public record SSplashParticle(
         );
     }
 
-    public static void handle(SSplashParticle message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> handle(message));
-        }
-        context.setPacketHandled(true);
+    public static void handle(SSplashParticle message, IPayloadContext context) {
+        context.enqueueWork(() -> handle(message));
     }
 
     @OnlyIn(Dist.CLIENT)

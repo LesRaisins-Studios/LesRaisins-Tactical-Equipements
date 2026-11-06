@@ -4,6 +4,7 @@ import me.xjqsh.lrtactical.api.melee.MeleeAction;
 import me.xjqsh.lrtactical.capability.CustomItemCoolDowns;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.event.InputEvent;
 
 import java.util.Optional;
 
@@ -89,7 +90,7 @@ public interface ICustomItem {
 
     /**
      * 是否阻止攻击事件<br/>
-     * 参见{@link net.minecraftforge.client.event.InputEvent.InteractionKeyMappingTriggered}
+     * 参见{@link InputEvent.InteractionKeyMappingTriggered}
      * @return 是否阻止点击事件
      */
     default boolean shouldBlockAttack() {
@@ -98,7 +99,7 @@ public interface ICustomItem {
 
     /**
      * 是否阻止使用事件<br/>
-     * 参见{@link net.minecraftforge.client.event.InputEvent.InteractionKeyMappingTriggered}
+     * 参见{@link InputEvent.InteractionKeyMappingTriggered}
      * @return 是否阻止点击事件
      */
     default boolean shouldBlockUse() {
@@ -107,7 +108,7 @@ public interface ICustomItem {
 
     /**
      * 是否阻止选取方块事件<br/>
-     * 参见{@link net.minecraftforge.client.event.InputEvent.InteractionKeyMappingTriggered}
+     * 参见{@link InputEvent.InteractionKeyMappingTriggered}
      * @return 是否阻止点击事件
      */
     default boolean shouldBlockPickBlock() {

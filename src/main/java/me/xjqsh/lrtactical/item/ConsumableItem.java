@@ -3,8 +3,8 @@ package me.xjqsh.lrtactical.item;
 import com.tacz.guns.api.item.IAnimationItem;
 import me.xjqsh.lrtactical.api.event.ConsumableUseEvent;
 import me.xjqsh.lrtactical.api.item.IConsumable;
-import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
-import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
+import me.xjqsh.lrtactical.capability.CombatProperties;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDowns;
 import me.xjqsh.lrtactical.client.renderer.item.ConsumableItemRenderer;
 import me.xjqsh.lrtactical.inventory.tooltip.ConsumableTooltip;
 import me.xjqsh.lrtactical.item.consumable.ConsumableData;
@@ -28,9 +28,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.common.NeoForge;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,7 +68,7 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return this.getConsumableIndex(stack).map(index -> {
             if (index.getData().isToggleUse()) {
                 return 72000;
@@ -128,7 +129,7 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
         }
 
         ItemStack stack = player.getItemInHand(usedHand);
-        boolean drawing = player.getCapability(CombatPropertiesProvider.CAPABILITY)
+        boolean drawing = CombatProperties.get(player)
                 .map(cap -> cap.getCoolDownTick() > 0)
                 .orElse(false);
         if (drawing) {
@@ -136,7 +137,7 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
         }
 
         boolean onCooldown = getCoolDownId(stack)
-                .map(id -> player.getCapability(CustomItemCoolDownsProvider.CAPABILITY)
+                .map(id -> CustomItemCoolDowns.get(player)
                         .map(cap -> cap.isOnCooldown(id))
                         .orElse(false)
                 ).orElse(false);
@@ -186,9 +187,7 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
     private void consumeAfterUse(ItemStack stack, LivingEntity entity, ConsumableIndex index) {
         ConsumableData data = index.getData();
         if (data.hasDurability()) {
-            stack.hurtAndBreak(data.getDurabilityDamage(), entity, (living) -> {
-                living.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            });
+            stack.hurtAndBreak(data.getDurabilityDamage(), entity, EquipmentSlot.MAINHAND);
         } else {
             stack.shrink(1);
         }
@@ -200,19 +199,19 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
             return;
         }
 
-        MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(selector.getEffect());
+        MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(selector.getEffect());
         if (effect != null) {
-            entity.removeEffect(effect);
+            entity.removeEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect));
         }
     }
 
     private void removeEffectsByCategory(LivingEntity entity, MobEffectCategory category) {
-        List<MobEffect> effects = entity.getActiveEffects().stream()
+        List<Holder<MobEffect>> effects = entity.getActiveEffects().stream()
                 .map(MobEffectInstance::getEffect)
-                .filter(effect -> effect.getCategory() == category)
+                .filter(effect -> effect.value().getCategory() == category)
                 .toList();
 
-        for (MobEffect effect : effects) {
+        for (Holder<MobEffect> effect : effects) {
             entity.removeEffect(effect);
         }
     }
@@ -242,11 +241,11 @@ public class ConsumableItem extends Item implements IAnimationItem, IConsumable 
             foodData.eat(data.getFood(), data.getSaturation());
         }
 
-        MinecraftForge.EVENT_BUS.post(new ConsumableUseEvent(entity, stack.copy(), index.getId(), index));
+        NeoForge.EVENT_BUS.post(new ConsumableUseEvent(entity, stack.copy(), index.getId(), index));
 
         ResourceLocation cooldownId = data.getCooldownCategory();
         if (cooldownId != null && data.getCooldown() > 0) {
-            entity.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(cap -> cap.addCooldown(cooldownId, data.getCooldown()));
+            CustomItemCoolDowns.get(entity).ifPresent(cap -> cap.addCooldown(cooldownId, data.getCooldown()));
         }
     }
 

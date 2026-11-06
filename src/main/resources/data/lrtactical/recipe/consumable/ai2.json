@@ -1,0 +1,42 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "c:leather"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:paper"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:glistering_melon_slice"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:golden_carrot"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:consumable",
+    "item": {
+      "id": "lrtactical:consumable",
+      "components": {
+        "minecraft:custom_data": {
+          "ConsumableId": "lrtactical:ai2"
+        },
+        "minecraft:max_stack_size": 2
+      }
+    }
+  }
+}

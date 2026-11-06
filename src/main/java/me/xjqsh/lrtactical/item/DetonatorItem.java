@@ -12,6 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 
 import java.util.UUID;
 
@@ -22,12 +24,13 @@ public class DetonatorItem extends Item {
 
     public void recordEntity(Entity entity, ItemStack detonatorStack) {
         UUID entityId = entity.getUUID();
-        detonatorStack.getOrCreateTag().putUUID("linked_entity", entityId);
+        CustomData.update(DataComponents.CUSTOM_DATA, detonatorStack, tag -> tag.putUUID("linked_entity", entityId));
     }
 
     public UUID getLinkedEntityId(ItemStack detonatorStack) {
-        if (detonatorStack.hasTag() && detonatorStack.getTag().hasUUID("linked_entity")) {
-            return detonatorStack.getTag().getUUID("linked_entity");
+        var tag = detonatorStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (tag.hasUUID("linked_entity")) {
+            return tag.getUUID("linked_entity");
         }
         return null;
     }

@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,13 +60,13 @@ public class MeleeIndexManager extends JsonDataManager<MeleeWeaponIndex<?>> {
         int sort = GsonHelper.getAsInt(pJson, "sort", 0);
 
         String type_name = GsonHelper.getAsString(pJson, "type", "lrtactical:normal");
-        var type = ModRegistries.MELEE_WEAPON_TYPE_SUPPLIER.get().getValue(new ResourceLocation(type_name));
+        var type = ModRegistries.MELEE_WEAPON_TYPE_REGISTRY.get(ResourceLocation.parse(type_name));
         if (type == null) {
             throw new JsonParseException("Unknown type name \"" + type_name + "\"");
         }
 
         String baseItem = GsonHelper.getAsString(pJson, "base_item", "lrtactical:melee");
-        var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(baseItem));
+        var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(baseItem));
         if (item == null) {
             throw new JsonParseException("Unknown item id \"" + type_name + "\"");
         }

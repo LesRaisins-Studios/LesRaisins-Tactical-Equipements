@@ -1,6 +1,5 @@
 package me.xjqsh.lrtactical.entity;
 
-
 import me.xjqsh.lrtactical.api.item.IThrowable;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.init.ModSounds;
@@ -12,9 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -31,16 +28,15 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public abstract class ThrowableItemEntity extends Projectile implements IEntityAdditionalSpawnData {
+public abstract class ThrowableItemEntity extends Projectile implements IEntityWithComplexSpawn {
     private static final EntityDataAccessor<ItemStack> DATA_ITEM_STACK = SynchedEntityData.defineId(ThrowableItemEntity.class, EntityDataSerializers.ITEM_STACK);
     private int life = 100;
     private float gravity = 0.07f;
@@ -63,26 +59,23 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
 
-    protected void defineSynchedData() {
-        this.getEntityData().define(DATA_ITEM_STACK, ItemStack.EMPTY);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DATA_ITEM_STACK, ItemStack.EMPTY);
     }
 
     public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         ItemStack itemstack = this.getItemRaw();
         if (!itemstack.isEmpty()) {
-            pCompound.put("Item", itemstack.save(new CompoundTag()));
+            pCompound.put("Item", itemstack.save(this.registryAccess()));
         }
 
     }
 
     public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
-        ItemStack itemstack = ItemStack.of(pCompound.getCompound("Item"));
+        ItemStack itemstack = ItemStack.parseOptional(this.registryAccess(), pCompound.getCompound("Item"));
         this.setItem(itemstack);
     }
 
@@ -96,7 +89,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
     }
 
     public void setItem(ItemStack pStack) {
-        if (!pStack.is(this.getDefaultItem()) || pStack.hasTag()) {
+        if (!pStack.is(this.getDefaultItem()) || !pStack.getComponentsPatch().isEmpty()) {
             this.getEntityData().set(DATA_ITEM_STACK, pStack.copyWithCount(1));
         }
 
@@ -334,9 +327,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         if (stack.getItem() instanceof IThrowable iThrowable) {
             ResourceLocation id = iThrowable.getId(stack);
             var packet = new SCustomSound(SCustomSound.SoundType.THROWABLE, id, key, this.position(), volume, pitch);
-            NetworkHandler.CHANNEL.send(PacketDistributor.NEAR.with(PacketDistributor.TargetPoint.p(
-                    this.getX(), this.getY(), this.getZ(), 64, this.level().dimension())
-            ), packet);
+            NetworkHandler.sendToNearbyPlayers(packet, this.level(), this.position(), 64);
         }
     }
 
@@ -359,7 +350,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         this.setTailParticle(data.getTailParticles());
     }
 
-    public float getGravity() {
+    public double getDefaultGravity() {
         return gravity;
     }
 
@@ -416,7 +407,7 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(life);
         buffer.writeFloat(gravity);
         buffer.writeDouble(bounceFactor);
@@ -424,21 +415,21 @@ public abstract class ThrowableItemEntity extends Projectile implements IEntityA
         buffer.writeBoolean(brokeOnGround);
         if (tailParticle != null) {
             buffer.writeBoolean(true);
-            EntityDataSerializers.PARTICLE.write(buffer, tailParticle);
+            ParticleTypes.STREAM_CODEC.encode(buffer, tailParticle);
         } else {
             buffer.writeBoolean(false);
         }
     }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
+    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
         life = additionalData.readInt();
         gravity = additionalData.readFloat();
         bounceFactor = additionalData.readDouble();
         shouldBounce = additionalData.readBoolean();
         brokeOnGround = additionalData.readBoolean();
         if (additionalData.readBoolean()) {
-            tailParticle = EntityDataSerializers.PARTICLE.read(additionalData);
+            tailParticle = ParticleTypes.STREAM_CODEC.decode(additionalData);
         } else {
             tailParticle = null;
         }

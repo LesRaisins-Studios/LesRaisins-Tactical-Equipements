@@ -1,15 +1,14 @@
 package me.xjqsh.lrtactical.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class CommonConfig {
-    public static ForgeConfigSpec.BooleanValue GRENADE_EXPLOSION_BLOCK_DAMAGE;
-    public static ForgeConfigSpec.BooleanValue MELEE_ITEM_CONSUME_DURABILITY;
-    public static ForgeConfigSpec.IntValue MELEE_IGNORE_INVULNERABLE_TICK_THRESHOLD;
+    public static ModConfigSpec.BooleanValue GRENADE_EXPLOSION_BLOCK_DAMAGE;
+    public static ModConfigSpec.BooleanValue MELEE_ITEM_CONSUME_DURABILITY;
+    public static ModConfigSpec.IntValue MELEE_IGNORE_INVULNERABLE_TICK_THRESHOLD;
 
-
-    public static ForgeConfigSpec init() {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+    public static ModConfigSpec init() {
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.push("grenade");
         GRENADE_EXPLOSION_BLOCK_DAMAGE = builder
@@ -25,7 +24,6 @@ public class CommonConfig {
                 .comment("when target's invulnerable tick is less than this value, melee attack will ignore it")
                 .defineInRange("meleeIgnoreInvulnerableTickThreshold", 20, 0, 100);
         builder.pop();
-
 
         return builder.build();
     }

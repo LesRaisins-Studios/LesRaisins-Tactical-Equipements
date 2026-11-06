@@ -17,6 +17,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -45,7 +48,7 @@ public class CustomExplosion extends Explosion {
     public CustomExplosion(Level pLevel, @Nullable Entity pSource, @Nullable DamageSource source, @Nullable ExplosionDamageCalculator pDamageCalculator,
                            double damage, double pToBlowX, double pToBlowY, double pToBlowZ, float pRadius,
                            Explosion.BlockInteraction pBlockInteraction) {
-        super(pLevel, pSource, source, null, pToBlowX, pToBlowY, pToBlowZ, pRadius, false, pBlockInteraction);
+        super(pLevel, pSource, source, null, pToBlowX, pToBlowY, pToBlowZ, pRadius, false, pBlockInteraction, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
         this.level = pLevel;
         this.source = pSource;
         this.radius = pRadius;
@@ -87,8 +90,8 @@ public class CustomExplosion extends Explosion {
     public void explode() {
         if (!this.level.isClientSide()) {
             NetworkHandler.sendToNearbyPlayers(
-                    new SShakeScreenMessage(screenShakeTime, this.radius * 2, screenShakeAmplitude, this.getPosition()),
-                    this.level, this.getPosition(), this.radius * 2
+                    new SShakeScreenMessage(screenShakeTime, this.radius * 2, screenShakeAmplitude, this.center()),
+                    this.level, this.center(), this.radius * 2
             );
         }
         this.level.gameEvent(this.source, GameEvent.EXPLODE, new Vec3(this.x, this.y, this.z));
@@ -146,11 +149,11 @@ public class CustomExplosion extends Explosion {
         int z0 = Mth.floor(this.z - (double) diameter - 1.0D);
         int z1 = Mth.floor(this.z + (double) diameter + 1.0D);
         List<Entity> list = this.level.getEntities(this.source, new AABB(x0, y0, z0, x1, y1, z1));
-        net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.level, this, list, diameter);
+        EventHooks.onExplosionDetonate(this.level, this, list, diameter);
         Vec3 position = new Vec3(this.x, this.y, this.z);
 
         for (Entity entity : list) {
-            if (!entity.ignoreExplosion()) {
+            if (!entity.ignoreExplosion(this)) {
                 double distanceRate = Math.sqrt(entity.distanceToSqr(position)) / (double) diameter;
                 if (distanceRate <= 1.0D) {
                     double xDistance = entity.getX() - this.x;
@@ -170,7 +173,7 @@ public class CustomExplosion extends Explosion {
                         }
 
                         if (fireTime > 0) {
-                            entity.setSecondsOnFire(fireTime);
+                            entity.igniteForSeconds(fireTime);
                         }
                     }
                 }

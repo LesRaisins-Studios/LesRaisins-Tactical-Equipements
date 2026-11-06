@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class ConsumableIndexManager extends JsonDataManager<ConsumableIndex> {
         int sort = GsonHelper.getAsInt(pJson, "sort", 0);
 
         String baseItem = GsonHelper.getAsString(pJson, "base_item", "lrtactical:consumable");
-        var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(baseItem));
+        var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(baseItem));
         if (item == null) {
             throw new JsonParseException("Unknown item id \"" + baseItem + "\"");
         }

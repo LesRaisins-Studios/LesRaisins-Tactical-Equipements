@@ -1,0 +1,44 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "c:leather"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "item": "minecraft:gold_nugget"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "item": "minecraft:paper"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "item": "minecraft:magma_cream"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:consumable",
+    "item": {
+      "id": "lrtactical:consumable",
+      "components": {
+        "minecraft:custom_data": {
+          "ConsumableId": "lrtactical:surv12"
+        },
+        "minecraft:max_stack_size": 1,
+        "minecraft:max_damage": 15,
+        "minecraft:damage": 0
+      }
+    }
+  }
+}

@@ -3,30 +3,34 @@ package me.xjqsh.lrtactical.init;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.item.melee.MeleeWeaponType;
 import me.xjqsh.lrtactical.item.throwable.ThrowableType;
+
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.*;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 
-import java.util.function.Supplier;
-
-@Mod.EventBusSubscriber(modid = EquipmentMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EquipmentMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ModRegistries {
-    public static final ResourceKey<Registry<ThrowableType<?, ?>>> THROWABLE_TYPE = ResourceKey.createRegistryKey(
-            new ResourceLocation(EquipmentMod.MOD_ID, "throwable_type")
-    );
-    public static Supplier<IForgeRegistry<ThrowableType<?, ?>>> THROWABLE_TYPE_SUPPLIER;
+    public static final ResourceKey<Registry<ThrowableType<?, ?>>> THROWABLE_TYPE =
+            ResourceKey.createRegistryKey(
+                    ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "throwable_type"));
+    public static Registry<ThrowableType<?, ?>> THROWABLE_TYPE_REGISTRY;
 
-    public static final ResourceKey<Registry<MeleeWeaponType<?>>> MELEE_WEAPON_TYPE = ResourceKey.createRegistryKey(
-            new ResourceLocation(EquipmentMod.MOD_ID, "melee_type")
-    );
-    public static Supplier<IForgeRegistry<MeleeWeaponType<?>>> MELEE_WEAPON_TYPE_SUPPLIER;
+    public static final ResourceKey<Registry<MeleeWeaponType<?>>> MELEE_WEAPON_TYPE =
+            ResourceKey.createRegistryKey(
+                    ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "melee_type"));
+    public static Registry<MeleeWeaponType<?>> MELEE_WEAPON_TYPE_REGISTRY;
 
     @SubscribeEvent
     public static void registerRegistries(NewRegistryEvent event) {
-        THROWABLE_TYPE_SUPPLIER = event.create(new RegistryBuilder<ThrowableType<?, ?>>().setName(THROWABLE_TYPE.location()));
-        MELEE_WEAPON_TYPE_SUPPLIER = event.create(new RegistryBuilder<MeleeWeaponType<?>>().setName(MELEE_WEAPON_TYPE.location()));
+        THROWABLE_TYPE_REGISTRY = new RegistryBuilder<ThrowableType<?, ?>>(THROWABLE_TYPE).create();
+        event.register(THROWABLE_TYPE_REGISTRY);
+
+        MELEE_WEAPON_TYPE_REGISTRY =
+                new RegistryBuilder<MeleeWeaponType<?>>(MELEE_WEAPON_TYPE).create();
+        event.register(MELEE_WEAPON_TYPE_REGISTRY);
     }
 }

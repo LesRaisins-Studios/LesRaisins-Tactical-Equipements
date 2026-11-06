@@ -1,7 +1,5 @@
 package me.xjqsh.lrtactical.item;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.tacz.guns.api.item.IAnimationItem;
 import me.xjqsh.lrtactical.api.collision.ITargetFilter;
 import me.xjqsh.lrtactical.api.item.IMeleeWeapon;
@@ -14,20 +12,17 @@ import me.xjqsh.lrtactical.item.index.MeleeWeaponIndex;
 import me.xjqsh.lrtactical.item.melee.CombatData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.common.ItemAbilities;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,16 +34,6 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     public MeleeItem() {
         super(new Properties().stacksTo(1).setNoRepair());
     }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        if (slot == EquipmentSlot.MAINHAND) {
-            return getMeleeIndex(stack).map(MeleeWeaponIndex::getDefaultModifiers).orElse(ImmutableMultimap.of());
-        }
-        return ImmutableMultimap.of();
-    }
-
-
 
     @Override
     public boolean isSame(ItemStack stack1, ItemStack stack2) {
@@ -195,9 +180,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
 
             if (hit) {
                 if (CommonConfig.MELEE_ITEM_CONSUME_DURABILITY.get()) {
-                    stack.hurtAndBreak(attackInfo.getDurabilityDamage(), attacker, (player) -> {
-                        player.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-                    });
+                    stack.hurtAndBreak(attackInfo.getDurabilityDamage(), attacker, EquipmentSlot.MAINHAND);
                 }
                 String soundKey;
                 if (kill) {
@@ -214,12 +197,7 @@ public class MeleeItem extends Item implements IAnimationItem, IMeleeWeapon {
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.category == EnchantmentCategory.WEAPON;
-    }
-
-    @Override
-    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        return toolAction == ToolActions.SWORD_SWEEP;
+    public boolean canPerformAction(ItemStack stack, ItemAbility toolAction) {
+        return toolAction == ItemAbilities.SWORD_SWEEP;
     }
 }

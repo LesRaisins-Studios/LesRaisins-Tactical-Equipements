@@ -6,6 +6,8 @@ import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
 import me.xjqsh.lrtactical.item.index.ThrowableIndex;
 import me.xjqsh.lrtactical.resource.CommonAssetsManager;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +18,7 @@ import java.util.Optional;
 public interface IThrowable extends ICustomItem {
     String ID_TAG = "ThrowableId";
     String OVERRIDE_DISPLAY_ID = "DisplayId";
-    ResourceLocation EMPTY = new ResourceLocation(EquipmentMod.MOD_ID, "empty");
+    ResourceLocation EMPTY = ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "empty");
 
     static IThrowable of(ItemStack stack) {
         if (stack.getItem() instanceof IThrowable item) {
@@ -27,27 +29,33 @@ public interface IThrowable extends ICustomItem {
 
     @Override
     default ResourceLocation getId(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        if (nbt.contains(ID_TAG, Tag.TAG_STRING)) {
-            ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(ID_TAG));
-            return Objects.requireNonNullElse(gunId, EMPTY);
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null) {
+            CompoundTag nbt = customData.copyTag();
+            if (nbt.contains(ID_TAG, Tag.TAG_STRING)) {
+                ResourceLocation gunId = ResourceLocation.tryParse(nbt.getString(ID_TAG));
+                return Objects.requireNonNullElse(gunId, EMPTY);
+            }
         }
         return EMPTY;
     }
 
     @Override
     default ResourceLocation getDisplayId(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        if (nbt.contains(OVERRIDE_DISPLAY_ID, Tag.TAG_STRING)) {
-            ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(OVERRIDE_DISPLAY_ID));
-            return Objects.requireNonNullElse(rl, EMPTY);
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null) {
+            CompoundTag nbt = customData.copyTag();
+            if (nbt.contains(OVERRIDE_DISPLAY_ID, Tag.TAG_STRING)) {
+                ResourceLocation rl = ResourceLocation.tryParse(nbt.getString(OVERRIDE_DISPLAY_ID));
+                return Objects.requireNonNullElse(rl, EMPTY);
+            }
         }
         return getId(stack);
     }
 
     @Override
     default void setId(ItemStack stack, ResourceLocation id) {
-        stack.getOrCreateTag().putString(ID_TAG, id.toString());
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> nbt.putString(ID_TAG, id.toString()));
     }
 
     @Override

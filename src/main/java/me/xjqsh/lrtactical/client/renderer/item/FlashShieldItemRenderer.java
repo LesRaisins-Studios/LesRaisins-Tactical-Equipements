@@ -82,7 +82,7 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
             poseStack.translate(0.5, 1.5, 0.5);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
             VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(slotTexture));
-            SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, -1);
             return;
         }
         poseStack.pushPose();
@@ -109,7 +109,7 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
                 ), light, overlay, bufferSource);
             } else {
                 VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(MissingTextureAtlasSprite.getLocation()));
-                SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+                SLOT_MODEL.renderToBuffer(poseStack, buffer, light, overlay, -1);
             }
         }
         poseStack.popPose();
@@ -124,10 +124,10 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
         // 右手手臂
         model.setFunctionalRenderer(RIGHTHAND_POS_NODE, bedrockPart -> new RightHandRender(model));
 
-        textureLocation = new ResourceLocation(display.textureLocation.getNamespace(), "textures/" + display.textureLocation.getPath() + ".png");
+        textureLocation = ResourceLocation.fromNamespaceAndPath(display.textureLocation.getNamespace(), "textures/" + display.textureLocation.getPath() + ".png");
 
         if (display.slotTextureLocation != null) {
-            slotTexture = new ResourceLocation(display.slotTextureLocation.getNamespace(), "textures/" + display.slotTextureLocation.getPath() + ".png");
+            slotTexture = ResourceLocation.fromNamespaceAndPath(display.slotTextureLocation.getNamespace(), "textures/" + display.slotTextureLocation.getPath() + ".png");
         }
 
         this.transforms = display.transforms == null ? ItemTransforms.NO_TRANSFORMS : display.transforms;
@@ -147,7 +147,7 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
     }
 
     public void onResourceManagerReload(ResourceManager manager) {
-        manager.getResource(new ResourceLocation(EquipmentMod.MOD_ID, "display/shield/flash_shield.json"))
+        manager.getResource(ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "display/shield/flash_shield.json"))
                 .map(resource -> {
                     try (var stream = resource.open()) {
                         return LrClientAssetsManager.GSON.fromJson(new InputStreamReader(stream), ShieldDisplay.class);
@@ -157,7 +157,6 @@ public class FlashShieldItemRenderer extends AnimateGeoItemRenderer<BedrockAnima
                 })
                 .ifPresent(this::init);
     }
-
 
     public record ShieldDisplay(
             @SerializedName("model")

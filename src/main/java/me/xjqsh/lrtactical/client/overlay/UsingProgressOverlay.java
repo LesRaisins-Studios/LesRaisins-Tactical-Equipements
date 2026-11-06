@@ -6,7 +6,7 @@ import me.xjqsh.lrtactical.api.LrTacticalAPI;
 import me.xjqsh.lrtactical.api.item.IConsumable;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
 import me.xjqsh.lrtactical.api.item.IThrowable;
-import me.xjqsh.lrtactical.capability.CombatPropertiesProvider;
+import me.xjqsh.lrtactical.capability.CombatProperties;
 import me.xjqsh.lrtactical.item.index.ConsumableIndex;
 import me.xjqsh.lrtactical.item.throwable.ThrowableData;
 import net.minecraft.client.Minecraft;
@@ -15,13 +15,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.LayeredDraw;
 
-public class UsingProgressOverlay implements IGuiOverlay {
-    public static final ResourceLocation ARROW_TEXTURE = new ResourceLocation(EquipmentMod.MOD_ID, "textures/gui/arrow.png");
+public class UsingProgressOverlay implements LayeredDraw.Layer {
+    public static final ResourceLocation ARROW_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, "textures/gui/arrow.png");
     @Override
-    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+        float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
+        int screenWidth = guiGraphics.guiWidth();
+        int screenHeight = guiGraphics.guiHeight();
+
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null) {
@@ -40,7 +45,7 @@ public class UsingProgressOverlay implements IGuiOverlay {
             } else {
                 alpha = 0x80;
             }
-            
+
             // 检查是否是切换模式的消耗品
             boolean isToggleMode = false;
             if (stack.getItem() instanceof IConsumable) {
@@ -49,11 +54,11 @@ public class UsingProgressOverlay implements IGuiOverlay {
                     isToggleMode = true;
                 }
             }
-            
+
             // 切换模式使用不同颜色的进度条
             int barColor = isToggleMode ? 0x00FF00 : 0xFFFFFF;
             guiGraphics.fill(x, y, (int) (x + progress * 32), y + 4, barColor | (alpha << 24));
-            
+
             if (stack.getItem() instanceof IThrowable throwable) {
                 throwable.getThrowableIndex(stack).ifPresent(index -> {
                     ThrowableData data = index.getData();
@@ -71,7 +76,7 @@ public class UsingProgressOverlay implements IGuiOverlay {
                     RenderSystem.disableBlend();
                 }
             }
-            
+
             // 为切换模式显示提示文本
             if (isToggleMode) {
                 Component hint = Component.translatable("overlay.lrtactical.consumable.toggle_hint");
@@ -80,7 +85,7 @@ public class UsingProgressOverlay implements IGuiOverlay {
             }
         }
 
-        player.getCapability(CombatPropertiesProvider.CAPABILITY).ifPresent(cap -> {
+        CombatProperties.get(player).ifPresent(cap -> {
             if (cap.getCoolDownTick() > 0) {
                 float maxTick = cap.getLastMaxTick();
                 float progress = 1 - Math.min(1f, cap.getCoolDownTick() / maxTick);

@@ -1,0 +1,38 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "c:ingots/iron"
+      },
+      "count": 5
+    },
+    {
+      "item": {
+        "tag": "c:leather"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "tag": "minecraft:logs"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:melee",
+    "item": {
+      "id": "lrtactical:melee",
+      "components": {
+        "minecraft:custom_data": {
+          "MeleeWeaponId": "lrtactical:dagger"
+        },
+        "minecraft:max_stack_size": 1,
+        "minecraft:max_damage": 384,
+        "minecraft:damage": 0
+      }
+    }
+  }
+}

@@ -27,19 +27,19 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EquipmentMod.MOD_ID)
+@EventBusSubscriber(value = Dist.CLIENT, modid = EquipmentMod.MOD_ID)
 public class ClientEventsHandler {
     private static final String INPUT_MOVEMENT_IDLE = "movement_idle";
     public static double shakeTime = 0;
@@ -111,7 +111,7 @@ public class ClientEventsHandler {
     }
 
     @SubscribeEvent
-    public static void tickAnimation(TickEvent.ClientTickEvent event) {
+    public static void tickAnimation(ClientTickEvent.Pre event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
             return;
@@ -154,14 +154,13 @@ public class ClientEventsHandler {
         return false;
     }
 
-
     public static void afterLevel(float pPartialTicks, long pNanoTime, boolean pRenderLevel) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (!pRenderLevel || mc.level == null || player == null) {
             return;
         }
-        MobEffectInstance effect = player.getEffect(ModEffects.BLIND.get());
+        MobEffectInstance effect = player.getEffect(ModEffects.BLIND);
         if (effect == null) {
             return;
         }

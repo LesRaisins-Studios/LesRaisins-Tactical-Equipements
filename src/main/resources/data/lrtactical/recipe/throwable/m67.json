@@ -1,0 +1,37 @@
+{
+  "type": "tacz:gun_smith_table_crafting",
+  "materials": [
+    {
+      "item": {
+        "tag": "c:ingots/iron"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "tag": "c:gunpowders"
+      },
+      "count": 6
+    },
+    {
+      "item": {
+        "tag": "c:gems/quartz"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "custom",
+    "group": "lrtactical:throwable",
+    "item": {
+      "count": 2,
+      "id": "lrtactical:throwable",
+      "components": {
+        "minecraft:custom_data": {
+          "ThrowableId": "lrtactical:m67"
+        },
+        "minecraft:max_stack_size": 3
+      }
+    }
+  }
+}

@@ -1,17 +1,25 @@
 package me.xjqsh.lrtactical.network.message;
 
-import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDowns;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.codec.StreamCodec;
 
-import java.util.function.Supplier;
-
-public record SCustomCoolDownMessage(ResourceLocation id, int duration) {
+public record SCustomCoolDownMessage(ResourceLocation id, int duration) implements CustomPacketPayload {
+    public static final Type<SCustomCoolDownMessage> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath("lrtactical", "s_custom_cool_down_message"));
+    public static final StreamCodec<FriendlyByteBuf, SCustomCoolDownMessage> STREAM_CODEC =
+            StreamCodec.of((buf, message) -> encode(message, buf), SCustomCoolDownMessage::decode);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     public static void encode(SCustomCoolDownMessage message, FriendlyByteBuf buf) {
         buf.writeResourceLocation(message.id);
@@ -22,12 +30,8 @@ public record SCustomCoolDownMessage(ResourceLocation id, int duration) {
         return new SCustomCoolDownMessage(buf.readResourceLocation(), buf.readInt());
     }
 
-    public static void handle(SCustomCoolDownMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> handle(message));
-        }
-        context.setPacketHandled(true);
+    public static void handle(SCustomCoolDownMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> handle(message));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -36,7 +40,7 @@ public record SCustomCoolDownMessage(ResourceLocation id, int duration) {
         if (player == null) {
             return;
         }
-        player.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(
+        CustomItemCoolDowns.get(player).ifPresent(
             coolDownCapability -> {
                 if (message.duration() == 0) {
                     coolDownCapability.removeCooldown(message.id());

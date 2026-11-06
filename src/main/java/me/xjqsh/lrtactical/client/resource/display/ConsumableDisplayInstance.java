@@ -105,9 +105,9 @@ public class ConsumableDisplayInstance implements ICustomSoundSupplier {
                 .setController(controller)
                 .setLuaScripts(script)
                 .build();
-        display.texture = new ResourceLocation(pojo.textureLocation.getNamespace(), "textures/" + pojo.textureLocation.getPath() + ".png");
+        display.texture = ResourceLocation.fromNamespaceAndPath(pojo.textureLocation.getNamespace(), "textures/" + pojo.textureLocation.getPath() + ".png");
         if (pojo.slotTextureLocation != null) {
-            display.slotTexture = new ResourceLocation(pojo.slotTextureLocation.getNamespace(), "textures/" + pojo.slotTextureLocation.getPath() + ".png");
+            display.slotTexture = ResourceLocation.fromNamespaceAndPath(pojo.slotTextureLocation.getNamespace(), "textures/" + pojo.slotTextureLocation.getPath() + ".png");
         }
 
         display.transforms = Objects.requireNonNullElse(pojo.transforms, ItemTransforms.NO_TRANSFORMS);

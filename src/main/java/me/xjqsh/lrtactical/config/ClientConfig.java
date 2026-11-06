@@ -1,13 +1,13 @@
 package me.xjqsh.lrtactical.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig {
-    public static ForgeConfigSpec.BooleanValue BLACK_FLASH;
-    public static ForgeConfigSpec.DoubleValue EXPLODE_SCREEN_SHAKE_MULTIPLIER;
+    public static ModConfigSpec.BooleanValue BLACK_FLASH;
+    public static ModConfigSpec.DoubleValue EXPLODE_SCREEN_SHAKE_MULTIPLIER;
 
-    public static ForgeConfigSpec init() {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+    public static ModConfigSpec init() {
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         builder.comment("Use black overlay instead of white when blinded by flashbang");
         BLACK_FLASH = builder.define("blackFlash", false);
         EXPLODE_SCREEN_SHAKE_MULTIPLIER = builder

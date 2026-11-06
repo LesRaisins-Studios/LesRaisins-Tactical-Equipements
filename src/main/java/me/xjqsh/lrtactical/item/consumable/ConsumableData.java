@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -168,7 +168,7 @@ public class ConsumableData {
                         Component.translatable(categoryKey)
                 ).withStyle(ChatFormatting.GRAY)));
             } else {
-                MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(selector.getEffect());
+                MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(selector.getEffect());
                 if (effect != null) {
                     lines.add(TooltipLine.collapsible(Component.translatable(
                             "tooltip.lrtactical.consumable.remove_effect",
@@ -311,11 +311,11 @@ public class ConsumableData {
         }
 
         public MobEffectInstance createInstance() {
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(id);
+            MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(id);
             if (effect == null) {
                 return null;
             }
-            return new MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon);
+            return new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect), duration, amplifier, ambient, visible, showIcon);
         }
     }
 }

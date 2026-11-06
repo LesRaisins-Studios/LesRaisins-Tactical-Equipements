@@ -1,7 +1,5 @@
 package me.xjqsh.lrtactical.item.index;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.gson.JsonElement;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.index.ICustomItemIndex;
@@ -15,7 +13,10 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +28,7 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
     private final String name;
     private final String tooltip;
     private final int sort;
-    private final Multimap<Attribute, AttributeModifier> defaultModifiers;
+    private final ItemAttributeModifiers defaultModifiers;
 
     private MeleeWeaponIndex(MeleeWeaponType<T> type, T data, String name, String tooltip,
                              ResourceLocation id, Item baseItem, int sort) {
@@ -38,19 +39,18 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
         this.name = name;
         this.tooltip = tooltip;
         this.sort = Mth.clamp(sort, 0, 65536);
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        var builder = ItemAttributeModifiers.builder();
         for (var entry : data.getRawAttributes().getAttributes()) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(entry.id());
+            Attribute attribute = BuiltInRegistries.ATTRIBUTE.get(entry.id());
             if (attribute == null) {
                 EquipmentMod.LOGGER.error("Unknown attribute {} for melee weapon {}", entry.id(), id);
                 continue;
             }
-            builder.put(attribute, new AttributeModifier(
-                    DefaultAttrUUIDUtil.getUUID(entry.id()),
-                    "LesRaisins Custom Item",
+            builder.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute), new AttributeModifier(
+                    DefaultAttrUUIDUtil.getId(entry.id()),
                     entry.amount(),
                     entry.operation()
-            ));
+            ), EquipmentSlotGroup.MAINHAND);
         }
         defaultModifiers = builder.build();
     }
@@ -73,7 +73,7 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
         return new MeleeWeaponIndex<>(type, meleeData, name, tooltip, id, baseItem, sort);
     }
 
-    public Multimap<Attribute, AttributeModifier> getDefaultModifiers() {
+    public ItemAttributeModifiers getDefaultModifiers() {
         return defaultModifiers;
     }
 
@@ -98,6 +98,10 @@ public class MeleeWeaponIndex<T extends MeleeWeaponData> implements ICustomItemI
         ItemStack stack = new ItemStack(baseItem);
         if (stack.getItem() instanceof IMeleeWeapon iMeleeWeapon) {
             iMeleeWeapon.setId(stack, this.getId());
+        }
+        if (data.getMaxDurability() > 0) {
+            stack.set(DataComponents.MAX_DAMAGE, data.getMaxDurability());
+            stack.set(DataComponents.DAMAGE, 0);
         }
         return stack;
     }

@@ -10,26 +10,35 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.codec.StreamCodec;
 
 public record SCustomSound(
-        SoundType type,
+        SoundType soundType,
         ResourceLocation id,
         String key,
         Vec3 pos,
         float volume,
         float pitch
-) {
+) implements CustomPacketPayload {
+    public static final Type<SCustomSound> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath("lrtactical", "s_custom_sound"));
+    public static final StreamCodec<FriendlyByteBuf, SCustomSound> STREAM_CODEC =
+            StreamCodec.of((buf, message) -> encode(message, buf), SCustomSound::decode);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     public enum SoundType {
         MELEE, THROWABLE
     }
 
     public static void encode(SCustomSound message, FriendlyByteBuf buf) {
-        buf.writeEnum(message.type());
+        buf.writeEnum(message.soundType());
         buf.writeResourceLocation(message.id());
         buf.writeUtf(message.key());
         buf.writeDouble(message.pos().x);
@@ -50,12 +59,8 @@ public record SCustomSound(
         );
     }
 
-    public static void handle(SCustomSound message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> handle(message));
-        }
-        context.setPacketHandled(true);
+    public static void handle(SCustomSound message, IPayloadContext context) {
+        context.enqueueWork(() -> handle(message));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -65,7 +70,7 @@ public record SCustomSound(
         if (player == null || level == null) {
             return;
         }
-        ICustomSoundSupplier supplier = switch (message.type()) {
+        ICustomSoundSupplier supplier = switch (message.soundType()) {
             case MELEE -> LrTacticalAPI.getMeleeDisplay(message.id()).orElse(null);
             case THROWABLE -> LrTacticalAPI.getThrowableDisplay(message.id()).orElse(null);
             default -> null;

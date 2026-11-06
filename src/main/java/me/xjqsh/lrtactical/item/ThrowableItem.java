@@ -3,7 +3,7 @@ package me.xjqsh.lrtactical.item;
 import com.tacz.guns.api.item.IAnimationItem;
 import com.tacz.guns.client.renderer.item.AnimateGeoItemRenderer;
 import me.xjqsh.lrtactical.api.item.IThrowable;
-import me.xjqsh.lrtactical.capability.CustomItemCoolDownsProvider;
+import me.xjqsh.lrtactical.capability.CustomItemCoolDowns;
 import me.xjqsh.lrtactical.client.renderer.item.ThrowableItemRendererWrapper;
 import me.xjqsh.lrtactical.init.ModItems;
 import me.xjqsh.lrtactical.inventory.tooltip.ThrowableTooltip;
@@ -19,9 +19,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -40,7 +40,7 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
 
     @ParametersAreNonnullByDefault
     @Override
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack pStack, LivingEntity entity) {
         return 72000;
     }
 
@@ -87,7 +87,7 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
         ItemStack stack = player.getItemInHand(pUsedHand);
         boolean flag = getThrowableIndex(stack)
                 .map(index -> index.getData().getCooldownCategory())
-                .map(id -> player.getCapability(CustomItemCoolDownsProvider.CAPABILITY)
+                .map(id -> CustomItemCoolDowns.get(player)
                         .map(cap -> cap.isOnCooldown(id))
                         .orElse(false)
                 ).orElse(false);
@@ -108,7 +108,7 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
 
         ResourceLocation id = index.getData().getCooldownCategory();
         if (id != null) {
-            entity.getCapability(CustomItemCoolDownsProvider.CAPABILITY).ifPresent(cap -> {
+            CustomItemCoolDowns.get(entity).ifPresent(cap -> {
                 cap.addCooldown(id, index.getData().getCooldown());
             });
         }
@@ -123,7 +123,6 @@ public class ThrowableItem extends Item implements IAnimationItem, IThrowable {
         }
 
     }
-
 
     @ParametersAreNonnullByDefault
     @Override

@@ -11,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,6 +101,7 @@ public class ThrowableIndex<T extends ThrowableData, E extends ThrowableItemEnti
         if (stack.getItem() instanceof IThrowable iThrowable) {
             iThrowable.setId(stack, this.getId());
         }
+        stack.set(DataComponents.MAX_STACK_SIZE, getMaxStackSize());
         return stack;
     }
 }

@@ -1,6 +1,5 @@
 package me.xjqsh.lrtactical.util;
 
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
