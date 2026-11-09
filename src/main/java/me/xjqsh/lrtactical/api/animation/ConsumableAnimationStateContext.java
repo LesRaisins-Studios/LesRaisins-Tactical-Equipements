@@ -1,9 +1,8 @@
 package me.xjqsh.lrtactical.api.animation;
 
-import com.tacz.guns.client.animation.statemachine.ItemAnimationStateContext;
 import net.minecraft.world.item.ItemStack;
 
-public class ConsumableAnimationStateContext extends ItemAnimationStateContext {
+public class ConsumableAnimationStateContext extends BaseAnimationStateContext {
     private ItemStack currentItem = ItemStack.EMPTY;
     private boolean using = false;
     private int usingTick = 0;
