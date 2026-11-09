@@ -55,7 +55,7 @@ public class StackComponentGameTests {
         var throwable = convert(helper, """
                 {"item":"lrtactical:throwable","count":2,"nbt":{"ThrowableId":"lrtactical:m67"}}
                 """);
-        helper.assertValueEqual(throwable.get(DataComponents.MAX_STACK_SIZE), 3, "Throwable native stack size");
+        helper.assertValueEqual(throwable.get(DataComponents.MAX_STACK_SIZE), 6, "Throwable native stack size");
         helper.assertValueEqual(throwable.getCount(), 2, "Converted throwable count");
         helper.succeed();
     }
@@ -97,7 +97,7 @@ public class StackComponentGameTests {
 
         var throwable = new ItemStack(ModItems.THROWABLE.get());
         ((IThrowable) throwable.getItem()).setId(throwable, ResourceLocation.parse("lrtactical:m67"));
-        helper.assertValueEqual(throwable.get(DataComponents.MAX_STACK_SIZE), 3, "Throwable ID assignment");
+        helper.assertValueEqual(throwable.get(DataComponents.MAX_STACK_SIZE), 6, "Throwable ID assignment");
         helper.succeed();
     }
 

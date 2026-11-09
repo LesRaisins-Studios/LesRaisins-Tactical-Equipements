@@ -83,8 +83,8 @@ public class MigrationGameTests {
                 ((ICustomItem) result.getItem()).getId(result),
                 ResourceLocation.parse("lrtactical:m67"),
                 "recipe equipment ID");
-        helper.assertValueEqual(result.getCount(), 2, "recipe output count");
-        helper.assertValueEqual(result.getMaxStackSize(), 3, "recipe stack limit");
+        helper.assertValueEqual(result.getCount(), 3, "recipe output count");
+        helper.assertValueEqual(result.getMaxStackSize(), 6, "recipe stack limit");
         helper.assertTrue(
                 helper.getLevel()
                         .getRecipeManager()
