@@ -19,7 +19,7 @@
     // 收起时间（ms）
     "put_away_time": 380,
     // 最大堆叠数量
-    "stack_size": 3,
+    "stack_size": 6,
     // 投掷物实体参数
     "entity" : {
       // 最大存活时长
@@ -42,7 +42,7 @@
       // 爆炸半径
       "radius": 5.5,
       // 爆心伤害
-      "damage": 28.0,
+      "damage": 35.0,
       // 是否炸毁方块
       "destroy_blocks": false,
       // 额外的方块破坏威力乘数，默认1.0
