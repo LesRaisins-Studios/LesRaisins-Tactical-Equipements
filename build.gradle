@@ -29,7 +29,7 @@ version = mod_version
 //version = mod_version + '-' + FORMAT.format(new Date())
 
 base {
-    archivesName = mod_id + '-' + minecraft_version
+    archivesName = mod_id + '-forge-' + minecraft_version
 }
 
 java {
@@ -170,10 +170,10 @@ dependencies {
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.106"))
 
-//    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:8055552-sources-8055584")
-    implementation fg.deobf("com.github.mcmodderanchor:tacz:forge-1.20.1-1.2.0")
+    // tacz 1.2.0
+    implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:9454481")
     implementation fg.deobf("com.github.mcmodderanchor:simplebedrockmodel:2.6.2-forge-mc1.20.1")
-    compileOnly("com.maydaymemory:mae:1.1.2") {
+    compileOnly("com.maydaymemory:mae:1.1.4") {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
         exclude group: 'it.unimi.dsi', module: 'fastutil'
         exclude group: 'org.joml', module: 'joml'
