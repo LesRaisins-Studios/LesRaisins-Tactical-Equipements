@@ -10,6 +10,7 @@ import com.tacz.guns.client.input.InteractKey;
 import me.xjqsh.lrtactical.EquipmentMod;
 import me.xjqsh.lrtactical.api.collision.OBB;
 import me.xjqsh.lrtactical.api.item.ICustomItem;
+import me.xjqsh.lrtactical.client.renderer.item.ConsumableItemRenderer;
 import me.xjqsh.lrtactical.client.renderer.item.FlashShieldItemRenderer;
 import me.xjqsh.lrtactical.client.renderer.item.MeleeItemRenderer;
 import me.xjqsh.lrtactical.client.renderer.item.ThrowableItemRendererWrapper;
@@ -131,6 +132,12 @@ public class ClientEventsHandler {
         } else if (renderer instanceof ThrowableItemRendererWrapper renderer2) {
             var animationStateMachine = renderer2.getStateMachine(mainHandItem);
             if (animationStateMachine != null) {
+                tickMove(player, animationStateMachine, INPUT_MOVEMENT_IDLE);
+            }
+        } else if (renderer instanceof ConsumableItemRenderer consumableRenderer) {
+            var animationStateMachine = consumableRenderer.getStateMachine(mainHandItem);
+            if (animationStateMachine != null) {
+                // Keep movement idle separate from the consumable's main action inputs.
                 tickMove(player, animationStateMachine, INPUT_MOVEMENT_IDLE);
             }
         }
