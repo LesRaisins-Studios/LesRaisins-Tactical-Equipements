@@ -34,10 +34,7 @@
       "components": {
         "minecraft:custom_data": {
           "ConsumableId": "lrtactical:ibuprofen"
-        },
-        "minecraft:max_stack_size": 1,
-        "minecraft:max_damage": 4,
-        "minecraft:damage": 0
+        }
       }
     }
   }

@@ -29,8 +29,7 @@
       "components": {
         "minecraft:custom_data": {
           "ThrowableId": "lrtactical:m67"
-        },
-        "minecraft:max_stack_size": 6
+        }
       }
     }
   }

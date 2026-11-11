@@ -18,6 +18,7 @@ import me.xjqsh.lrtactical.network.DataType;
 import me.xjqsh.lrtactical.network.message.*;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -39,6 +40,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @GameTestHolder(EquipmentMod.MOD_ID)
@@ -73,30 +75,34 @@ public class MigrationGameTests {
 
     @GameTest(template = "empty")
     public static void recipesKeepCustomIdentity(GameTestHelper helper) {
-        var recipe =
-                helper.getLevel()
-                        .getRecipeManager()
-                        .byKey(ResourceLocation.parse("lrtactical:throwable/m67"))
-                        .orElseThrow();
-        var result = recipe.value().getResultItem(helper.getLevel().registryAccess());
-        helper.assertValueEqual(
-                ((ICustomItem) result.getItem()).getId(result),
-                ResourceLocation.parse("lrtactical:m67"),
-                "recipe equipment ID");
-        helper.assertValueEqual(result.getCount(), 3, "recipe output count");
-        helper.assertValueEqual(result.getMaxStackSize(), 6, "recipe stack limit");
+        var recipeManager = helper.getLevel().getRecipeManager();
+        var registryAccess = helper.getLevel().registryAccess();
+        for (String path : List.of("m67", "rgn")) {
+            var itemId = ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, path);
+            var recipeId = itemId.withPrefix("throwable/");
+            var recipe = recipeManager.byKey(recipeId).orElseThrow();
+            var result = recipe.value().getResultItem(registryAccess);
+            helper.assertValueEqual(((ICustomItem) result.getItem()).getId(result), itemId, "recipe equipment ID");
+            helper.assertValueEqual(result.getCount(), 3, "recipe output count");
+            helper.assertValueEqual(result.get(DataComponents.MAX_STACK_SIZE), 6, "recipe output stack component");
+        }
+        var maxDamageByRecipe = Map.of("consumable/cms", 5, "melee/dagger", 384);
+        for (var expected : maxDamageByRecipe.entrySet()) {
+            var recipeId = ResourceLocation.fromNamespaceAndPath(EquipmentMod.MOD_ID, expected.getKey());
+            var recipe = recipeManager.byKey(recipeId).orElseThrow();
+            var result = recipe.value().getResultItem(registryAccess);
+            helper.assertValueEqual(result.get(DataComponents.MAX_DAMAGE), expected.getValue(), recipeId + " max damage");
+            helper.assertValueEqual(result.get(DataComponents.DAMAGE), 0, recipeId + " initial damage");
+        }
         helper.assertTrue(
-                helper.getLevel()
-                        .getRecipeManager()
-                        .byKey(ResourceLocation.parse("lrtactical:smith_table"))
-                        .isPresent(),
+                recipeManager.byKey(ResourceLocation.parse("lrtactical:smith_table")).isPresent(),
                 "Workbench recipe missing");
         helper.assertTrue(
                 TimelessAPI.getCommonBlockIndex(ResourceLocation.parse("lrtactical:smith_table"))
                         .isPresent(),
                 "Equipment workbench data failed to load");
         helper.assertValueEqual(
-                helper.getLevel().getRecipeManager().getRecipes().stream()
+                recipeManager.getRecipes().stream()
                         .filter(holder -> holder.id().getNamespace().equals("lrtactical"))
                         .count(),
                 20L,

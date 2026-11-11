@@ -34,8 +34,7 @@
       "components": {
         "minecraft:custom_data": {
           "ConsumableId": "lrtactical:ai2"
-        },
-        "minecraft:max_stack_size": 2
+        }
       }
     }
   }

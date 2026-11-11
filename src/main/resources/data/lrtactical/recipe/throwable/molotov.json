@@ -29,8 +29,7 @@
       "components": {
         "minecraft:custom_data": {
           "ThrowableId": "lrtactical:molotov"
-        },
-        "minecraft:max_stack_size": 3
+        }
       }
     }
   }

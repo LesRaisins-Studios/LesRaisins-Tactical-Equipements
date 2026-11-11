@@ -34,8 +34,7 @@
       "components": {
         "minecraft:custom_data": {
           "ConsumableId": "lrtactical:carfak"
-        },
-        "minecraft:max_stack_size": 1
+        }
       }
     }
   }

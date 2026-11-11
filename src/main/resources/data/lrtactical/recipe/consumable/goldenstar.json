@@ -34,10 +34,7 @@
       "components": {
         "minecraft:custom_data": {
           "ConsumableId": "lrtactical:goldenstar"
-        },
-        "minecraft:max_stack_size": 1,
-        "minecraft:max_damage": 8,
-        "minecraft:damage": 0
+        }
       }
     }
   }

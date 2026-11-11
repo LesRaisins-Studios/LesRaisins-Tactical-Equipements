@@ -28,8 +28,7 @@
       "components": {
         "minecraft:custom_data": {
           "ConsumableId": "lrtactical:blood_pack"
-        },
-        "minecraft:max_stack_size": 2
+        }
       }
     }
   }

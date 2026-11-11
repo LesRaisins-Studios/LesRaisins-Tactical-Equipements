@@ -77,6 +77,12 @@ repositories {
         }
     }
     maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
         url = 'https://maven.shedaniel.me/'
     }
     maven {
@@ -88,10 +94,10 @@ repositories {
 }
 
 dependencies {
-    // Official TaCZ 1.2.0 NeoForge build. Override with -Ptacz_jar=/path/to/the/official.jar.
-    implementation files(providers.gradleProperty('tacz_jar').getOrElse('libs/tacz-neoforge-1.21.1-1.2.0.jar'))
+    implementation "curse.maven:timeless-and-classics-zero-1028108:9454361-sources-9454571"
     implementation 'com.github.mcmodderanchor:simplebedrockmodel:2.6.2-neoforge-mc1.21.1'
     compileOnly 'com.maydaymemory:mae:1.1.4'
+
     implementation 'me.shedaniel.cloth:cloth-config-neoforge:15.0.140'
     implementation 'dev.kosmx.player-anim:player-animation-lib-forge:2.0.1+1.21.1'
     compileOnly 'com.github.FiguraMC.luaj:luaj-core:3.0.8-figura'

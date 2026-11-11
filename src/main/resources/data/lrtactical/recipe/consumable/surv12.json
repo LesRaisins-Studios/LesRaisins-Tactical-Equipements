@@ -34,10 +34,7 @@
       "components": {
         "minecraft:custom_data": {
           "ConsumableId": "lrtactical:surv12"
-        },
-        "minecraft:max_stack_size": 1,
-        "minecraft:max_damage": 15,
-        "minecraft:damage": 0
+        }
       }
     }
   }

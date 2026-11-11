@@ -34,10 +34,7 @@
       "components": {
         "minecraft:custom_data": {
           "MeleeWeaponId": "lrtactical:baseball_bat"
-        },
-        "minecraft:max_stack_size": 1,
-        "minecraft:max_damage": 240,
-        "minecraft:damage": 0
+        }
       }
     }
   }

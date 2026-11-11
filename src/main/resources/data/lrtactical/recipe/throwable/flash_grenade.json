@@ -29,8 +29,7 @@
       "components": {
         "minecraft:custom_data": {
           "ThrowableId": "lrtactical:flash_grenade"
-        },
-        "minecraft:max_stack_size": 3
+        }
       }
     }
   }
